@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bioinformatics Pipeline</title>
+    <script src="../static/js/addInput.js" type="text/javascript"></script>
+    <script src="../static/js/filepicker.js"></script>
+    <script src="../static/js/vars.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+    <link rel="stylesheet" href="../static/style/style.css">
+    <script src="../static/js/methods.js"></script>
+</head>
+<script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            window.location.href = "/signout";
+        });
+    }
+</script>
+<script>
+    oauthToken = '{{ oauthtoken }}';
+</script>
+
+<script>
+    function start() {
+        gapi.load('auth2', function () {
+            auth2 = gapi.auth2.init({
+                client_id: '160430799521-om2977l800uepldismnau961cof27lti.apps.googleusercontent.com',
+                scope: 'https://www.googleapis.com/auth/drive.file email profile',
+                prompt: 'consent',
+                immediate: 'false'
+            });
+        });
+    }
+</script>
+<body>
+<h2 style='text-align: center;'>HIV Incidence and Infection Time Estimator</h2>
+<div>
+    <script src="https://www.google.com/jsapi?key=AIzaSyBrPcJgwBk7wZtCMpJ1Wz_AR_GlLQP1RGw"></script>
+</div>
+<a href="#" onclick="signOut();">Sign out</a>
+<div class="container">
+    <div class="tab">
+        <button class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
+        <button class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data</button>
+    </div>
+    <div id="ss" class="tabcontent">
+        <h3>Sanger Sequence Data</h3>
+        <p>Fill the sanger sequence form</p>
+    </div>
+
+    <div id="ngs" class="tabcontent">
+        <h3>Next Generation Sequence Data</h3>
+        <p>Fill the ngs data form</p>
+    </div>
+</div>
+
+</body>
+</html>
