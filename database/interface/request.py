@@ -9,12 +9,11 @@ def store_request(fields):
     except:
         print 'Database already open'
 
+
     formtype = fields['formtype']
     datatype = fields['datatype']
 
     request_id = id_generator(INT_LEN_REQUEST_ID)
-    success_signal = False
-    ttl = INT_TTL_GEN_ID
 
     try:
         query_res = DatingRequest.get(DatingRequest.requestId == request_id)
@@ -22,10 +21,12 @@ def store_request(fields):
             request_id = id_generator(INT_LEN_REQUEST_ID)
             query_res = DatingRequest.get(DatingRequest.requestId == request_id)
     except:
-        request = TaxaRequest(requestId=request_id, userId=user_id, file_json=files_reqd, forward_primer_seq=fps,
-                              backward_primer_seq=bps, collapse_length=seqlen, percentage=percent, base_count=basecount)
+        form_data = _create_form_data(fields, formtype, datatype, request_id)
+        request = DatingRequest()
         request.save(force_insert=True)
     finally:
-        if dbopen:
-            db_disconnect()
+            db.disconnect()
 
+def _create_form_data(fields, formtype, datatype, request_id):
+    form_data = {}
+    if formtype == SINGLE and datatype == SANGER_SEQUNCE_DATA:
