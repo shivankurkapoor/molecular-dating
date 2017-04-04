@@ -32,21 +32,20 @@ RENEW_TOKEN_URL = 'accounts.google.com'
 RENEW_TOKEN_PATH = '/o/oauth2/token'
 RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refresh_token={refresh_token}&grant_type={grant_type}'
 
+
 '''
 GOOGLE DRIVE FILE HANDLING
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
-DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/PycharmProjects/BioinformaticsPipeline/dir//{user_id}'
+DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/PycharmProjects/moleculardating/downloadedfiles/{request_id}'
 MIME_TYPE = 'application/octet-stream'
-FORWARD_FILE = 'forwardfile_{request_id}.fasta'
-BACKWARD_FILE = 'backwardfile_{request_id}.fasta'
-RESULT_FILE = 'resultfile_{request_id}.fastq'
+
 DESCRIPTION = ''
 
 '''
 MISC
 '''
-INT_LEN_REQUEST_ID = 9
+INT_LEN_REQUEST_ID = 20
 INT_TTL_GEN_ID = 10
 
 
@@ -101,6 +100,6 @@ ZIP_OUTPUT_FILE_NAME = 'taxonomy_output.zip'
 Request Form Types
 '''
 SINGLE = 'single'
-SANGER_SEQUNCE_DATA = 'ss'
+SANGER_SEQUNCE_DATA = 'ss' #Sanger Sequence Data
 MULTIPLE = 'multiple'
-NEXT_GEN_DATA = 'ngs'
+NEXT_GEN_DATA = 'ngs' #Next Generation Sequence Data

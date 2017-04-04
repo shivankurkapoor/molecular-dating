@@ -27,21 +27,29 @@ function showDefault() {
     button.className += " active";
 }
 
+function isAnyError(form) {
+    return false;
+}
+
 function upload(form) {
-    alert("Inside upload")
+    var requests = [];
     if (form.id == 'ss_single_form') {
-        if (!isAnyError()) {
+        if (!isAnyError(form)) {
             var formtype = 'single';
             var datatype = 'ss';
-            var align = form.elements['align'].value;
-            var hxb2 = form.elements['hxb2'].value;
+            var request = Object();
+            request.file = 'fastafile_1';
+            request.align = form.elements['align'].checked;
+            request.hxb2 = form.elements['hxb2'].checked;
             var fastafile = form.elements['fastafile'].files[0];
+            var numreq = 1;
+            requests.push(request);
             var formdata = new FormData();
             formdata.append('formtype', formtype);
             formdata.append('datatype', datatype);
-            formdata.append('align', align);
-            formdata.append('hxb2', hxb2);
-            formdata.append('fastafile', fastafile);
+            formdata.append('formdata', JSON.stringify({'requests':requests}));
+            formdata.append('numreq', numreq);
+            formdata.append('fastafile_1', fastafile);
 
             $.ajax({
                 url: '/upload',

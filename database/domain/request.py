@@ -6,7 +6,8 @@ from datetime import datetime
 class DatingRequest(Model):
     request_id = CharField(primary_key=True)
     form_data = TextField(default='')
-    request_type = CharField(default='')
+    form_type = CharField(default='')
+    data_type = CharField(default='')
     are_files_downloaded = BooleanField(default=False)
     time_created = TimestampField(default=datetime.now())
     time_processed = TimestampField()
@@ -29,7 +30,7 @@ class DatingRequest(Model):
         self.is_processed=is_processed
         self.save()
 
-    def set_is_uploaded(self, is_upoaded=False):
-        self.is_uploaded = is_upoaded
+    def set_is_uploaded(self, is_uploaded=False):
+        self.is_uploaded = is_uploaded
         self.save()
 

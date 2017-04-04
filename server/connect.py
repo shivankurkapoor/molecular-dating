@@ -75,7 +75,7 @@ def get_stored_credentials(user_id):
     #       class method.
     dbopen = True
     try:
-        db_connect()
+        db.connect()
     except:
         print 'db already open'
         dbopen = False
@@ -112,7 +112,7 @@ def get_stored_credentials(user_id):
         return None
     finally:
         if dbopen:
-            db_disconnect()
+            db.disconnect()
 
 
 def store_credentials(user_id, credentials, user_info):
@@ -130,7 +130,7 @@ def store_credentials(user_id, credentials, user_info):
     #       credentials.to_json() method.
     dbopen = True
     try:
-        db_connect()
+        db.connect()
     except:
         print 'db already open'
         dbopen = False
@@ -146,7 +146,7 @@ def store_credentials(user_id, credentials, user_info):
         user.save_user_info(user_info)
     finally:
         if dbopen:
-            db_disconnect()
+            db.disconnect()
 
 
     '''
@@ -278,7 +278,7 @@ def connect_proc(fields=None, client_ip=STR_UNDEFINED):
 def get_oauth_token(user_id):
     dbopen = True
     try:
-        db_connect()
+        db.connect()
     except:
         print 'db already open'
         dbopen = False
@@ -295,7 +295,7 @@ def get_oauth_token(user_id):
         return None
     finally:
         if dbopen:
-            db_disconnect()
+            db.disconnect()
     #db_disconnect()
     return None
 
@@ -308,9 +308,19 @@ def _connect_proc_parsing_fields(fields):
         raise InvalidUsage('Wrong fields format', status_code=400)
 
 
-def process_request(fields):
+def process_request(fields, files):
     _request_parsing_fields(fields)
-    status_code = store_request(fields)
+    status_code, request_id = store_request(fields['formtype'],
+                                fields['datatype'],
+                                fields['numreq'],
+                                json_decode(str(fields['formdata'])),
+                                files)
+    if status_code == INT_OK and fields['formtype'] == SINGLE:
+        pass
+    return respond_json({''})
+
+
+
 
 
 
@@ -324,23 +334,26 @@ def _request_parsing_fields(fields):
     try:
         assert 'formtype' in fields
         assert 'datatype' in fields
+        assert 'numreq' in fields
+        assert 'formdata' in fields
     except AssertionError:
         print 'Error while parsing requests, one or more fields are missing'
         raise InvalidUsage('Wrong fields form', status_code=400)
 
     formtype = fields['formtype']
     datatype = fields['datatype']
+    numreq = int(fields['numreq'])
+    formdata = json_decode(str(fields['formdata']))
 
     try:
-        if formtype == SINGLE and datatype  == SANGER_SEQUNCE_DATA:
-            assert 'align' in fields['align']
-            assert 'hxb2' in fields['hxb2']
-            assert 'fastafile' in fields['fastafile']
+        assert len(formdata['requests']) == numreq
+        if datatype  == SANGER_SEQUNCE_DATA:
+            pass
         elif formtype == SINGLE and datatype == NEXT_GEN_DATA:
             pass
         elif formtype == MULTIPLE and datatype == SANGER_SEQUNCE_DATA:
             pass
-        elif formtype == MULTIPLE and datatype == NEXT_GEN_DATA
+        elif formtype == MULTIPLE and datatype == NEXT_GEN_DATA:
             pass
 
     except AssertionError:
