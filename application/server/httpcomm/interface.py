@@ -12,7 +12,7 @@ import urllib
 from common.globalconst import *
 from common.globalfunct import *
 
-from application.server.httpcomm import *
+from server.httpcomm.const import *
 
 
 def http_request(url=STR_UNDEFINED,

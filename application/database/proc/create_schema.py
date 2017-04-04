@@ -2,13 +2,13 @@
 import sys
 sys.path.append('../')
 
-from application.database import *
-from application.database.domain import DatingRequest
-from application.database.domain import User
+from database import *
+from database.domain.request import DatingRequest
+from database.domain.user import User
 
 try:
-    db_connect()
+    db.connect()
     db.create_tables([User, DatingRequest])
-    db_disconnect()
+    db.close()
 except Exception as e:
     print 'Error while creating schemas ',e

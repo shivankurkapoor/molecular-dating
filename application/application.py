@@ -44,7 +44,7 @@ def app_connect():
 def upload():
     status, response = process_request(request.form, request.files)
     if status == INT_OK:
-        return render_template(response)
+        return response
     else:
          return render_template('error.html', error='Failure')
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     application.secret_key = APP_SECRET_KEY
     #application.debug = True
     #application.run(host='p512.usc.edu/miseq',port=5000)
-    application.run(host='localhost', debug=True)
+    application.run(host='localhost', port=5000, debug=True)
     # application.run(debug=True)
 
 

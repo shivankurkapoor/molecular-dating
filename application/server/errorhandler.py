@@ -1,4 +1,4 @@
-from application.common import *
+from common import *
 
 class InvalidUsage(Exception):
     """

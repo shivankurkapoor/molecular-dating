@@ -36,6 +36,11 @@
     }
 </script>
 <body>
+<script>
+    window.onload = function () {
+        showDefault();
+    };
+</script>
 <h2 style='text-align: center;'>HIV Incidence and Infection Time Estimator</h2>
 <div>
     <script src="https://www.google.com/jsapi?key=AIzaSyBrPcJgwBk7wZtCMpJ1Wz_AR_GlLQP1RGw"></script>
@@ -43,12 +48,35 @@
 <a href="#" onclick="signOut();">Sign out</a>
 <div class="container">
     <div class="tab">
-        <button class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
-        <button class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data</button>
+        <button id="ssbutton" class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
+        <button id="ngsbutton" class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data
+        </button>
     </div>
     <div id="ss" class="tabcontent">
         <h3>Sanger Sequence Data</h3>
         <p>Fill the sanger sequence form</p>
+        <div id="container_ss">
+            <br>
+            <button id="addNewEles" onclick="addSangerFileChooser()">Add more</button>
+            <br>
+            <form id="ss_single_form" name="ss_form" onsubmit="return upload(this);">
+                <div id="ss_form_container">
+                    <div>
+                        <label>Choose Fasta File : </label>
+                        <input type="file" id="fastafile" name="fastafile">
+                        <label>Align : </label>
+                        <input type="checkbox" id="align" name="align" value="True">
+                        <label>HXB2 : </label>
+                        <input type="checkbox" id="hxb2" name="hxb2" value="hxb2">
+                    </div>
+
+                </div>
+                <div>
+                    <input type='submit' value='submit'>
+                </div>
+            </form>
+        </div>
+
     </div>
 
     <div id="ngs" class="tabcontent">

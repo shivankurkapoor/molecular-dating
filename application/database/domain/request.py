@@ -1,7 +1,7 @@
 from datetime import datetime
 from peewee import *
 
-from application.database import *
+from database import *
 
 
 class DatingRequest(Model):

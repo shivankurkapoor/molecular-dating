@@ -21,7 +21,7 @@ from oauth2client.client import flow_from_clientsecrets
 from server.errorhandler import *
 from server.server_common import *
 
-from application.server.httpcomm import *
+from server.httpcomm import *
 
 
 def download_file_direct(file, request_id, filename, format='fasta'):

@@ -14,8 +14,8 @@ from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
 from server.errorhandler import *
 from server.server_common import *
-
-from application.server.httpcomm import *
+from server.httpcomm.interface import *
+from server.httpcomm.const import *
 
 
 # ...
@@ -71,14 +71,14 @@ def get_stored_credentials(user_id):
     #       To instantiate an OAuth2Credentials instance from a Json
     #       representation, use the oauth2client.client.Credentials.new_from_json
     #       class method.
-    dbopen = True
+
     try:
         db.connect()
     except:
         print 'db already open'
-        dbopen = False
     try:
-        user = User.get(User.userId == user_id)
+        user = User.select().where(User.user_id == user_id)
+        user = user[0]
         if user.credentials:
             # credentials =  Credentials.new_from_json(user['credentials'])
             credentials = json.loads(user.credentials)
@@ -99,7 +99,7 @@ def get_stored_credentials(user_id):
                     credentials['token_expiry'] = datetime_util(datetime.now() + timedelta(seconds=float(str(data['expires_in']))))
                     credentials = Credentials.new_from_json(json_encode(credentials))
                     user.update_credentials(credentials.to_json())
-                    #user.sync()
+
                     return credentials
                 else:
                     return None
@@ -109,8 +109,7 @@ def get_stored_credentials(user_id):
         print e
         return None
     finally:
-        if dbopen:
-            db.disconnect()
+            db.close()
 
 
 def store_credentials(user_id, credentials, user_info):
@@ -126,25 +125,24 @@ def store_credentials(user_id, credentials, user_info):
     #
     #       To retrieve a Json representation of the credentials instance, call the
     #       credentials.to_json() method.
-    dbopen = True
     try:
         db.connect()
     except:
         print 'db already open'
-        dbopen = False
     try:
-        user = User.get(User.userId == user_id)
-    except:
-        user = User(userId=user_id, credentials=credentials.to_json())
-        user.save(force_insert=True)
-        user.save_user_info(user_info)
-    else:
-        # Meaning the userid is in the database, so we will update the record
-        user.update_credentials(credentials.to_json())
-        user.save_user_info(user_info)
+        query_requests = User.select().where(User.user_id == user_id)
+        if query_requests:
+            user = query_requests[0]
+            user.update_credentials(credentials.to_json())
+            user.save_user_info(user_info)
+        else:
+            user = User(user_id=user_id, credentials=credentials.to_json())
+            user.save(force_insert=True)
+
+    except Exception as e:
+        print 'Error while storing credentials ',e
     finally:
-        if dbopen:
-            db.disconnect()
+            db.close()
 
 
     '''
@@ -274,27 +272,21 @@ def connect_proc(fields=None, client_ip=STR_UNDEFINED):
 
 
 def get_oauth_token(user_id):
-    dbopen = True
     try:
         db.connect()
     except:
         print 'db already open'
-        dbopen = False
     try:
-        user = User.get(User.userId == str(user_id))
-        if user.credentials:
-            credentials = json.loads(user.credentials)
+        user = User.select().where(User.user_id == str(user_id))
+        if user[0].credentials:
+            credentials = json.loads(user[0].credentials)
             access_token = credentials['access_token']
-            #db_disconnect()
             return access_token
     except Exception as e:
         print e
-        #db_disconnect()
         return None
     finally:
-        if dbopen:
-            db.disconnect()
-    #db_disconnect()
+            db.close()
     return None
 
 
@@ -317,8 +309,8 @@ def process_request(fields, files):
     if fields['formtype'] == SINGLE:
         if status_code == INT_OK:
             #call the respective process
-            html = '<html></html>'
-            return status_code, html
+            html = '<html><HELLO/html>'
+            return status_code, respond_json(status_code, html=html)
         else:
             return INT_ERROR_GENERAL, None
 
