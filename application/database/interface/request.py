@@ -1,9 +1,10 @@
-from database.domain.request import DatingRequest
-from database import *
-from common.globalfunct import *
-from common.globalconst import *
-from server.filehandler import download_file_direct
 import os
+from common.globalconst import *
+from common.globalfunct import *
+from database import *
+from database.domain.request import DatingRequest
+
+from application.server.filehandler import download_file_direct
 
 
 def store_request(formtype, datatype, numreq, formdata, files):

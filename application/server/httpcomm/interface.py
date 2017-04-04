@@ -6,13 +6,13 @@ Simplify as simple_http_request to return the raw http response
 and http_request to return the processed data
 
 """
+import httplib
+import socket
+import urllib
 from common.globalconst import *
 from common.globalfunct import *
-from server.httpcomm.const import *
 
-import httplib
-import urllib
-import socket
+from application.server.httpcomm import *
 
 
 def http_request(url=STR_UNDEFINED,

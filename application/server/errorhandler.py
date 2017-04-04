@@ -1,4 +1,4 @@
-from common.globalconst import *
+from application.common import *
 
 class InvalidUsage(Exception):
     """

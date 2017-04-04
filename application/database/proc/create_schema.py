@@ -2,9 +2,9 @@
 import sys
 sys.path.append('../')
 
-from database import *
-from database.domain.request import DatingRequest
-from database.domain.user import User
+from application.database import *
+from application.database.domain import DatingRequest
+from application.database.domain import User
 
 try:
     db_connect()

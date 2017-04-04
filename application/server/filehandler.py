@@ -4,23 +4,24 @@ Created on : 12/21/2016
 This module contains functions
 '''
 
-import logging
+import errno
 import httplib2
 import io
+import logging
 import os
-import errno
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-from oauth2client.client import Credentials
-from googleapiclient.discovery import build
+from apiclient import discovery
 from apiclient import errors
 from apiclient import http
 from common.globalconst import *
 from common.globalfunct import *
+from googleapiclient.discovery import build
+from oauth2client.client import Credentials
+from oauth2client.client import FlowExchangeError
+from oauth2client.client import flow_from_clientsecrets
 from server.errorhandler import *
 from server.server_common import *
-from server.httpcomm.interface import *
-from apiclient import discovery
+
+from application.server.httpcomm import *
 
 
 def download_file_direct(file, request_id, filename, format='fasta'):

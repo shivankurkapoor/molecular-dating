@@ -2,7 +2,8 @@
 This is the python file that defines common functions for server module
 """
 from common.globalconst import *
-from common.globalfunct import json_encode_flask
+
+from application.common.globalfunct import json_encode_flask
 
 
 def respond_json(status_code, **kw):

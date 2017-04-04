@@ -1,5 +1,7 @@
 from peewee import *
-from database import *
+
+from application.database import *
+
 
 class User(Model):
     user_id = CharField(primary_key=True)

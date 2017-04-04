@@ -1,23 +1,21 @@
-import logging
 import httplib2
-from dateutil import parser
-from datetime import datetime, timedelta
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-from oauth2client.client import Credentials
-from googleapiclient.discovery import build
+import logging
 from apiclient import errors
 from common.globalconst import *
 from common.globalfunct import *
+from database import *
+from database.domain.user import User
+from database.interface.request import *
+from datetime import datetime, timedelta
+from dateutil import parser
+from googleapiclient.discovery import build
+from oauth2client.client import Credentials
+from oauth2client.client import FlowExchangeError
+from oauth2client.client import flow_from_clientsecrets
 from server.errorhandler import *
 from server.server_common import *
-from database import *
-#from database.domain.user import User
-from database.interface.request import *
-from database.domain.user import User
-from server.httpcomm.interface import *
 
-
+from application.server.httpcomm import *
 
 
 # ...
