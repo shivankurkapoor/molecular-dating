@@ -1,3 +1,4 @@
+var fileUploadList = {};
 
 function openForm(evt, sequenceDataType) {
     // Declare all variables
@@ -135,7 +136,7 @@ function addSangerFileChooser() {
     fastaLabel.id = "fastaLabel";
 
     var fastaScript = document.createElement("script");
-    fastafile.innerHTML = "function init" + fastabutton.id + "1Picker() { \
+    fastaScript.innerHTML = "function init" + fastabutton.id + "1Picker() { \
       var picker = new FilePicker({ \
         apiKey: 'AIzaSyAK4MtRgKB-EPXvE94oCtuma8kXaynaAes',  \
         clientId: '160430799521-om2977l800uepldismnau961cof27lti', \
@@ -151,7 +152,11 @@ function addSangerFileChooser() {
           fileUploadList['Group" + elementNumber + "']['Sample" + i + "']['Forward'] = fileJson;  \
         } \
       }); \
-    }"
+    }";
+
+
+    var loadScript = document.createElement("script");
+    loadScript.src = "https\://apis.google.com/js/client.js?onload=init" + forward.id + "1Picker";
 
     var labelalign = document.createElement('label');
     labelalign.for = "align";
@@ -179,7 +184,10 @@ function addSangerFileChooser() {
     removebuttom.onclick = function() {removeElement(this.parentNode);};
 
     div.appendChild(labelfile);
-    div.appendChild(fileinput);
+    div.appendChild(fastabutton);
+    div.appendChild(fastaLabel);
+    div.appendChild(fastaScript);
+    div.appendChild(loadScript);
     div.appendChild(labelalign);
     div.appendChild(aligninput);
     div.appendChild(labelhxb2);
