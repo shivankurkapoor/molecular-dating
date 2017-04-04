@@ -315,9 +315,17 @@ def process_request(fields, files):
                                 fields['numreq'],
                                 json_decode(str(fields['formdata'])),
                                 files)
-    if status_code == INT_OK and fields['formtype'] == SINGLE:
-        pass
-    return respond_json({''})
+
+    if fields['formtype'] == SINGLE:
+        if status_code == INT_OK:
+            #call the respective process
+            html = '<html></html>'
+            return status_code, html
+        else:
+            return INT_ERROR_GENERAL, None
+
+
+
 
 
 

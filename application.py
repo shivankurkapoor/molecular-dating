@@ -42,8 +42,11 @@ def app_connect():
 
 @application.route('/upload', methods=['POST'])
 def upload():
-    status = process_request(request.form, request.files)
-    return "Form data submitted!"
+    status, response = process_request(request.form, request.files)
+    if status == INT_OK:
+        return render_template(response)
+    else:
+         return render_template('error.html', error='Failure')
 
 @application.route('/signout')
 def signout():
