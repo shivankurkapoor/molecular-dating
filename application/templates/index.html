@@ -91,7 +91,7 @@
         <h3>Sanger Sequence Data</h3>
         <p>Fill the sanger sequence form</p>
         <div id="container_ss">
-            <form id="ss_single_form" name="ss_form" onsubmit="return upload(this);">
+            <form id="ss_single_form" name="ss_form">
                 <br>
                 Choose Fasta File: <input type='file' id='fastafile' name="fastafile">
                 <br>
@@ -104,7 +104,7 @@
                 </div>
                 <div>
                     <br>
-                    <input type='submit' value='submit'>
+                    <input type='submit' value='submit' onclick="upload(this.parentNode.parentNode)">
                 </div>
             </form>
         </div>

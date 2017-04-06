@@ -30,7 +30,7 @@
 		open: function() {
 			// Check if the user has already authenticated
 			//var token = gapi.auth.getToken();
-			var token = oauthToken;
+			token = oauthToken;
 			if (token) {
 				this._showPicker();
 			} else {
@@ -46,24 +46,15 @@
 		 */
 		_showPicker: function() {
 			//var accessToken = gapi.auth.getToken().access_token;
-			var accessToken = oauthToken;
-			/*
-			this.picker = new google.picker.PickerBuilder().
-				addView(google.picker.ViewId.DOCS).
-				setAppId(this.clientId).
-				setOAuthToken(accessToken).
-				setCallback(this._pickerCallback.bind(this)).
-				build().
-				setVisible(true);
-				*/
-			var view = new google.picker.View(google.picker.ViewId.DOCS);
-            this.picker = new google.picker.PickerBuilder()
+			accessToken = oauthToken;
+            //var view = new google.picker.View(google.picker.ViewId.DOCS).setMimeTypes('application/octet-stream');
+			this.picker = new google.picker.PickerBuilder()
 				.setAppId(appId)
 				.setOAuthToken(accessToken)
-            	.addView(view)
-				.setDeveloperKey(developerKey)
-				.addView(new google.picker.DocsUploadView())
+                .addView(new google.picker.DocsView().setIncludeFolders(true).setMimeTypes('application/octet-stream'))
+                .setSelectableMimeTypes('application/octet-stream')
             	.setCallback(this._pickerCallback.bind(this))
+                .setTitle('Select Sequence File')
             	.build().setVisible(true);
 
 		},

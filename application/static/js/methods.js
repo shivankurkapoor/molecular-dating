@@ -1,5 +1,5 @@
-var fileUploadList = {};
-var elementNumber = 0;
+var fileUploadDict = {};
+var elementNumber = 1;
 
 function openForm(evt, sequenceDataType) {
     // Declare all variables
@@ -34,34 +34,54 @@ function isAnyError(form) {
     return false;
 }
 
+
+function fillRequests(requests, dataType) {
+    if (dataType == 'ss') {
+        for (var key in fileUploadDict) {
+            if (fileUploadDict.hasOwnProperty(key)) {
+                var request = Object;
+                var input_form_element = document.getElementById('input_form_id_' + key);
+                request.algin = input_form_element
+
+                    requests.push(JSON.stringify(fileUploadDict[key]));
+            }
+        }
+    }
+    else if(dataType == 'ngs'){
+
+    }
+
+}
+
+
 function upload(form) {
     var requests = [];
-    var formtype;
-    var datatype;
+    var formType;
+    var dataType;
     var request;
-    var formdata;
-    var numreq;
+    var formData;
+    var numReq;
     if (form.id == 'ss_single_form') {
         if (!isAnyError(form)) {
-            formtype = 'single';
-            datatype = 'ss';
+            formType = 'single';
+            dataType = 'ss';
             request = Object();
             request.file = 'fastafile_1';
             request.align = form.elements['align'].checked;
             request.hxb2 = form.elements['hxb2'].checked;
-            var fastafile = form.elements['fastafile'].files[0];
-            numreq = 1;
+            var fastaFile = form.elements['fastafile'].files[0];
+            numReq = 1;
             requests.push(request);
-            formdata = new FormData();
-            formdata.append('formtype', formtype);
-            formdata.append('datatype', datatype);
-            formdata.append('formdata', JSON.stringify({'requests':requests}));
-            formdata.append('numreq', numreq);
-            formdata.append('fastafile_1', fastafile);
+            formData = new FormData();
+            formData.append('form_type', formType);
+            formData.append('data_type', dataType);
+            formData.append('form_data', JSON.stringify({'requests': requests}));
+            formData.append('num_request', numReq);
+            formData.append('fasta_file_0', fastaFile);
 
             $.ajax({
                 url: '/upload',
-                data: formdata,
+                data: formData,
                 processData: false,
                 contentType: false,
                 type: 'POST',
@@ -75,27 +95,27 @@ function upload(form) {
         }
     }
     else if (form.id == 'ngs_single_form') {
-        if(!isAnyError(form)){
-                formtype = 'single';
-                datatype = 'ngs';
-                request = Object();
-                request.forward_file = 'forward_file_1';
-                request.backward_file = 'backward_file_1';
-                var forward_file = form.elements['forwardfile'].files[0];
-                var backward_file = form.elements['backwardfile'].files[0];
-                numreq = 1;
-                requests.push(request);
-                formdata = new FormData();
-                formdata.append('formtype', formtype);
-                formdata.append('datatype', datatype);
-                formdata.append('formdata', JSON.stringify({'requests':requests}));
-                formdata.append('numreq', numreq);
-                formdata.append('forward_file_1', forward_file);
-                formdata.append('backward_file_1', backward_file);
+        if (!isAnyError(form)) {
+            formType = 'single';
+            dataType = 'ngs';
+            request = Object();
+            request.forwardFile = 'forward_file_0';
+            request.backwardFile = 'backward_file_0';
+            var forwardFile = form.elements['forwardfile'].files[0];
+            var backwardFile = form.elements['backwardfile'].files[0];
+            numReq = 1;
+            requests.push(request);
+            formData = new FormData();
+            formData.append('form_type', formType);
+            formData.append('data_type', dataType);
+            formData.append('form_data', JSON.stringify({'requests': requests}));
+            formData.append('num_request', numReq);
+            formData.append('forward_file_0', forwardFile);
+            formData.append('backward_file_0', backwardFile);
 
-                 $.ajax({
+            $.ajax({
                 url: '/upload',
-                data: formdata,
+                data: formData,
                 processData: false,
                 contentType: false,
                 type: 'POST',
@@ -108,91 +128,119 @@ function upload(form) {
         }
 
     }
-    else if (form.id == '') {
-
+    else if (form.id == 'ss_multi_form') {
+        if (!isAnyError(form)) {
+            formType = 'multiple';
+            dataType = 'ss';
+            fillRequests(requests);
+            numReq = requests.length;
+            formData = new FormData();
+            formData.append('form_type', formType);
+            formData.append('data_type', dataType);
+            formData.append('form_data', JSON.stringify({'requests': requests}));
+            formData.append('num_request', numReq);
+            $.ajax({
+                url: '/upload',
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function (data) {
+                    alert("Response received");
+                    window.location.href = "/";
+                }
+            });
+        }
     }
-    else if (form.id == '') {
+    else if (form.id == 'ngs_multi_form') {
+        if (!isAnyError(form)) {
+
+        }
 
     }
     return false
 }
 
 function removeElement(element) {
+    var elementId = element.id;
+    delete fileUploadDict[elementId];
     element.parentNode.removeChild(element);
 }
 
 function addSangerFileChooser() {
-    var form_container = document.getElementById('ss_form_container');
+    var formContainer = document.getElementById('ss_form_container');
     var div = document.createElement('div');
+    div.id = 'input_form_element_' + elementNumber;
 
-    var labelfile = document.createElement('label');
-    labelfile.for = "fastafile";
-    labelfile.innerHTML = "Choose Fasta File : ";
+    var buttonLabel = document.createElement('label');
+    buttonLabel.for = "fastafile";
+    buttonLabel.innerHTML = "Choose Fasta File : ";
 
-    var fastabutton = document.createElement("button");
-    fastabutton.id = "fastabutton"+elementNumber;
-    fastabutton.innerHTML = "Select from Google Drive";
+    var pickerButton = document.createElement("button");
+    pickerButton.id = "picker_" + elementNumber;
+    pickerButton.type = "button";
+    pickerButton.innerHTML = "Select from Google Drive";
 
-    var fastaLabel = document.createElement("label");
-    fastaLabel.id = "fastaLabel"+elementNumber;
+    var fileLabel = document.createElement("label");
+    fileLabel.id = "file_select_" + elementNumber;
 
-    var fastaScript = document.createElement("script");
-    fastaScript.innerHTML = "function init" + fastabutton.id + "1Picker() { \
+    var pickerScript = document.createElement("script");
+    pickerScript.innerHTML = "function initPicker_" + elementNumber + "() { \
       var picker = new FilePicker({ \
         apiKey: 'AIzaSyAK4MtRgKB-EPXvE94oCtuma8kXaynaAes',  \
         clientId: '160430799521-om2977l800uepldismnau961cof27lti', \
-        buttonEl: document.getElementById(\'" + fastabutton.id + "\'), \
+        buttonEl: document.getElementById(\'" + pickerButton.id + "\'), \
         onSelect: function(file) {  \
-          console.log(file);  \
-          document.getElementById(\'" + fastaLabel.id + "\').style.color=\"black\";  \
-          document.getElementById(\'" + fastaLabel.id + "\').innerHTML=file.title;  \
-          var fileJson = {};  \
-          fileJson['fileid'] = file['id'];  \
-          fileJson['parentid'] = file['parents'][0]['id'];  \
-          fileJson['filename'] = file['title']; \
-          fileUploadList[" + elementNumber + "] = fileJson;  \
+          document.getElementById(\'" + fileLabel.id + "\').style.color=\"black\";  \
+          document.getElementById(\'" + fileLabel.id + "\').innerHTML=file.title;  \
+          fileUploadDict[" + elementNumber + "] = file;  \
         } \
       }); \
     }";
 
 
     var loadScript = document.createElement("script");
-    loadScript.src = "https\://apis.google.com/js/client.js?onload=init" + fastabutton.id + "1Picker";
+    loadScript.src = "https\://apis.google.com/js/client.js?onload=initPicker_" + elementNumber;
 
-    var labelalign = document.createElement('label');
-    labelalign.for = "align";
-    labelalign.innerHTML = "Align : ";
-    var aligninput = document.createElement('input');
-    aligninput.type = "checkbox";
-    aligninput.id = "align";
-    aligninput.name = "align";
-    aligninput.value = "True";
+    var labelAlign = document.createElement('label');
+    labelAlign.for = "align";
+    labelAlign.innerHTML = "Align : ";
 
-    var labelhxb2 = document.createElement('label');
-    labelhxb2.for = "hxb2";
-    labelhxb2.innerHTML = "HXB2 : ";
-    var hxb2input = document.createElement('input');
-    hxb2input.type = "checkbox";
-    hxb2input.id = "hxb2";
-    hxb2input.name = "hxb2";
-    hxb2input.value = "True";
+    var alignInput = document.createElement('input');
+    alignInput.type = "checkbox";
+    alignInput.id = "align";
+    alignInput.name = "align";
+    alignInput.value = "True";
 
-    var removebuttom = document.createElement('button');
-    removebuttom.type = 'button';
-    removebuttom.id = "rb";
-    removebuttom.name = "rb";
-    removebuttom.innerHTML = 'Remove';
-    removebuttom.onclick = function() {removeElement(this.parentNode);};
+    var labelHXB2 = document.createElement('label');
+    labelHXB2.for = "hxb2";
+    labelHXB2.innerHTML = "HXB2 : ";
 
-    div.appendChild(labelfile);
-    div.appendChild(fastabutton);
-    div.appendChild(fastaLabel);
-    div.appendChild(fastaScript);
+    var hxb2Input = document.createElement('input');
+    hxb2Input.type = "checkbox";
+    hxb2Input.id = "hxb2";
+    hxb2Input.name = "hxb2";
+    hxb2Input.value = "True";
+
+    var removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.id = "rb";
+    removeButton.name = "rb";
+    removeButton.innerHTML = 'Remove';
+    removeButton.onclick = function () {
+        removeElement(this.parentNode);
+    };
+
+    div.appendChild(buttonLabel);
+    div.appendChild(pickerButton);
+    div.appendChild(fileLabel);
+    div.appendChild(pickerScript);
     div.appendChild(loadScript);
-    div.appendChild(labelalign);
-    div.appendChild(aligninput);
-    div.appendChild(labelhxb2);
-    div.appendChild(hxb2input);
-    div.appendChild(removebuttom);
-    form_container.appendChild(div);
+    div.appendChild(labelAlign);
+    div.appendChild(alignInput);
+    div.appendChild(labelHXB2);
+    div.appendChild(hxb2Input);
+    div.appendChild(removeButton);
+    formContainer.appendChild(div);
+    elementNumber += 1;
 }

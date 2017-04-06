@@ -7,7 +7,7 @@ from database.domain.request import DatingRequest
 from server.filehandler import download_file_direct
 
 
-def store_request(formtype, datatype, numreq, formdata, files):
+def store_request(form_type, data_type, num_request, form_data, files):
     try:
         db.connect()
     except:
@@ -21,11 +21,11 @@ def store_request(formtype, datatype, numreq, formdata, files):
         while len(query_res) >0:
             request_id = id_generator(INT_LEN_REQUEST_ID)
             query_res = DatingRequest.select().where(DatingRequest.request_id == request_id)
-        status, json_data, download_status = _create_json_data(formtype, datatype, numreq, formdata, files, request_id)
+        status, json_data, download_status = _create_form_data(form_type, data_type, num_request, form_data, files, request_id)
         record = DatingRequest(request_id=request_id,
                            form_data=json_data,
-                           form_type=formtype,
-                           data_type=datatype,
+                           form_type=form_type,
+                           data_type=data_type,
                            are_files_downloaded=download_status)
         record.save(force_insert=True)
         return status, request_id
@@ -40,7 +40,7 @@ def _get_file_path(request_id, file, format='fasta'):
     return os.path.join(DOWNLOAD_FILE_PATH.format(request_id=request_id), '.'.join([file,format]))
 
 
-def _create_json_data(formtype, datatype, numreq, formdata, files, request_id):
+def _create_form_data(formtype, datatype, numreq, formdata, files, request_id):
     request_list = []
     download_status = False
     if datatype == SANGER_SEQUNCE_DATA:

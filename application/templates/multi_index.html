@@ -58,15 +58,31 @@
             <br>
             <button id="addNewEles" onclick="addSangerFileChooser()">Add more</button>
             <br>
-            <form id="ss_multi_form" name="ss_form">
+            <form id="ss_multi_form" name="ss_multi_form" onsubmit="return upload(this)">
                 <div id="ss_form_container">
-                    <div>
+                    <div id="input_form_element_0">
                         <label>Choose Fasta File : </label>
-                        <input type="file" id="fastafile" name="fastafile">
+                        <button type="button" id='picker_0'>Select from Google Drive</button>
+                        <label id="file_select_0"></label>
+                        <script>function initPicker_0() {
+                            var picker = new FilePicker({
+                                apiKey: 'AIzaSyAK4MtRgKB-EPXvE94oCtuma8kXaynaAes',
+                                clientId: '160430799521-om2977l800uepldismnau961cof27lti',
+                                buttonEl: document.getElementById('picker_0'),
+                                onSelect: function (file) {
+                                    console.log(file);
+                                    document.getElementById('file_select_0').style.color = "black";
+                                    document.getElementById('file_select_0').innerHTML = file.title;
+                                    fileUploadList[0] = file;
+                                }
+                            });
+                        }
+                        </script>
+                        <script src="https://apis.google.com/js/client.js?onload=initPicker_0"></script>
                         <label>Align : </label>
                         <input type="checkbox" id="align" name="align" value="True">
-                        <label>HXB2 : </label>
-                        <input type="checkbox" id="hxb2" name="hxb2" value="hxb2">
+                        <label>HXB2: </label>
+                        <input type="checkbox" id="hxb2" name="hxb2" value="True">
                     </div>
 
                 </div>

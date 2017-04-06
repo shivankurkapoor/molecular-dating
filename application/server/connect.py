@@ -128,7 +128,7 @@ def store_credentials(user_id, credentials, user_info):
     try:
         db.connect()
     except:
-        print 'db already open'
+        print 'Error in connecting to database'
     try:
         query_requests = User.select().where(User.user_id == user_id)
         if query_requests:
@@ -275,7 +275,7 @@ def get_oauth_token(user_id):
     try:
         db.connect()
     except:
-        print 'db already open'
+        print 'Error in opening database'
     try:
         user = User.select().where(User.user_id == str(user_id))
         if user[0].credentials:
@@ -300,10 +300,10 @@ def _connect_proc_parsing_fields(fields):
 
 def process_request(fields, files):
     _request_parsing_fields(fields)
-    status_code, request_id = store_request(fields['formtype'],
-                                fields['datatype'],
-                                fields['numreq'],
-                                json_decode(str(fields['formdata'])),
+    status_code, request_id = store_request(fields['form_type'],
+                                fields['data_type'],
+                                fields['num_request'],
+                                json_decode(str(fields['form_data'])),
                                 files)
 
     if fields['formtype'] == SINGLE:
@@ -316,42 +316,33 @@ def process_request(fields, files):
 
 
 
-
-
-
-
-
-
-
-
-
 '''
 Private Functions
 '''
 def _request_parsing_fields(fields):
     try:
-        assert 'formtype' in fields
-        assert 'datatype' in fields
-        assert 'numreq' in fields
-        assert 'formdata' in fields
+        assert 'form_type' in fields
+        assert 'data_type' in fields
+        assert 'num_request' in fields
+        assert 'formd_ata' in fields
     except AssertionError:
         print 'Error while parsing requests, one or more fields are missing'
         raise InvalidUsage('Wrong fields form', status_code=400)
 
-    formtype = fields['formtype']
-    datatype = fields['datatype']
-    numreq = int(fields['numreq'])
-    formdata = json_decode(str(fields['formdata']))
+    form_type = fields['form_type']
+    data_type = fields['data_type']
+    num_request = int(fields['num_request'])
+    form_data = json_decode(str(fields['form_data']))
 
     try:
-        assert len(formdata['requests']) == numreq
-        if datatype  == SANGER_SEQUNCE_DATA:
+        assert len(form_data['requests']) == num_request
+        if form_type == SINGLE and data_type  == SANGER_SEQUNCE_DATA:
             pass
-        elif formtype == SINGLE and datatype == NEXT_GEN_DATA:
+        elif form_type == SINGLE and data_type == NEXT_GEN_DATA:
             pass
-        elif formtype == MULTIPLE and datatype == SANGER_SEQUNCE_DATA:
+        elif form_type == MULTIPLE and data_type == SANGER_SEQUNCE_DATA:
             pass
-        elif formtype == MULTIPLE and datatype == NEXT_GEN_DATA:
+        elif form_type == MULTIPLE and data_type == NEXT_GEN_DATA:
             pass
 
     except AssertionError:
