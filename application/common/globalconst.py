@@ -9,7 +9,8 @@ STR_UNDEFINED = 'Undefined'
 '''
 Below fields are related to Google Drive API
 '''
-CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
+#CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
+CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/GitHub/moleculardating/application/auth/client_secret.json'
 REDIRECT_URI = 'postmessage'
 SCOPES = [
     'https://www.googleapis.com/auth/drive.file'
@@ -37,7 +38,8 @@ RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refres
 GOOGLE DRIVE FILE HANDLING
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
-DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/downloadedfiles/{request_id}'
+#DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/downloadedfiles/{request_id}'
+DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/downloadedfiles/{request_id}'
 MIME_TYPE = 'application/octet-stream'
 
 DESCRIPTION = ''

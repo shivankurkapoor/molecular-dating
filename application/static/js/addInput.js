@@ -20,7 +20,7 @@ function addGroups() {
 
     var buttonElement = document.createElement("button");
     buttonElement.id = "B" + i;
-    buttonElement.innerHTML = "Add Samples"
+    buttonElement.innerHTML = "Add Samples";
     buttonElement.onclick = function() {addSamples(this);};
     container.appendChild(buttonElement);
 

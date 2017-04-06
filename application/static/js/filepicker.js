@@ -21,7 +21,7 @@
 		gapi.client.setApiKey(this.apiKey);
 		gapi.client.load('drive', 'v2', this._driveApiLoaded.bind(this));
 		google.load('picker', '1', { callback: this._pickerApiLoaded.bind(this) });
-	}
+	};
 
 	FilePicker.prototype = {
 		/**
@@ -58,12 +58,13 @@
 				*/
 			var view = new google.picker.View(google.picker.ViewId.DOCS);
             this.picker = new google.picker.PickerBuilder()
-            .setAppId(appId)
-            .setOAuthToken(accessToken)
-            .addView(view)
-            .addView(new google.picker.DocsUploadView())
-            .setCallback(this._pickerCallback.bind(this))
-            .build().setVisible(true);
+				.setAppId(appId)
+				.setOAuthToken(accessToken)
+            	.addView(view)
+				.setDeveloperKey(developerKey)
+				.addView(new google.picker.DocsUploadView())
+            	.setCallback(this._pickerCallback.bind(this))
+            	.build().setVisible(true);
 
 		},
 

@@ -1,4 +1,5 @@
 var fileUploadList = {};
+var elementNumber = 0;
 
 function openForm(evt, sequenceDataType) {
     // Declare all variables
@@ -129,11 +130,11 @@ function addSangerFileChooser() {
     labelfile.innerHTML = "Choose Fasta File : ";
 
     var fastabutton = document.createElement("button");
-    fastabutton.id = "fastabutton";
+    fastabutton.id = "fastabutton"+elementNumber;
     fastabutton.innerHTML = "Select from Google Drive";
 
     var fastaLabel = document.createElement("label");
-    fastaLabel.id = "fastaLabel";
+    fastaLabel.id = "fastaLabel"+elementNumber;
 
     var fastaScript = document.createElement("script");
     fastaScript.innerHTML = "function init" + fastabutton.id + "1Picker() { \
@@ -149,14 +150,14 @@ function addSangerFileChooser() {
           fileJson['fileid'] = file['id'];  \
           fileJson['parentid'] = file['parents'][0]['id'];  \
           fileJson['filename'] = file['title']; \
-          fileUploadList['Group" + elementNumber + "']['Sample" + i + "']['Forward'] = fileJson;  \
+          fileUploadList[" + elementNumber + "] = fileJson;  \
         } \
       }); \
     }";
 
 
     var loadScript = document.createElement("script");
-    loadScript.src = "https\://apis.google.com/js/client.js?onload=init" + forward.id + "1Picker";
+    loadScript.src = "https\://apis.google.com/js/client.js?onload=init" + fastabutton.id + "1Picker";
 
     var labelalign = document.createElement('label');
     labelalign.for = "align";

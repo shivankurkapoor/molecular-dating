@@ -1,6 +1,6 @@
 #append these paths to sys required for bash script files - it appends the path to application directory to sys
 import sys
-sys.path.append('../')
+#sys.path.append('../')
 
 from database import *
 from database.domain.request import DatingRequest
