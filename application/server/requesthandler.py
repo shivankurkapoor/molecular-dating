@@ -111,7 +111,7 @@ def generate_html(directory, request_id, user_id):
             with open(fname, 'w') as f:
                 html = render_template(os.path.join(TEMPLATE_PATH, 'display_template.html'), context)
                 f.write(html)
-        
+
     except Exception as e:
         print 'Error in generating html file', e
 
