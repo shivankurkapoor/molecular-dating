@@ -166,7 +166,7 @@ function upload(form) {
             });
         }
     }
-    else if (form.id == 'ngs-multi-form') {
+    else if (form.id == 'ngs-multi-input-form') {
         if (!isAnyError(form)) {
             formType = 'multiple';
             dataType = 'ngs';
