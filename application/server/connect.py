@@ -16,21 +16,8 @@ from server.errorhandler import *
 from server.server_common import *
 from server.httpcomm.interface import *
 from server.httpcomm.const import *
+from server.requesthandler import *
 
-
-# ...
-
-
-# Path to client_secret.json which should contain a JSON document such as:
-#   {
-#     "web": {
-#       "client_id": "[[YOUR_CLIENT_ID]]",
-#       "client_secret": "[[YOUR_CLIENT_SECRET]]",
-#       "redirect_uris": [],
-#       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-#       "token_uri": "https://accounts.google.com/o/oauth2/token"
-#     }
-#   }
 
 def renew_access_token(client_id='', client_secret='', refresh_token='', grant_type='refresh_token'):
     try:
@@ -275,14 +262,17 @@ def connect_proc(fields=None, client_ip=STR_UNDEFINED):
 def get_oauth_token(user_id):
     try:
         db.connect()
-    except:
-        print 'Error in opening database'
+    #TODO WRITE EXCEPTION CLASS FOR DB CONNECT EXCEPTIONS
+    except Exception as e:
+        print 'Error in opening database', e
     try:
-        user = User.select().where(User.user_id == str(user_id))
-        if user[0].credentials:
-            credentials = json.loads(user[0].credentials)
-            access_token = credentials['access_token']
-            return access_token
+        query_result = User.select().where(User.user_id == str(user_id))
+        if query_result:
+            user = query_result[0]
+            if user.credentials:
+                credentials = json.loads(user.credentials)
+                access_token = credentials['access_token']
+                return access_token
     except Exception as e:
         print e
         return None
@@ -291,24 +281,21 @@ def get_oauth_token(user_id):
     return None
 
 
-def process_request(fields, files):
+def process_request(fields, files, user_id=''):
     _upload_proc_parsing_fields(fields)
     status_code, request_id = store_request(fields['form_type'],
                                             fields['data_type'],
                                             fields['num_request'],
                                             json_decode(str(fields['form_data'])),
-                                            files)
+                                            files,
+                                            user_id)
 
-    if fields['form_type'] == SINGLE:
-        if status_code == INT_OK:
-            # call the respective process
-            html = '<html><HELLO></html>'
-            return status_code, respond_json(status_code, html=html)
-        else:
-            return INT_ERROR_GENERAL, None
-    else:
-        html = '<html>HELLO</hello>'
-        return status_code, respond_json(status_code, html=html)
+
+    if status_code == INT_OK:
+       status_code = handle_request(request_id, user_id)
+
+
+    return INT_ERROR_GENERAL, None
 
 
 '''

@@ -23,8 +23,7 @@ def json_decode(json_str=None):
 def datetime_util(date = None):
     '''
     This function converts the datetime format {YYYY-MM-DD HH:MM:SS}
-    to {YYYY-MM-DDTHH:MM:SSZ} format. This date format is used by Google
-    APIs
+    to {YYYY-MM-DDTHH:MM:SSZ} format. This date format is used by Google APIs
     :param date:
     :return:
     '''
@@ -34,9 +33,22 @@ def datetime_util(date = None):
     date, time = dtstr.split(' ')
     return date+'T'+time+'Z'
 
-'''
-Gives the immediate subdirectories if any within the given directory
-'''
+
 def get_immediate_subdirectories(a_dir):
     return [name for name in os.listdir(a_dir)
             if os.path.isdir(os.path.join(a_dir, name))]
+
+
+def write_bash_file(*args, **kwargs):
+    script_path = args[0]
+    script_name = args[1]
+    command = kwargs.pop('command')
+    for key, value in kwargs:
+        command+= ' '+ '--' + key + '=' + value
+    script = os.path.join(script_path, script_name) + '.sh'
+
+    print command
+    with open(script , 'w') as f:
+        f.write(command)
+
+

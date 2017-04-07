@@ -45,8 +45,8 @@ function fillRequests(requests, dataType) {
             if (sangerFileUploadDict.hasOwnProperty(key)) {
                 request = Object();
                 request.file = 'fasta_file_' + key;
-                request.align = document.getElementById('align-' + key).value;
-                request.hxb2 = document.getElementById('hxb2-' + key).value;
+                request.align = document.getElementById('align-' + key).checked;
+                request.hxb2 = document.getElementById('hxb2-' + key).checked;
                 request.meta_data = Object();
                 request.meta_data.fasta_file = sangerFileUploadDict[key];
                 requests.push(request);

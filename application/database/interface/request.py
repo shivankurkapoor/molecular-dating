@@ -7,7 +7,7 @@ from database.domain.request import DatingRequest
 from server.filehandler import download_file_direct
 
 
-def store_request(form_type, data_type, num_request, form_data, files):
+def store_request(form_type, data_type, num_request, form_data, files, user_id):
     try:
         db.connect()
     except:
@@ -23,6 +23,7 @@ def store_request(form_type, data_type, num_request, form_data, files):
         status, json_data, download_status = _create_form_data(form_type, data_type, num_request, form_data, files,
                                                                request_id)
         record = DatingRequest(request_id=request_id,
+                               user_id = user_id,
                                form_data=json_data,
                                form_type=form_type,
                                data_type=data_type,
@@ -35,9 +36,11 @@ def store_request(form_type, data_type, num_request, form_data, files):
     finally:
         db.close()
 
+
 '''
 Private Functions
 '''
+
 
 def _get_file_path(request_id, file, format=FASTA):
     return os.path.join(DOWNLOAD_FILE_PATH.format(request_id=request_id), '.'.join([file, format]))
@@ -55,17 +58,21 @@ def _create_form_data(form_type, data_type, num_request, form_data, files, reque
                     download_status = True
                 request_list.append({'fasta_file': {'file_id': request_id + '_' + request['file'],
                                                     'file_path': _get_file_path(request_id, request['file'], FASTA),
-                                                    'align': request['align'],
-                                                    'hxb2': request['hxb2'],
-                                                    'meta_data': {}
-                                                    }})
+                                                    'meta_data': {},
+                                                    'is_downloaded' : True
+                                                    },
+                                     'align': request['align'],
+                                     'hxb2': request['hxb2'],
+                                     })
             elif form_type == MULTIPLE:
                 request_list.append({'fasta_file': {'file_id': request_id + '_' + request['file'],
                                                     'file_path': _get_file_path(request_id, request['file'], FASTA),
-                                                    'align': request['align'],
-                                                    'hxb2': request['hxb2'],
-                                                    'meta_data': request['meta_data']
-                                                    }})
+                                                    'meta_data': request['meta_data'],
+                                                    'is_downloaded' : False
+                                                    },
+                                     'align': request['align'],
+                                     'hxb2': request['hxb2'],
+                                     })
 
     elif data_type == NEXT_GEN_DATA:
         for i, request in enumerate(form_data['requests']):
@@ -78,7 +85,9 @@ def _create_form_data(form_type, data_type, num_request, form_data, files, reque
                     download_status_code_list.append(download_file_direct(files[f], request_id, request[f], FASTQ))
                     request_dict[f] = {'file_id': request_id + '_' + request[f],
                                        'file_path': _get_file_path(request_id, request[f], FASTQ),
-                                       'meta_data': {}}
+                                       'meta_data': {},
+                                       'is_downloaded' : True}
+
 
                 if all(status == INT_DOWNLOADED for status in download_status_code_list):
                     download_status = True
@@ -86,7 +95,10 @@ def _create_form_data(form_type, data_type, num_request, form_data, files, reque
                 for f in request_dict:
                     request_dict[f] = {'file_id': request_id + '_' + request[f],
                                        'file_path': _get_file_path(request_id, request[f], FASTQ),
-                                       'meta_data': request['meta_data'][f]}
+                                       'meta_data': request['meta_data'][f],
+                                       'is_downloaded' : False}
+
+            #TODO ADD ALL THE FIELDS OF FASTQ FORM AND UPDATE THE DICTIONARY
             request_list.append(request_dict)
 
     return INT_OK, json_encode({'requests': request_list}), download_status

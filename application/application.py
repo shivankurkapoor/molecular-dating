@@ -28,6 +28,10 @@ def app_show_form():
     else:
         return render_template('error.html', error='Could not authenticate')
 
+@application.route('/displaypage', methods=['GET'])
+def app_display():
+    request_params = json_decode(request.data)
+
 
 @application.route('/connect', methods=['POST'])
 def app_connect():
@@ -42,7 +46,8 @@ def app_connect():
 
 @application.route('/upload', methods=['POST'])
 def upload():
-    status, response = process_request(request.form, request.files)
+    user_id = session.get('userId', '')
+    status, response = process_request(request.form, request.files, user_id=user_id)
     if status == INT_OK:
         return response
     else:

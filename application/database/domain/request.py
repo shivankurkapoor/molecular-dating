@@ -6,6 +6,7 @@ from database import *
 
 class DatingRequest(Model):
     request_id = CharField(primary_key=True)
+    user_id = CharField(default='')
     form_data = TextField(default='')
     form_type = CharField(default='')
     data_type = CharField(default='')
@@ -35,7 +36,7 @@ class DatingRequest(Model):
         self.is_uploaded = is_uploaded
         self.save()
 
-    datingrequest_attr = ['request_id', 'form_data', 'form_type', 'data_type',
+    datingrequest_attr = ['request_id', 'user_id','form_data', 'form_type', 'data_type',
                           'are_files_downloaded', 'time_created', 'time_processed',
                           'is_processed', 'is_uploaded']
 

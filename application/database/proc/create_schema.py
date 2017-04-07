@@ -9,6 +9,7 @@ from database.domain.user import User
 try:
     db.connect()
     db.create_tables([User, DatingRequest])
-    db.close()
 except Exception as e:
-    print 'Error while creating schemas ',e
+    print 'Error while creating schemas',e
+finally:
+    db.close()

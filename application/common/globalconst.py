@@ -75,27 +75,22 @@ INT_FAILURE_UPLOAD = -5002
 INT_DOWNLOADED = 5001
 INT_UPLOADED = 5002
 
-'''
-bioinformatics pipeline related constants
-'''
-INPUT_FILE_PATH = '../requests'
 
 '''
-taxonomy annotation program related constants
+Dir path for html file
 '''
-USERFILE = None		#the user file for which family annotations need to be found out
-REFFILE = 'current_Bacteria_aligned.fa'		#the reference file which will be used to find the taxonomy annotation
-#REFFILE = '/Users/zifanwang/Downloads/RDPDataset/current_Bacteria_aligned.fa'
-OUTPUTDIRECTORY = None	#the directory where the output file needs to be saved
-#SUBINDEXEDREFFILEDIRECTORY = '../subindexedRefFiles/'		#the reference file which will be used to find out the family annotations
-#SUBINDEXEDREFFILEDIRECTORY = '/Users/zifanwang/Downloads/RDPDataset/SubIndexedRefFiles10000/'
-SUBINDEXEDREFFILEDIRECTORY = '../SubIndexedRefFiles10000/'
-START = 0			#the base number where the region of interest starts in the reference sequence
-END = 0				#the base number where the region of interest ends in the reference sequence
-GAPREMOVEDUSERFILE = None	#the gap removed user file
-TAXONOMY_OUTPUT_DIR = 'TaxonomyOutput/'
-GRAPH_FILE_NAME = 'abundance_info.png'
-ZIP_OUTPUT_FILE_NAME = 'taxonomy_output.zip'
+TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
+
+'''
+Output dir path
+'''
+OUTPUT_PATH = '/home/leelab/PycharmProjects/moleculardating/output'
+
+'''
+Bash directories
+'''
+BASH_SCRIPT_DOWNLOAD = '/home/leelab/PycharmProjects/moleculardating/bash/download'
+BASH_SCRIPT_EXECUTE = '/home/leelab/PycharmProjects/moleculardating/bash/execute'
 
 
 '''
