@@ -47,7 +47,8 @@ function fillRequests(requests, dataType) {
                 request.file = 'fasta_file_' + key;
                 request.align = document.getElementById('align-' + key).value;
                 request.hxb2 = document.getElementById('hxb2-' + key).value;
-                request.meta_data = sangerFileUploadDict[key];
+                request.meta_data = Object();
+                request.meta_data.fasta_file = sangerFileUploadDict[key];
                 requests.push(request);
             }
         }
@@ -56,8 +57,8 @@ function fillRequests(requests, dataType) {
         for (key in ngsFileUploadDict) {
             if (ngsFileUploadDict.hasOwnProperty(key)) {
                 request = Object();
-                request.forwardFile = 'forwatd_file_' + key;
-                request.backwardFile = 'backward_file_' + key;
+                request.forward_file = 'forward_file_' + key;
+                request.backward_file = 'backward_file_' + key;
                 request.meta_data = Object();
                 request.meta_data.forward_file = ngsFileUploadDict[key]['forward'];
                 request.meta_data.backward_file = ngsFileUploadDict[key]['backward'];
@@ -113,8 +114,8 @@ function upload(form) {
             formType = 'single';
             dataType = 'ngs';
             request = Object();
-            request.forwardFile = 'forward_file_0';
-            request.backwardFile = 'backward_file_0';
+            request.forward_file = 'forward_file_0';
+            request.backward_file = 'backward_file_0';
             var forwardFile = form.elements['forwardfile'].files[0];
             var backwardFile = form.elements['backwardfile'].files[0];
             numReq = 1;
@@ -124,8 +125,8 @@ function upload(form) {
             formData.append('data_type', dataType);
             formData.append('form_data', JSON.stringify({'requests': requests}));
             formData.append('num_request', numReq);
-            formData.append('forward_file_0', forwardFile);
-            formData.append('backward_file_0', backwardFile);
+            formData.append('forward_file', forwardFile);
+            formData.append('backward_file', backwardFile);
 
             $.ajax({
                 url: '/upload',
@@ -310,7 +311,9 @@ function addNextGenInputElements() {
         onSelect: function(file) {  \
           document.getElementById(\'" + forwardFileLabel.id + "\').style.color=\"black\";  \
           document.getElementById(\'" + forwardFileLabel.id + "\').innerHTML=file.title;  \
-          ngsFileUploadDict[" + ngsElementNumber + "] = {};  \
+          if(!ngsFileUploadDict.hasOwnProperty("+ ngsElementNumber +")){\
+               ngsFileUploadDict[" + ngsElementNumber +"] = {}; \
+          }\
           ngsFileUploadDict[" + ngsElementNumber + "][\"forward\"] = file;\
         } \
       }); \
@@ -341,7 +344,9 @@ function addNextGenInputElements() {
         onSelect: function(file) {  \
           document.getElementById(\'" + backwardFileLabel.id + "\').style.color=\"black\";  \
           document.getElementById(\'" + backwardFileLabel.id + "\').innerHTML=file.title;  \
-          ngsFileUploadDict[" + ngsElementNumber + "] = {};  \
+          if(!ngsFileUploadDict.hasOwnProperty("+ ngsElementNumber +")){\
+               ngsFileUploadDict[" + ngsElementNumber +"] = {}; \
+          }\
           ngsFileUploadDict[" + ngsElementNumber + "][\"backward\"] = file;\
         } \
       }); \

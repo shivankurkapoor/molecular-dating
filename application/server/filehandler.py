@@ -24,7 +24,7 @@ from server.server_common import *
 from server.httpcomm import *
 
 
-def download_file_direct(file, request_id, filename, format='fasta'):
+def download_file_direct(file, request_id, filename, format=FASTA):
     dir = DOWNLOAD_FILE_PATH.format(request_id=request_id)
     if not os.path.exists(dir):
         os.makedirs(dir)

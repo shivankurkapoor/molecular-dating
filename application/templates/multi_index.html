@@ -116,7 +116,9 @@
                                     console.log(file);
                                     document.getElementById('forward-file-select-0').style.color = "black";
                                     document.getElementById('forward-file-select-0').innerHTML = file.title;
-                                    ngsFileUploadDict[0] = {};
+                                    if(!ngsFileUploadDict.hasOwnProperty(0)){
+                                        ngsFileUploadDict[0] = {};
+                                    }
                                     ngsFileUploadDict[0]['forward'] = file;
                                 }
                             });
@@ -136,8 +138,10 @@
                                     console.log(file);
                                     document.getElementById('backward-file-select-0').style.color = "black";
                                     document.getElementById('backward-file-select-0').innerHTML = file.title;
-                                    ngsFileUploadDict[0] = {};
-                                    ngsFileUploadDict[0]['forward'] = file;
+                                    if(!ngsFileUploadDict.hasOwnProperty(0)){
+                                        ngsFileUploadDict[0] = {};
+                                    }
+                                    ngsFileUploadDict[0]['backward'] = file;
                                 }
                             });
                         }

@@ -32,7 +32,7 @@ from server.httpcomm.const import *
 #     }
 #   }
 
-def renew_access_token(client_id = '', client_secret='', refresh_token = '', grant_type = 'refresh_token'):
+def renew_access_token(client_id='', client_secret='', refresh_token='', grant_type='refresh_token'):
     try:
         assert client_id
         assert client_secret
@@ -43,10 +43,11 @@ def renew_access_token(client_id = '', client_secret='', refresh_token = '', gra
         return INT_FAILURE, None
     try:
         params = RENEW_TOKEN_PARAMS.format(client_id=client_id, client_secret=client_secret,
-                                           refresh_token=refresh_token,grant_type=grant_type)
-        headers = {'Cache-Control':'no-cache',
-                   'content-type':'application/x-www-form-urlencoded'}
-        response = simple_http_request(url=RENEW_TOKEN_URL, method='POST', url2=RENEW_TOKEN_PATH, body=params, ishttps=True, headers=headers)
+                                           refresh_token=refresh_token, grant_type=grant_type)
+        headers = {'Cache-Control': 'no-cache',
+                   'content-type': 'application/x-www-form-urlencoded'}
+        response = simple_http_request(url=RENEW_TOKEN_URL, method='POST', url2=RENEW_TOKEN_PATH, body=params,
+                                       ishttps=True, headers=headers)
         data = json_decode(response.read())
         if 'access_token' in data:
             return INT_OK, data
@@ -54,9 +55,8 @@ def renew_access_token(client_id = '', client_secret='', refresh_token = '', gra
             print 'Could not retrieve access token'
             return INT_FAILURE_RENEW, None
     except Exception as e:
-        print 'Error in renew_access_token ',e
+        print 'Error in renew_access_token ', e
         return INT_ERROR_GENERAL, None
-
 
 
 def get_stored_credentials(user_id):
@@ -96,7 +96,8 @@ def get_stored_credentials(user_id):
                                                        )
                 if status_code == INT_OK:
                     credentials['access_token'] = data['access_token']
-                    credentials['token_expiry'] = datetime_util(datetime.now() + timedelta(seconds=float(str(data['expires_in']))))
+                    credentials['token_expiry'] = datetime_util(
+                        datetime.now() + timedelta(seconds=float(str(data['expires_in']))))
                     credentials = Credentials.new_from_json(json_encode(credentials))
                     user.update_credentials(credentials.to_json())
 
@@ -109,7 +110,7 @@ def get_stored_credentials(user_id):
         print e
         return None
     finally:
-            db.close()
+        db.close()
 
 
 def store_credentials(user_id, credentials, user_info):
@@ -137,13 +138,13 @@ def store_credentials(user_id, credentials, user_info):
             user.save_user_info(user_info)
         else:
             user = User(user_id=user_id, credentials=credentials.to_json())
+            user.save_user_info(user_info)
             user.save(force_insert=True)
 
     except Exception as e:
-        print 'Error while storing credentials ',e
+        print 'Error while storing credentials ', e
     finally:
-            db.close()
-
+        db.close()
 
     '''
     try:
@@ -250,7 +251,7 @@ def get_credentials(authorization_code, state=None):
         else:
             credentials = get_stored_credentials(user_id)
             if credentials and credentials.refresh_token is not None:
-                return user_id,INT_OK
+                return user_id, INT_OK
     except CodeExchangeException, error:
         logging.error('An error occurred during code exchange.')
         # Drive apps should try to retrieve the user and credentials for the current
@@ -286,29 +287,21 @@ def get_oauth_token(user_id):
         print e
         return None
     finally:
-            db.close()
+        db.close()
     return None
 
 
-def _connect_proc_parsing_fields(fields):
-    try:
-        assert 'authcode' in fields
-    except AssertionError:
-        print 'Error : Authorization code not received in the request'
-        raise InvalidUsage('Wrong fields format', status_code=400)
-
-
 def process_request(fields, files):
-    _request_parsing_fields(fields)
+    _upload_proc_parsing_fields(fields)
     status_code, request_id = store_request(fields['form_type'],
-                                fields['data_type'],
-                                fields['num_request'],
-                                json_decode(str(fields['form_data'])),
-                                files)
+                                            fields['data_type'],
+                                            fields['num_request'],
+                                            json_decode(str(fields['form_data'])),
+                                            files)
 
     if fields['form_type'] == SINGLE:
         if status_code == INT_OK:
-            #call the respective process
+            # call the respective process
             html = '<html><HELLO></html>'
             return status_code, respond_json(status_code, html=html)
         else:
@@ -318,12 +311,12 @@ def process_request(fields, files):
         return status_code, respond_json(status_code, html=html)
 
 
-
-
 '''
 Private Functions
 '''
-def _request_parsing_fields(fields):
+
+
+def _upload_proc_parsing_fields(fields):
     try:
         assert 'form_type' in fields
         assert 'data_type' in fields
@@ -340,7 +333,7 @@ def _request_parsing_fields(fields):
 
     try:
         assert len(form_data['requests']) == num_request
-        if form_type == SINGLE and data_type  == SANGER_SEQUNCE_DATA:
+        if form_type == SINGLE and data_type == SANGER_SEQUNCE_DATA:
             pass
         elif form_type == SINGLE and data_type == NEXT_GEN_DATA:
             pass
@@ -352,3 +345,11 @@ def _request_parsing_fields(fields):
     except AssertionError:
         print 'Error while parsing requests, one or more fields are missing'
         raise InvalidUsage('Wrong fields form', status_code=400)
+
+
+def _connect_proc_parsing_fields(fields):
+    try:
+        assert 'authcode' in fields
+    except AssertionError:
+        print 'Error : Authorization code not received in the request'
+        raise InvalidUsage('Wrong fields format', status_code=400)

@@ -14,7 +14,7 @@ class User(Model):
     name = TextField(default='')
     picture = TextField(default='')
     verified_email = BooleanField(default=False)
-    credentials = TextField()
+    credentials = TextField(default='')
 
     class Meta:
         database = db

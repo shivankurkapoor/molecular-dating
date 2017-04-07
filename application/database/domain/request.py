@@ -11,7 +11,7 @@ class DatingRequest(Model):
     data_type = CharField(default='')
     are_files_downloaded = BooleanField(default=False)
     time_created = TimestampField(default=datetime.now())
-    time_processed = TimestampField(default=None)
+    time_processed = TimestampField()
     is_processed = BooleanField(default=False)
     is_uploaded = BooleanField(default=False)
 
@@ -34,4 +34,8 @@ class DatingRequest(Model):
     def set_is_uploaded(self, is_uploaded=False):
         self.is_uploaded = is_uploaded
         self.save()
+
+    datingrequest_attr = ['request_id', 'form_data', 'form_type', 'data_type',
+                          'are_files_downloaded', 'time_created', 'time_processed',
+                          'is_processed', 'is_uploaded']
 
