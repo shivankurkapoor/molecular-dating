@@ -36,12 +36,12 @@
         <li>Make sure that your web browser has 'enable pop-ups' for this website</li>
         <li>Please sign in to upload multiple files or use the direct file upload for single file</li>
     </ul>
-    <button id="signinButton">Sign in with Google</button>
+    <button id="signin-button">Sign in with Google</button>
     <script>
         window.addEventListener('message', function (event) {
             console.log(event.data);
         });
-        $('#signinButton').click(function () {
+        $('#signin-button').click(function () {
             // signInCallback defined in step 6.
             auth2.grantOfflineAccess({'redirect_uri': 'postmessage'}).then(signInCallback);
         });
@@ -51,10 +51,10 @@
             if (authResult['code']) {
 
                 // Hide the sign-in button now that the user is authorized, for example:
-                $('#signinButton').attr('style', 'display: none');
+                $('#signin-button').attr('style', 'display: none');
 
                 // Send the code to the server
-                var authcode = {'authcode': authResult['code']}
+                var authcode = {'authcode': authResult['code']};
                 $.ajax({
                     type: 'POST',
                     url: '/connect',
@@ -83,15 +83,15 @@
         };
     </script>
     <div class="tab">
-        <button id="ssbutton" class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
-        <button id="ngsbutton" class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data
+        <button id="ss-tab-button" class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
+        <button id="ngs-tab-button" class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data
         </button>
     </div>
     <div id="ss" class="tabcontent">
         <h3>Sanger Sequence Data</h3>
         <p>Fill the sanger sequence form</p>
-        <div id="container_ss">
-            <form id="ss_single_form" name="ss_form">
+        <div id="container-ss">
+            <form id="ss-single-input-form" name="ss-single-input-form">
                 <br>
                 Choose Fasta File: <input type='file' id='fastafile' name="fastafile">
                 <br>
@@ -113,8 +113,8 @@
     <div id="ngs" class="tabcontent">
         <h3>Next Generation Sequence Data</h3>
         <p>Fill the ngs data form</p>
-        <div id="container_ngs">
-            <form id="ngs_single_form" name="ngs_form" onsubmit="return upload(this);">
+        <div id="container-ngs">
+            <form id="ngs-single-input-form" name="ngs-single-input-form" onsubmit="return upload(this);">
                 <br>
                 Choose Forward File: <input type='file' id='forwardfile' name="forwardfile">
                 <br>

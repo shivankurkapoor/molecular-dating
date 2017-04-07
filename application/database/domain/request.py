@@ -11,7 +11,7 @@ class DatingRequest(Model):
     data_type = CharField(default='')
     are_files_downloaded = BooleanField(default=False)
     time_created = TimestampField(default=datetime.now())
-    time_processed = TimestampField()
+    time_processed = TimestampField(default=None)
     is_processed = BooleanField(default=False)
     is_uploaded = BooleanField(default=False)
 

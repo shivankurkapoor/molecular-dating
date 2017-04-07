@@ -306,13 +306,17 @@ def process_request(fields, files):
                                 json_decode(str(fields['form_data'])),
                                 files)
 
-    if fields['formtype'] == SINGLE:
+    if fields['form_type'] == SINGLE:
         if status_code == INT_OK:
             #call the respective process
-            html = '<html><HELLO/html>'
+            html = '<html><HELLO></html>'
             return status_code, respond_json(status_code, html=html)
         else:
             return INT_ERROR_GENERAL, None
+    else:
+        html = '<html>HELLO</hello>'
+        return status_code, respond_json(status_code, html=html)
+
 
 
 
@@ -324,7 +328,7 @@ def _request_parsing_fields(fields):
         assert 'form_type' in fields
         assert 'data_type' in fields
         assert 'num_request' in fields
-        assert 'formd_ata' in fields
+        assert 'form_data' in fields
     except AssertionError:
         print 'Error while parsing requests, one or more fields are missing'
         raise InvalidUsage('Wrong fields form', status_code=400)

@@ -47,42 +47,42 @@
 <a href="#" onclick="signOut();">Sign out</a>
 <div class="container">
     <div class="tab">
-        <button id="ssbutton" class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
-        <button id="ngsbutton" class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data
+        <button id="ss-tab-button" class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
+        <button id="ngs-tab-button" class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data
         </button>
     </div>
     <div id="ss" class="tabcontent">
         <h3>Sanger Sequence Data</h3>
         <p>Fill the sanger sequence form</p>
-        <div id="container_ss">
+        <div id="container-ss">
             <br>
-            <button id="addNewEles" onclick="addSangerFileChooser()">Add more</button>
+            <button id="add-sanger-input-button" onclick="addSangerInputElements()">Add more</button>
             <br>
-            <form id="ss_multi_form" name="ss_multi_form" onsubmit="return upload(this)">
-                <div id="ss_form_container">
-                    <div id="input_form_element_0">
+            <form id="ss-multi-input-form" name="ss-multi-input-form" onsubmit="return upload(this)">
+                <div id="ss-form-container">
+                    <div id="ss-input-form-element-0">
                         <label>Choose Fasta File : </label>
-                        <button type="button" id='picker_0'>Select from Google Drive</button>
-                        <label id="file_select_0"></label>
+                        <button type="button" id='picker-0'>Select from Google Drive</button>
+                        <label id="file-select-0"></label>
                         <script>function initPicker_0() {
                             var picker = new FilePicker({
                                 apiKey: 'AIzaSyAK4MtRgKB-EPXvE94oCtuma8kXaynaAes',
                                 clientId: '160430799521-om2977l800uepldismnau961cof27lti',
-                                buttonEl: document.getElementById('picker_0'),
+                                buttonEl: document.getElementById('picker-0'),
                                 onSelect: function (file) {
                                     console.log(file);
-                                    document.getElementById('file_select_0').style.color = "black";
-                                    document.getElementById('file_select_0').innerHTML = file.title;
-                                    fileUploadList[0] = file;
+                                    document.getElementById('file-select-0').style.color = "black";
+                                    document.getElementById('file-select-0').innerHTML = file.title;
+                                    sangerFileUploadDict[0] = file;
                                 }
                             });
                         }
                         </script>
                         <script src="https://apis.google.com/js/client.js?onload=initPicker_0"></script>
                         <label>Align : </label>
-                        <input type="checkbox" id="align" name="align" value="True">
+                        <input type="checkbox" id="align-0" name="align" value="True">
                         <label>HXB2: </label>
-                        <input type="checkbox" id="hxb2" name="hxb2" value="True">
+                        <input type="checkbox" id="hxb2-0" name="hxb2" value="True">
                     </div>
 
                 </div>
@@ -97,6 +97,60 @@
     <div id="ngs" class="tabcontent">
         <h3>Next Generation Sequence Data</h3>
         <p>Fill the ngs data form</p>
+        <div id="container-ngs">
+            <br>
+            <button id="add-ngs-input-button" onclick="addNextGenInputElements()">Add more</button>
+            <br>
+            <form id="ngs-multi-input-form" name="ngs-multi-input-form" onsubmit="return upload(this)">
+                <div id="ngs-form-container">
+                    <div id="ngs-input-form-element-0">
+                        <label>Choose Forward File : </label>
+                        <button type="button" id='picker-forward-0'>Select from Google Drive</button>
+                        <label id="forward-file-select-0"></label>
+                        <script>function initForwardPicker_0() {
+                            var picker = new FilePicker({
+                                apiKey: 'AIzaSyAK4MtRgKB-EPXvE94oCtuma8kXaynaAes',
+                                clientId: '160430799521-om2977l800uepldismnau961cof27lti',
+                                buttonEl: document.getElementById('picker-forward-0'),
+                                onSelect: function (file) {
+                                    console.log(file);
+                                    document.getElementById('forward-file-select-0').style.color = "black";
+                                    document.getElementById('forward-file-select-0').innerHTML = file.title;
+                                    ngsFileUploadDict[0] = {};
+                                    ngsFileUploadDict[0]['forward'] = file;
+                                }
+                            });
+                        }
+                        </script>
+                        <script src="https://apis.google.com/js/client.js?onload=initForwardPicker_0"></script>
+
+                        <label>Choose Backward File : </label>
+                        <button type="button" id='picker-backward-0'>Select from Google Drive</button>
+                        <label id="backward-file-select-0"></label>
+                        <script>function initBackwardPicker_0() {
+                            var picker = new FilePicker({
+                                apiKey: 'AIzaSyAK4MtRgKB-EPXvE94oCtuma8kXaynaAes',
+                                clientId: '160430799521-om2977l800uepldismnau961cof27lti',
+                                buttonEl: document.getElementById('picker-backward-0'),
+                                onSelect: function (file) {
+                                    console.log(file);
+                                    document.getElementById('backward-file-select-0').style.color = "black";
+                                    document.getElementById('backward-file-select-0').innerHTML = file.title;
+                                    ngsFileUploadDict[0] = {};
+                                    ngsFileUploadDict[0]['forward'] = file;
+                                }
+                            });
+                        }
+                        </script>
+                        <script src="https://apis.google.com/js/client.js?onload=initBackwardPicker_0"></script>
+                    </div>
+
+                </div>
+                <div>
+                    <input type='submit' value='submit'>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
