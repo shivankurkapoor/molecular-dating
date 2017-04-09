@@ -30,6 +30,8 @@ function showDefault() {
     tabcontent = document.getElementById("ss");
     tabcontent.style.display = "block";
     button.className += " active";
+    loader = document.getElementById("loader-display");
+    loader.style.display = "none";
 }
 
 function isAnyError(form) {
@@ -47,8 +49,7 @@ function fillRequests(requests, dataType) {
                 request.file = 'fasta_file_' + key;
                 request.align = document.getElementById('align-' + key).checked;
                 request.hxb2 = document.getElementById('hxb2-' + key).checked;
-                request.meta_data = Object();
-                request.meta_data.fasta_file = sangerFileUploadDict[key];
+                request.meta_data = sangerFileUploadDict[key];
                 requests.push(request);
             }
         }
@@ -100,9 +101,17 @@ function upload(form) {
                 processData: false,
                 contentType: false,
                 type: 'POST',
+                beforeSend: function () {
+                    document.getElementById("ss").style.display = 'none';
+                    document.getElementById("loader-display").style.display = 'block';
+
+                },
                 success: function (data) {
-                    alert("Response received");
+                    //alert("Response received");
                     window.location.href = "/";
+                },
+                error: function () {
+                    
                 }
             });
 
@@ -134,9 +143,16 @@ function upload(form) {
                 processData: false,
                 contentType: false,
                 type: 'POST',
+                beforeSend: function () {
+                    document.getElementById("ngs").style.display = 'none';
+                    document.getElementById("loader-display").style.display = 'block';
+                },
                 success: function (data) {
-                    alert("Response received");
+                    //alert("Response received");
                     window.location.href = "/";
+                },
+                error: function () {
+
                 }
             });
 
@@ -161,8 +177,16 @@ function upload(form) {
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
-                    alert("Response received");
-                    window.location.href = "/multiform";
+                   alert(data['status']);
+                    if(data['status'] == 'ok'){
+                        window.location.href = "/displaypage?request_id="+data['request_id']+"&user_id="+data['user_id'];
+                    }
+                    else{
+                        window.location.href = '/error'
+                    }
+                },
+                error: function () {
+
                 }
             });
         }
@@ -185,8 +209,16 @@ function upload(form) {
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
-                    alert("Response received");
-                    window.location.href = "/multiform";
+                    alert(data['status']);
+                     if(data['status'] == 'ok'){
+                        window.location.href = "/displaypage?request_id="+data['request_id']+"&user_id="+data['user_id'];
+                    }
+                    else{
+                        window.location.href = '/error'
+                    }
+                },
+                error: function () {
+
                 }
             });
         }

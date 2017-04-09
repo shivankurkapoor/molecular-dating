@@ -292,7 +292,9 @@ def process_request(fields, files, user_id=''):
 
 
     if status_code == INT_OK:
-       status_code = handle_request(request_id, user_id)
+        status_code = handle_request(request_id, user_id)
+        if status_code == INT_OK:
+            return status_code, respond_json(status_code, request_id=request_id, user_id=user_id)
 
 
     return INT_ERROR_GENERAL, None

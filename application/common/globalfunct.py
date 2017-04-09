@@ -43,12 +43,15 @@ def write_bash_file(*args, **kwargs):
     script_path = args[0]
     script_name = args[1]
     command = kwargs.pop('command')
-    for key, value in kwargs:
-        command+= ' '+ '--' + key + '=' + value
-    script = os.path.join(script_path, script_name) + '.sh'
+    for key, value in kwargs.items():
+        command+= ' '+ '--' + str(key) + '=' + str(value)
+    script = '.'.join([os.path.join(script_path, script_name) , 'sh'])
 
     print command
-    with open(script , 'w') as f:
-        f.write(command)
+    try:
+        with open(script, 'w') as f:
+            f.write(command)
+    except IOError as e:
+        print 'Error in generating bash script', e
 
 

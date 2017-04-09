@@ -9,7 +9,7 @@ from common.globalconst import *
 from common.globalfunct import *
 
 
-application = Flask(__name__)
+application = Flask(__name__, )
 
 
 @application.route('/')
@@ -30,7 +30,11 @@ def app_show_form():
 
 @application.route('/displaypage', methods=['GET'])
 def app_display():
-    request_params = json_decode(request.data)
+    request_params = request.values
+    if 'userId' in session and session['userId'] == request_params['user_id']:
+        return render_template('display/' + request_params['request_id']+'.html')
+    else:
+        return render_template('error.html', error='Could not authenticate')
 
 
 @application.route('/connect', methods=['POST'])

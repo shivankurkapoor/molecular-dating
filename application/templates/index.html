@@ -93,7 +93,7 @@
         <div id="container-ss">
             <form id="ss-single-input-form" name="ss-single-input-form">
                 <br>
-                Choose Fasta File: <input type='file' id='fastafile' name="fastafile">
+                Choose Fasta File: <input type='file' id='fastafile' name="fastafile" accept=".fasta">
                 <br>
 
                 <div>
@@ -110,16 +110,17 @@
         </div>
     </div>
 
+
     <div id="ngs" class="tabcontent">
         <h3>Next Generation Sequence Data</h3>
         <p>Fill the ngs data form</p>
         <div id="container-ngs">
             <form id="ngs-single-input-form" name="ngs-single-input-form" onsubmit="return upload(this);">
                 <br>
-                Choose Forward File: <input type='file' id='forwardfile' name="forwardfile">
+                Choose Forward File: <input type='file' id='forwardfile' name="forwardfile" accept=".fastq">
                 <br>
                 <br>
-                Choose Backward File: <input type='file' id='backwardfile' name="backwardfile">
+                Choose Backward File: <input type='file' id='backwardfile' name="backwardfile" accept=".fastq">
                 <br>
                 <div>
                     <br>
@@ -127,6 +128,11 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <div id="loader-display" class="tabcontent">
+        <h2>Your request is being processed. Please wait..</h2>
+        <img src="../static/images/ajax-loader.gif">
     </div>
 </div>
 
