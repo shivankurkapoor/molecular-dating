@@ -70,6 +70,22 @@ function fillRequests(requests, dataType) {
 }
 
 
+function fetch(request_id) {
+    $.ajax({
+        url: '/fetch',
+        data: {'request_id' : request_id},
+        dataType: 'json',
+        type: 'GET',
+        success: function (data) {
+            alert('SUCCESS');
+            //window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'];
+        },
+        error: function (data) {
+            alert('Error in second Ajax call');
+        }
+    });
+}
+
 function upload(form) {
     var requests = [];
     var formType;
@@ -95,29 +111,30 @@ function upload(form) {
             formData.append('num_request', numReq);
             formData.append('fasta_file_0', fastaFile);
 
+
             $.ajax({
                 url: '/upload',
                 data: formData,
                 processData: false,
                 contentType: false,
                 type: 'POST',
-                beforeSend: function () {
+                async: false,
+                success: function (data) {
+                    //alert(data['request_id']);
+                    document.getElementById("loader-msg").innerHTML = 'Request Id:' + data['request_id'] + '. Your request is being processed. ' +
+                        'Please wait or keep note of your request id and check the status of your ' +
+                        'request later.';
                     document.getElementById("ss").style.display = 'none';
                     document.getElementById("loader-display").style.display = 'block';
-
-                },
-                success: function (data) {
-                    //alert("Response received");
-                    window.location.href = "/";
+                    fetch(data['request_id'])
                 },
                 error: function () {
-                    
+                    alert('Error in first Ajax call');
                 }
             });
-
-
         }
     }
+
     else if (form.id == 'ngs-single-input-form') {
         if (!isAnyError(form)) {
             formType = 'single';
@@ -143,16 +160,17 @@ function upload(form) {
                 processData: false,
                 contentType: false,
                 type: 'POST',
-                beforeSend: function () {
+                async: false,
+                success: function (data) {
+                    document.getElementById("loader-msg").innerHTML = 'Request Id:' + data['request_id'] + '. Your request is being processed. ' +
+                        'Please wait or keep note of your request id and check the status of your ' +
+                        'request later.';
                     document.getElementById("ngs").style.display = 'none';
                     document.getElementById("loader-display").style.display = 'block';
-                },
-                success: function (data) {
-                    //alert("Response received");
-                    window.location.href = "/";
+                    fetch(data['request_id'])
                 },
                 error: function () {
-
+                        alert('Error in first Ajax call');
                 }
             });
 
@@ -177,11 +195,11 @@ function upload(form) {
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
-                   alert(data['status']);
-                    if(data['status'] == 'ok'){
-                        window.location.href = "/displaypage?request_id="+data['request_id']+"&user_id="+data['user_id'];
+                    alert(data['status']);
+                    if (data['status'] == 'ok') {
+                        window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'];
                     }
-                    else{
+                    else {
                         window.location.href = '/error'
                     }
                 },
@@ -210,10 +228,10 @@ function upload(form) {
                 type: 'POST',
                 success: function (data) {
                     alert(data['status']);
-                     if(data['status'] == 'ok'){
-                        window.location.href = "/displaypage?request_id="+data['request_id']+"&user_id="+data['user_id'];
+                    if (data['status'] == 'ok') {
+                        window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'];
                     }
-                    else{
+                    else {
                         window.location.href = '/error'
                     }
                 },
@@ -230,10 +248,10 @@ function upload(form) {
 function removeElement(element) {
     var dataType = element.id.split('-')[0];
     var elementId = element.id.split('-').pop();
-    if(dataType == 'ss'){
+    if (dataType == 'ss') {
         delete sangerFileUploadDict[elementId];
     }
-    else if(dataType == 'ngs'){
+    else if (dataType == 'ngs') {
         delete ngsFileUploadDict[elementId];
     }
 
@@ -343,8 +361,8 @@ function addNextGenInputElements() {
         onSelect: function(file) {  \
           document.getElementById(\'" + forwardFileLabel.id + "\').style.color=\"black\";  \
           document.getElementById(\'" + forwardFileLabel.id + "\').innerHTML=file.title;  \
-          if(!ngsFileUploadDict.hasOwnProperty("+ ngsElementNumber +")){\
-               ngsFileUploadDict[" + ngsElementNumber +"] = {}; \
+          if(!ngsFileUploadDict.hasOwnProperty(" + ngsElementNumber + ")){\
+               ngsFileUploadDict[" + ngsElementNumber + "] = {}; \
           }\
           ngsFileUploadDict[" + ngsElementNumber + "][\"forward\"] = file;\
         } \
@@ -376,8 +394,8 @@ function addNextGenInputElements() {
         onSelect: function(file) {  \
           document.getElementById(\'" + backwardFileLabel.id + "\').style.color=\"black\";  \
           document.getElementById(\'" + backwardFileLabel.id + "\').innerHTML=file.title;  \
-          if(!ngsFileUploadDict.hasOwnProperty("+ ngsElementNumber +")){\
-               ngsFileUploadDict[" + ngsElementNumber +"] = {}; \
+          if(!ngsFileUploadDict.hasOwnProperty(" + ngsElementNumber + ")){\
+               ngsFileUploadDict[" + ngsElementNumber + "] = {}; \
           }\
           ngsFileUploadDict[" + ngsElementNumber + "][\"backward\"] = file;\
         } \

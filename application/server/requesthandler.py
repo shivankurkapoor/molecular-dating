@@ -19,7 +19,7 @@ def handle_request(request_id, user_id):
         print 'Error in opening database connection', e
         raise
     try:
-        query_result = DatingRequest.select().where(request_id == request_id)
+        query_result = DatingRequest.select().where(DatingRequest.request_id == request_id)
         if query_result:
             request = query_result[0]
             generate_bash_scripts(request.request_id, request.form_type, request.data_type,
@@ -94,7 +94,7 @@ def generate_html(directory, request_id, user_id):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        query_result = User.select().where(user_id == user_id)
+        query_result = User.select().where(User.user_id == user_id)
         if query_result:
             user = query_result[0]
             email = user.email

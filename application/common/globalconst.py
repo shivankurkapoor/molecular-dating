@@ -47,7 +47,7 @@ DESCRIPTION = ''
 '''
 MISC
 '''
-INT_LEN_REQUEST_ID = 20
+INT_LEN_REQUEST_ID = 8
 INT_TTL_GEN_ID = 10
 
 
@@ -74,6 +74,8 @@ INT_FAILURE_DOWNLOAD = -5001
 INT_FAILURE_UPLOAD = -5002
 INT_DOWNLOADED = 5001
 INT_UPLOADED = 5002
+INT_PROCESSED = 6001
+INT_NOTPROCESSED = 6002
 
 
 '''
@@ -111,3 +113,8 @@ File Types
 '''
 FASTA = 'fasta'
 FASTQ = 'fastq'
+
+'''
+Time to wait for processing
+'''
+DELTA = 10

@@ -18,6 +18,7 @@ def app_demo():
     This is the homepage with sign-in option
     :return:
     """
+  session.pop('userId', None)
   return render_template('index.html')
 
 @application.route('/multiform',)
@@ -31,10 +32,18 @@ def app_show_form():
 @application.route('/displaypage', methods=['GET'])
 def app_display():
     request_params = request.values
+    #Todo Add a check for verifying the request id
     if 'userId' in session and session['userId'] == request_params['user_id']:
         return render_template('display/' + request_params['request_id']+'.html')
-    else:
+    elif ('userId' in session and session['userId'] != request_params['user_id']):
         return render_template('error.html', error='Could not authenticate')
+
+
+@application.route('/fetch', methods=['GET'])
+def app_fetch():
+    request_params = request.values
+    status_code = fetch_request(request_params['request_id'], session.get('user_id',''))
+    return respond_json(status_code, request_id=request_params['request_id'], user_id=session.get('user_id',''))
 
 
 @application.route('/connect', methods=['POST'])
