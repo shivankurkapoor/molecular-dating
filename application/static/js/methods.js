@@ -3,7 +3,8 @@ var sangerFileUploadDict = {};
 var ngsElementNumber = 1;
 var ngsFileUploadDict = {};
 
-function openForm(evt, sequenceDataType) {
+
+function openForm(evt, formType) {
     // Declare all variables
     var i, tabcontent, tablinks;
 
@@ -20,7 +21,7 @@ function openForm(evt, sequenceDataType) {
     }
 
     // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(sequenceDataType).style.display = "block";
+    document.getElementById(formType).style.display = "block";
     evt.currentTarget.className += " active";
 }
 
@@ -73,12 +74,19 @@ function fillRequests(requests, dataType) {
 function fetch(request_id) {
     $.ajax({
         url: '/fetch',
-        data: {'request_id' : request_id},
+        data: {'request_id': request_id},
         dataType: 'json',
         type: 'GET',
         success: function (data) {
-            alert('SUCCESS');
-            //window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'];
+            //alert('SUCCESS');
+            request_id = data['request_id'];
+            user_id = data['user_id'];
+            status = data['code'];
+            //6002 is not processed
+            window.location.assign("http://localhost:5000/displaypage?request_id=" + request_id + "&user_id=" + user_id + "&status=" + status);
+
+        },
+        complete: function () {
         },
         error: function (data) {
             alert('Error in second Ajax call');
@@ -128,10 +136,12 @@ function upload(form) {
                     document.getElementById("loader-display").style.display = 'block';
                     fetch(data['request_id'])
                 },
+
                 error: function () {
                     alert('Error in first Ajax call');
                 }
             });
+
         }
     }
 
@@ -170,7 +180,7 @@ function upload(form) {
                     fetch(data['request_id'])
                 },
                 error: function () {
-                        alert('Error in first Ajax call');
+                    alert('Error in first Ajax call');
                 }
             });
 
@@ -241,6 +251,16 @@ function upload(form) {
             });
         }
 
+    }
+
+    else if (form.id == 'request-status-input-form') {
+        if (!isAnyError(form)) {
+            var request_id = form.elements['request-id'].value;
+            document.getElementById("loader-msg").innerHTML = 'Request Id:' + request_id + '. Fetching your request.';
+            document.getElementById("request-status").style.display = 'none';
+            document.getElementById("loader-display").style.display = 'block';
+            fetch(request_id);
+        }
     }
     return false
 }

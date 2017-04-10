@@ -50,6 +50,8 @@
         <button id="ss-tab-button" class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
         <button id="ngs-tab-button" class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data
         </button>
+        <button id="check-request-tab-button" class="tablinks" onclick="openForm(event, 'request-status')">Check Request
+        </button>
     </div>
     <div id="ss" class="tabcontent">
         <h3>Sanger Sequence Data</h3>
@@ -70,7 +72,7 @@
                                 clientId: '160430799521-om2977l800uepldismnau961cof27lti',
                                 buttonEl: document.getElementById('picker-0'),
                                 onSelect: function (file) {
-                                    console.log(file);
+                                    //console.log(file);
                                     document.getElementById('file-select-0').style.color = "black";
                                     document.getElementById('file-select-0').innerHTML = file.title;
                                     sangerFileUploadDict[0] = file;
@@ -116,7 +118,7 @@
                                     console.log(file);
                                     document.getElementById('forward-file-select-0').style.color = "black";
                                     document.getElementById('forward-file-select-0').innerHTML = file.title;
-                                    if(!ngsFileUploadDict.hasOwnProperty(0)){
+                                    if (!ngsFileUploadDict.hasOwnProperty(0)) {
                                         ngsFileUploadDict[0] = {};
                                     }
                                     ngsFileUploadDict[0]['forward'] = file;
@@ -138,7 +140,7 @@
                                     console.log(file);
                                     document.getElementById('backward-file-select-0').style.color = "black";
                                     document.getElementById('backward-file-select-0').innerHTML = file.title;
-                                    if(!ngsFileUploadDict.hasOwnProperty(0)){
+                                    if (!ngsFileUploadDict.hasOwnProperty(0)) {
                                         ngsFileUploadDict[0] = {};
                                     }
                                     ngsFileUploadDict[0]['backward'] = file;
@@ -156,6 +158,27 @@
             </form>
         </div>
     </div>
+
+    <div id="request-status" class="tabcontent">
+        <h3>Check your request status here</h3>
+        <div id="container-request-status">
+            <form id="request-status-input-form" name="request-status-input-form" onsubmit="return upload(this);">
+                <br>
+                Request Id: <input type='text' id='request-id' name="request-id-text-box">
+                <br>
+                <div>
+                    <br>
+                    <input type='submit' value='submit'>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="loader-display" class="tabcontent">
+        <h3 id="loader-msg"></h3>
+        <img src="../static/images/ajax-loader.gif">
+    </div>
+
 </div>
 
 </body>

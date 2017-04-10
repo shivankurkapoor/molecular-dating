@@ -39,7 +39,7 @@
     <button id="signin-button">Sign in with Google</button>
     <script>
         window.addEventListener('message', function (event) {
-            console.log(event.data);
+            //console.log(event.data);
         });
         $('#signin-button').click(function () {
             // signInCallback defined in step 6.
@@ -86,6 +86,8 @@
         <button id="ss-tab-button" class="tablinks" onclick="openForm(event, 'ss')">Sanger Sequencing Data</button>
         <button id="ngs-tab-button" class="tablinks" onclick="openForm(event, 'ngs')">Next Generation Sequencing Data
         </button>
+        <button id="check-request-tab-button" class="tablinks" onclick="openForm(event, 'request-status')">Check Request
+        </button>
     </div>
     <div id="ss" class="tabcontent">
         <h3>Sanger Sequence Data</h3>
@@ -129,6 +131,21 @@
             </form>
         </div>
     </div>
+
+    <div id="request-status" class="tabcontent">
+    <h3>Check your request status here</h3>
+    <div id="container-request-status">
+        <form id="request-status-input-form" name="request-status-input-form" onsubmit="return upload(this);">
+            <br>
+            Request Id: <input type='text' id='request-id' name="request-id-text-box">
+            <br>
+            <div>
+                <br>
+                <input type='submit' value='submit'>
+            </div>
+        </form>
+    </div>
+</div>
 
     <div id="loader-display" class="tabcontent">
         <h3 id="loader-msg"></h3>

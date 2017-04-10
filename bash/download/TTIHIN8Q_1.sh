@@ -1,1 +1,0 @@
-python file_downloader.py --user_id=116397074182558488295 --file_id=0Bxu5-_bls171LWx0S3JEbDNyaHM --request_id=TTIHIN8Q --request_idx=1 --file_path=/Users/shivankurkapoor/GitHub/moleculardating/downloadedfiles/TTIHIN8Q/fasta_file_1.fasta

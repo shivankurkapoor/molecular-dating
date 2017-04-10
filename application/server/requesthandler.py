@@ -26,13 +26,13 @@ def handle_request(request_id, user_id):
                                   json_decode(str(request.form_data)), request.user_id)
 
             if request.form_type == MULTIPLE:
-                output_path = os.path.join(TEMPLATE_PATH, 'display')
-                generate_html(output_path, request_id, user_id)
+                hrml_output_path = os.path.join(TEMPLATE_PATH, 'display')
+                generate_html(hrml_output_path, request_id, user_id, MSG_TEMPLATE_MULTIPLE)
                 return INT_OK
 
             elif request.form_type == SINGLE:
-                # TODO SHOULD YOU EXECUTE IT OR PUT IT IN REQUEST QUEUE AND WAIT
-                # TODO CREATE OUTPUT FOLDER AND RESPONSE PAGE
+                html_output_path = os.path.join(TEMPLATE_PATH, 'display')
+                generate_html(html_output_path, request_id, user_id, MSG_TEMPLATE_SINGLE)
                 return INT_OK
 
         return INT_ERROR_GENERAL
@@ -45,7 +45,7 @@ def handle_request(request_id, user_id):
 def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
     try:
         if form_type == MULTIPLE:
-            command = 'python file_downloader.py'
+            command = 'python download.py'
             script_path = BASH_SCRIPT_DOWNLOAD
             if data_type == SANGER_SEQUNCE_DATA:
                 for idx, request in enumerate(form_data['requests']):
@@ -54,16 +54,16 @@ def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
                     script_name = '_'.join([request_id, str(idx)])
                     write_bash_file(script_path, script_name, command=command, user_id=user_id, file_id=file_id,
                                     file_path=file_path,
-                                    request_id=request_id, request_idx=idx)
+                                    request_id=request_id, request_idx=idx, file_type='fasta_file')
 
             elif data_type == NEXT_GEN_DATA:
                 for idx, request in enumerate(form_data['requests']):
                     for f in request:
                         file_id = request[f]['meta_data']['id']
-                        file_path = request[f]['meta_data']['file_path']
+                        file_path = request[f]['file_path']
                         script_name = '_'.join([request_id, str(idx), f])
                         write_bash_file(script_path, script_name, command=command, user_id=user_id, file_id=file_id,
-                                        file_path=file_path, request_id=request_id, request_idx=idx)
+                                        file_path=file_path, request_id=request_id, request_idx=idx, file_type=f)
 
         elif form_type == SINGLE:
             request = form_data['requests'][0]
@@ -89,25 +89,28 @@ def jinja_render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
 
 
-def generate_html(directory, request_id, user_id):
+def generate_html(directory, request_id, user_id, template):
     try:
         if not os.path.exists(directory):
             os.makedirs(directory)
 
         query_result = User.select().where(User.user_id == user_id)
+        email = None
         if query_result:
             user = query_result[0]
             email = user.email
-            context = {
-                'request_id': request_id,
-                'email': email,
-                'user_id': user_id
-            }
-            fname = os.path.join(directory, request_id+'.html')
+        context = {
+            'request_id': request_id,
+            'user_id': user_id
+        }
+        if email:
+            context.update({'email': email})
 
-            with open(fname, 'w') as f:
-                html = jinja_render_template('display_template.html', context)
-                f.write(html)
+        fname = os.path.join(directory, request_id+'.html')
+
+        with open(fname, 'w') as f:
+            html = jinja_render_template(template, context)
+            f.write(html)
 
     except Exception as e:
         print 'Error in generating html file', e

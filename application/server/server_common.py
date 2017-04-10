@@ -34,9 +34,16 @@ def respond_json(status_code, **kw):
     elif status_code == INT_FAILURE_AUTH:
         myjson['status'] = 'failure'
         myjson['message'] = 'user authentication failure'
+    elif status_code == INT_PROCESSED:
+        myjson['status'] = 'processed'
+        myjson['message'] = 'request has been processed'
+    elif status_code == INT_NOTPROCESSED:
+        myjson['status'] = 'notprocessed'
+        myjson['message'] = 'request has not been processed yet'
     else:
         myjson['status'] = 'error'
         myjson['message'] = 'missing error message'
+
     myjson['code'] = status_code
     return json_encode_flask(myjson)
 

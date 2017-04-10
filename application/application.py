@@ -33,10 +33,13 @@ def app_show_form():
 def app_display():
     request_params = request.values
     #Todo Add a check for verifying the request id
-    if 'userId' in session and session['userId'] == request_params['user_id']:
+    if (int(request_params['status']) == INT_OK) or (int(request_params['status']) == INT_NOTPROCESSED):
         return render_template('display/' + request_params['request_id']+'.html')
-    elif ('userId' in session and session['userId'] != request_params['user_id']):
-        return render_template('error.html', error='Could not authenticate')
+    elif int(request_params['status']) == INT_PROCESSED:
+        return render_template('result/' + request_params['request_id'] + '.html')
+    else:
+        return render_template('error.html', error='Error in fetching result')
+
 
 
 @application.route('/fetch', methods=['GET'])

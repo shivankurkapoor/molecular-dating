@@ -15,6 +15,7 @@ class DatingRequest(Model):
     time_processed = TimestampField()
     is_processed = BooleanField(default=False)
     is_uploaded = BooleanField(default=False)
+    upload_file_meta_data = TextField(default='')
 
     class Meta:
         database = db

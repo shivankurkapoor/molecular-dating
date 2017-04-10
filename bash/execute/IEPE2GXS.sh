@@ -1,1 +1,0 @@
-python sanger_main.py --hxb2=FALSE --request_idx=0 --align=FALSE --request_id=IEPE2GXS

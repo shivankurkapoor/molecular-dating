@@ -57,7 +57,7 @@ def fetch_request(request_id, session_user_id):
                     is_processed = request.is_processed
 
                 if is_processed:
-                    return INT_OK
+                    return INT_PROCESSED
                 else:
                     return INT_NOTPROCESSED
 
