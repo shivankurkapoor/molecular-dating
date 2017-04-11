@@ -1,0 +1,3 @@
+source venv/bin/activate
+edit config.yml only
+python main.py > tmp &

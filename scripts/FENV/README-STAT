@@ -1,0 +1,5 @@
+VL<-read.table("corr-input.dat",header=TRUE)
+model=lm(VL$x ~ VL$y)
+summary(model)
+cor.test(VL$x,VL$y,method="spearman")
+

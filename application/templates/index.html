@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="../static/style/style.css">
 
     <script src="../static/js/methods.js"></script>
+    <script src="../static/js/vars.js"></script>
     <script>
         function start() {
             gapi.load('auth2', function () {
@@ -132,6 +133,21 @@
                 <br>
                 Choose Backward File: <input type='file' id='backwardfile' name="backwardfile" accept=".fastq">
                 <br>
+                <br>
+                Forward Primer Sequence: <input type="text" id="forward-primer" name="forward-primer">
+                <br>
+                <br>
+                Backward Primer Sequence: <input type="text" id="backward-primer" name="backward-primer">
+                <br>
+                <br>
+                Sequence Length (for collapsing): <input type="number" id="sequence-length" name="sequence-length" min="0">
+                <br>
+                <br>
+                Base Count: <input type="number" id="base-count" name="base-count" min="0">
+                <br>
+                <br>
+                Percent: <input type="number" id="percent" name="percent" min="0" max="100" step="any">
+                <br>
                 <div>
                     <br>
                     <input type='submit' value='submit'>
@@ -163,19 +179,19 @@
 <!-- Modal -->
 <div id="id01" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-top">
-      <header class="w3-container w3-theme-l1">
+        <header class="w3-container w3-theme-l1">
         <span onclick="document.getElementById('id01').style.display='none'"
-        class="w3-button w3-display-topright">×</span>
-        <h4>Oh snap! We just showed you a modal..</h4>
-        <h5>Because we can <i class="fa fa-smile-o"></i></h5>
-      </header>
-      <div class="w3-padding">
-        <p>Cool huh? Ok, enough teasing around..</p>
-        <p>Go to our <a class="w3-btn" href="/w3css/default.asp">W3.CSS Tutorial</a> to learn more!</p>
-      </div>
-      <footer class="w3-container w3-theme-l1">
-        <p>Modal footer</p>
-      </footer>
+              class="w3-button w3-display-topright">×</span>
+            <h4>Oh snap! We just showed you a modal..</h4>
+            <h5>Because we can <i class="fa fa-smile-o"></i></h5>
+        </header>
+        <div class="w3-padding">
+            <p>Cool huh? Ok, enough teasing around..</p>
+            <p>Go to our <a class="w3-btn" href="/w3css/default.asp">W3.CSS Tutorial</a> to learn more!</p>
+        </div>
+        <footer class="w3-container w3-theme-l1">
+            <p>Modal footer</p>
+        </footer>
     </div>
 </div>
 </body>

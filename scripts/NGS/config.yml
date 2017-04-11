@@ -1,0 +1,52 @@
+#Configuration for prediction interval parameters
+predictioninterval:
+  fit_slope: '571.2'
+  fit_intercept: '0.0'
+  lower_slope: '446.8531'
+  lower_intercept: '-104.3010'
+  upper_slope: '691.8418'
+  upper_intercept: '104.8290'
+
+#Configuration for main.py
+mainconfig:
+  type: 'chronic'
+  input: 'INPUT_RV144'
+  input_unclustered: 'TEMP'
+  input_clustered: 'RV144_CLUSTERED_FASTA_PAM'
+  output: 'OUTPUT_RV144'
+  threshold_gsi: '0.7311'
+  threshold_clustering: '10' #beta threshold
+  threshold_diversity: '0.654'
+  threshold_numseq: '1'
+  gaps_ignore: 'True'
+  effective_diversity_th: '0.654'
+  gsi_num: 'GSI5'
+  #Sequence Alignment parameters
+  ms: '-1' #score of a mismatch
+  q: '10'   #gap-open penalty
+  r: '2'   #gap-extension penalty
+  l: '1'   #context length
+  b: '1'  #match bonus
+
+#Configurations for filenames
+filenames:
+  diversity_file: 'diversity.npy'
+  hd_file: 'hd.npy'
+  gsi_file: 'gsi.txt'
+  report_file: 'report.csv'
+  final_report: 'final.csv'
+  var_file: 'var.npy'
+  plot: 'plot'
+  pred_interval_file: 'predictioninterval.csv'
+  pred_interval_txt_file: 'predictioninterval.txt'
+
+#Template Path
+html:
+  html_template: 'template.html'
+  image_width: '550'
+  image_height: '350'
+
+
+
+
+

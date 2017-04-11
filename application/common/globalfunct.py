@@ -1,26 +1,32 @@
 import json
-from datetime import datetime
-from flask import jsonify
 import os
-import string
 import random
+import string
+from datetime import datetime
+
+from flask import jsonify
+
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 def json_encode(json_dict=None):
     assert isinstance(json_dict, dict)
     return json.dumps(json_dict)
 
+
 def json_encode_flask(json_dict=None):
     assert isinstance(json_dict, dict)
     return jsonify(json_dict)
+
 
 def json_decode(json_str=None):
     assert isinstance(json_str, str)
     return json.loads(json_str)
 
-def datetime_util(date = None):
+
+def datetime_util(date=None):
     '''
     This function converts the datetime format {YYYY-MM-DD HH:MM:SS}
     to {YYYY-MM-DDTHH:MM:SSZ} format. This date format is used by Google APIs
@@ -31,7 +37,7 @@ def datetime_util(date = None):
     dtstr = str(date)
     dtstr = dtstr.split('.')[0]
     date, time = dtstr.split(' ')
-    return date+'T'+time+'Z'
+    return date + 'T' + time + 'Z'
 
 
 def get_immediate_subdirectories(a_dir):
@@ -44,14 +50,13 @@ def write_bash_file(*args, **kwargs):
     script_name = args[1]
     command = kwargs.pop('command')
     for key, value in kwargs.items():
-        command+= ' '+ '--' + str(key) + '=' + str(value)
-    script = '.'.join([os.path.join(script_path, script_name) , 'sh'])
+        command += ' ' + '--' + str(key) + '=' + str(value)
+    script = '.'.join([os.path.join(script_path, script_name), 'sh'])
 
-    print command
     try:
+        if not os.path.exists(script_path):
+            os.makedirs(script_path)
         with open(script, 'w') as f:
             f.write(command)
     except IOError as e:
         print 'Error in generating bash script', e
-
-

@@ -1,0 +1,44 @@
+#Configuration for prediction interval parameters
+predictioninterval:
+  fit_slope: '566.87'
+  fit_intercept: '0.0'
+  lower_slope: '444.274'
+  lower_intercept: '-103.579'
+  upper_slope: '684.6724'
+  upper_intercept: '105.0945'
+
+#Configuration for main.py
+mainconfig:
+  type: 'longi'
+  input_unclustered: 'INPUT_LONGI'
+  input_clustered: 'LONGI_CLUSTERED_FASTA_PAM'
+  output: 'OUTPUT_LONGI_THbeta4.5'
+  threshold_gsi: '0.2'
+  threshold_clustering: '4.5' #beta threshold
+  threshold_diversity: '0.779'
+  threshold_numseq: '4'
+  gaps_ignore: 'True'
+  effective_diversity_th: '0.779'
+  gsi_num: 'GSI4'
+
+#Configurations for filenames
+filenames:
+  diversity_file: 'diversity.npy'
+  hd_file: 'hd.npy'
+  gsi_file: 'gsi.txt'
+  report_file: 'report.csv'
+  final_report: 'final.csv'
+  plot: 'plot'
+  pred_interval_file: 'predictioninterval.csv'
+  pred_interval_txt_file: 'predictioninterval.txt'
+
+#Template Path
+html:
+  html_template: 'template.html'
+  image_width: '550'
+  image_height: '350'
+
+
+
+
+

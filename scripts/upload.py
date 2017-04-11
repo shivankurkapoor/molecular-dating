@@ -1,7 +1,5 @@
 import sys
-
 sys.path.append('../application')
-
 import httplib2
 from oauth2client.client import Credentials
 from apiclient import http
@@ -9,13 +7,10 @@ from database import *
 from database.domain.user import User
 from database.domain.request import DatingRequest
 from server.httpcomm.interface import *
-import io
 from apiclient import discovery
-import errno
 from argparse import ArgumentParser
 from apiclient import errors
-
-
+from common.globalfunct import *
 
 
 def upload_file_google_drive(service, title, description, parent_id, mime_type, filename):
@@ -49,9 +44,8 @@ def upload_file_google_drive(service, title, description, parent_id, mime_type, 
         print 'File ID: %s' % file['id']
     except errors.HttpError, error:
         print 'An error occured: %s' % error
-        return INT_FAILURE_UPLOAD,None
+        return INT_FAILURE_UPLOAD, None
     return INT_UPLOADED, file
-
 
 
 if __name__ == '__main__':
@@ -97,18 +91,20 @@ if __name__ == '__main__':
             drive_service = discovery.build('drive', 'v2', http_auth)
             file_path, file_name = str(args.file_path).rsplit(os.sep, 1)
             description = 'Output files for request_id : {request_id}'.format(request_id=args.request_id)
-            status, meta_data = upload_file_google_drive(drive_service, file_name, description, None, ZIP_MIME_TYPE, str(args.file_path))
+            status, meta_data = upload_file_google_drive(drive_service, file_name, description, None, ZIP_MIME_TYPE,
+                                                         str(args.file_path))
 
             if status == INT_UPLOADED:
-                #TODO Code for cleanup
+                # TODO Code for cleanup
                 with db.atomic():
                     request_query_res = DatingRequest.select().where(DatingRequest.request_id == str(args.request_id))
                     if request_query_res:
                         dating_request = request_query_res[0]
-                        query_form_update = DatingRequest.update(is_uploaded = True, upload_file_meta_data = str(json_encode(meta_data))).where(
+                        query_form_update = DatingRequest.update(is_uploaded=True, upload_file_meta_data=str(
+                            json_encode(meta_data))).where(
                             DatingRequest.request_id == str(args.request_id))
                         query_form_update.execute()
-                #TODO Code for email notification , display page generation and download link
+                        # TODO Code for email notification , display page generation and download link
 
 
     except Exception as e:

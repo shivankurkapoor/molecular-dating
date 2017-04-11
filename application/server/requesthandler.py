@@ -1,9 +1,10 @@
+from jinja2 import Environment, FileSystemLoader
+
+from common.globalconst import *
+from common.globalfunct import *
 from database import *
 from database.domain.request import DatingRequest
 from database.domain.user import User
-from common.globalfunct import *
-from common.globalconst import *
-from jinja2 import Environment, FileSystemLoader
 
 PATH = TEMPLATE_PATH
 TEMPLATE_ENVIRONMENT = Environment(
@@ -26,8 +27,8 @@ def handle_request(request_id, user_id):
                                   json_decode(str(request.form_data)), request.user_id)
 
             if request.form_type == MULTIPLE:
-                hrml_output_path = os.path.join(TEMPLATE_PATH, 'display')
-                generate_html(hrml_output_path, request_id, user_id, MSG_TEMPLATE_MULTIPLE)
+                html_output_path = os.path.join(TEMPLATE_PATH, 'display')
+                generate_html(html_output_path, request_id, user_id, MSG_TEMPLATE_MULTIPLE)
                 return INT_OK
 
             elif request.form_type == SINGLE:
@@ -45,41 +46,62 @@ def handle_request(request_id, user_id):
 def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
     try:
         if form_type == MULTIPLE:
-            command = 'python download.py'
-            script_path = BASH_SCRIPT_DOWNLOAD
+            command = 'python ' + DOWNLOAD_SCRIPT
+            script_path = BASH_SCRIPT_PROCESS.format(request_id=request_id)
             if data_type == SANGER_SEQUNCE_DATA:
                 for idx, request in enumerate(form_data['requests']):
                     file_id = request['fasta_file']['meta_data']['id']
                     file_path = request['fasta_file']['file_path']
-                    script_name = '_'.join([request_id, str(idx)])
+                    script_name = '_'.join(['DOWNLOAD', 'FASTA_FILE', request_id, str(idx)])
                     write_bash_file(script_path, script_name, command=command, user_id=user_id, file_id=file_id,
                                     file_path=file_path,
                                     request_id=request_id, request_idx=idx, file_type='fasta_file')
 
             elif data_type == NEXT_GEN_DATA:
                 for idx, request in enumerate(form_data['requests']):
-                    for f in request:
+                    for f in ['forward_file', 'backward_file']:
                         file_id = request[f]['meta_data']['id']
                         file_path = request[f]['file_path']
-                        script_name = '_'.join([request_id, str(idx), f])
+                        script_name = '_'.join(['DOWNLOAD' , f.upper(), request_id, str(idx)])
                         write_bash_file(script_path, script_name, command=command, user_id=user_id, file_id=file_id,
                                         file_path=file_path, request_id=request_id, request_idx=idx, file_type=f)
 
         elif form_type == SINGLE:
             request = form_data['requests'][0]
-            script_path = BASH_SCRIPT_EXECUTE
+            script_path = BASH_SCRIPT_FASTPROCESS.format(request_id=request_id)
             if data_type == SANGER_SEQUNCE_DATA:
-                command = 'python sanger_main.py'
-                align = 'TRUE' if request['align'] else 'FALSE'
-                hxb2 = 'TRUE' if request['hxb2'] else 'FALSE'
+                command = 'python '
                 script_name = request_id
+                align = request['align']
+                hxb2 =  request['hxb2']
+                input_dir = RESULT_PATH.format(request_id=request_id, request_idx = '0')
+                html_result_dir = HTML_RESULT_PATH.format(request_id=request_id)
+                if hxb2:
+                    command+= FENV_PROCESS_SCRIPT
+                    script_name = 'HXB2_' + script_name
+                else:
+                    command+= HXB_PROCESS_SCRIPT
+                    script_name = 'FENV_' + script_name
+
                 write_bash_file(script_path, script_name, command=command, align=align, hxb2=hxb2,
-                                request_id=request_id, request_idx=0)
+                                request_id=request_id, input=input_dir, request_idx=0, html_dir=html_result_dir)
 
             elif data_type == NEXT_GEN_DATA:
-                command = 'python next_gen_main.py'
-                script_name = request_id
-                write_bash_file(script_path, script_name, command=command, request_id=request_id, request_idx=0)
+                command = 'python ' + FASTQTOFASTA_SCRIPT
+                script_name = 'FASTQ_TO_FASTA_' + request_id
+                forward_primer = request['forward_primer']
+                backward_primer = request['backward_primer']
+                seq_len = request['seq_len']
+                base_count = request['base_count']
+                percent = request['base_count']
+                forward_file = request['forward_file']['file_path']
+                backward_file = request['backward_file']['file_path']
+                output_dir = os.path.join(RESULT_PATH.format(request_id=request_id, request_idx = '0'), FASTQ_DIR)
+                write_bash_file(script_path, script_name, command=command, forward_primer=forward_primer,
+                                backward_primer=backward_primer,
+                                seq_len=seq_len, base_count=base_count, percent=percent, forward_file=forward_file,
+                                backward_file=backward_file, request_id=request_id, output_dir=output_dir,
+                                request_idx=0)
 
     except Exception as e:
         print 'Error in generating bash scripts', e
@@ -106,7 +128,7 @@ def generate_html(directory, request_id, user_id, template):
         if email:
             context.update({'email': email})
 
-        fname = os.path.join(directory, request_id+'.html')
+        fname = os.path.join(directory, request_id + '.html')
 
         with open(fname, 'w') as f:
             html = jinja_render_template(template, context)

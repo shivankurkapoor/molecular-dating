@@ -1,0 +1,6 @@
+source venv/bin/activate
+python main.py chronic
+python main.py longi
+edit utils.py
+awk '{if($11<10.){if($9<0.8){if($13>5)print $1}}}' final.csv.txt 
+

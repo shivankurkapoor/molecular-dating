@@ -2,7 +2,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Molecular Dating</title>
-    <script src="../static/js/addInput.js" type="text/javascript"></script>
     <script src="../static/js/filepicker.js"></script>
     <script src="../static/js/vars.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -19,6 +18,7 @@
     </style>
 
     <script src="../static/js/methods.js"></script>
+    <script src="../static/js/vars.js"></script>
 </head>
 <script>
     function signOut() {
@@ -115,7 +115,24 @@
             <br>
             <form id="ngs-multi-input-form" name="ngs-multi-input-form" onsubmit="return upload(this)">
                 <div id="ngs-form-container">
-                    <div id="ngs-input-form-element-0">
+                    <br>
+                    Forward Primer Sequence: <input type="text" id="forward-primer" name="forward-primer">
+                    <br>
+                    <br>
+                    Backward Primer Sequence: <input type="text" id="backward-primer" name="backward-primer">
+                    <br>
+                    <br>
+                    Sequence Length (for collapsing): <input type="number" id="sequence-length"
+                                                             name="sequence-length" min="0">
+                    <br>
+                    <br>
+                    Base Count: <input type="number" id="base-count" name="base-count" min="0">
+                    <br>
+                    <br>
+                    Percent: <input type="number" id="percent" name="percent" min="0" max="100" step="any">
+                    <br>
+                    <br>
+                    <div class=w3-container id="ngs-input-form-element-0">
                         <label>Choose Forward File : </label>
                         <button type="button" id='picker-forward-0'>Select from Google Drive</button>
                         <label id="forward-file-select-0"></label>
@@ -137,7 +154,6 @@
                         }
                         </script>
                         <script src="https://apis.google.com/js/client.js?onload=initForwardPicker_0"></script>
-
                         <label>Choose Backward File : </label>
                         <button type="button" id='picker-backward-0'>Select from Google Drive</button>
                         <label id="backward-file-select-0"></label>
@@ -160,6 +176,7 @@
                         </script>
                         <script src="https://apis.google.com/js/client.js?onload=initBackwardPicker_0"></script>
                     </div>
+                     <br>
 
                 </div>
                 <div>

@@ -1,19 +1,18 @@
 import sys
-
 sys.path.append('../application')
-
+import io
 import httplib2
+import errno
+
 from oauth2client.client import Credentials
 from apiclient import http
 from database import *
 from database.domain.user import User
 from database.domain.request import DatingRequest
-from server.httpcomm.interface import *
-import io
 from apiclient import discovery
-import errno
 from argparse import ArgumentParser
-
+from common.globalfunct import *
+from common.globalconst import *
 
 def download_file_google_drive(user_id, drive_service, file_id, filename, file_path):
     '''
@@ -118,18 +117,68 @@ if __name__ == '__main__':
             file_path, file_name = str(args.file_path).rsplit(os.sep, 1)
             status = download_file_google_drive(str(args.user_id), drive_service, args.file_id, file_name, file_path)
 
+
             if status == INT_DOWNLOADED:
-                #TODO generate bash files for processing
+
                 with db.atomic():
                     request_query_res = DatingRequest.select().where(DatingRequest.request_id == str(args.request_id))
                     if request_query_res:
                         dating_request = request_query_res[0]
                         form_data = json_decode(str(dating_request.form_data))
                         form_data['requests'][int(args.request_idx)][str(args.file_type)]['is_downloaded'] = True
+
+
+                        # Check if files for a single process has been downloaded
+                        # In case of NGS, we need to generate bash script for fastq to fasta
+                        # In case of Sanger, we need to generate the bash script for molecular dating
+                        if dating_request.data_type == SANGER_SEQUNCE_DATA:
+                            script_name = args.request_id + '_' + str(args.request_idx)
+                            script_path = BASH_SCRIPT_PROCESS.format(request_id = args.request_id)
+                            align = form_data['requests'][int(args.request_idx)]['align']
+                            hxb2 = form_data['requests'][int(args.request_idx)]['hxb2']
+                            input_dir = RESULT_PATH.format(request_id=str(args.result_id), request_idx=str(args.result_idx))
+
+                            command = 'python '
+                            if hxb2:
+                                command+= HXB_PROCESS_SCRIPT
+                                script_name = 'HXB2_' + script_name
+                            else:
+                                command+= FENV_PROCESS_SCRIPT
+                                script_name = 'FENV_' + script_name
+
+                            write_bash_file(script_path, script_name, command=command, align=align,
+                                            request_id=args.request_id, request_idx=args.request_idx, input_dir=input_dir)
+
+                        elif dating_request.data_type == NEXT_GEN_DATA:
+                            if form_data['requests'][int(args.request_idx)]['backward_file']['is_downloaded'] and \
+                                    form_data['requests'][int(args.request_idx)]['forward_file']['is_downloaded']:
+                                command = 'python ' + FASTQTOFASTA_SCRIPT
+                                script_name = 'FASTQ_TO_FASTA_' + args.request_id + '_' + str(args.request_idx)
+                                script_path = BASH_SCRIPT_PROCESS.format(request_id = args.request_id)
+                                forward_primer = form_data['requests'][int(args.request_idx)]['forward_primer']
+                                backward_primer = form_data['requests'][int(args.request_idx)]['backward_primer']
+                                seq_len = form_data['requests'][int(args.request_idx)]['seq_len']
+                                base_count = form_data['requests'][int(args.request_idx)]['base_count']
+                                percent = form_data['requests'][int(args.request_idx)]['percent']
+                                output_dir = os.path.join(RESULT_PATH.format(request_id=args.request_id, request_idx=str(args.request_idx)), FASTQ_DIR)
+                                forward_file = form_data['requests'][int(args.request_idx)]['forward_file']['file_path']
+                                backward_file = form_data['requests'][int(args.request_idx)]['backward_file']['file_path']
+                                write_bash_file(script_path, script_name, command=command,
+                                                forward_primer=forward_primer,
+                                                backward_primer=backward_primer,
+                                                seq_len=seq_len, base_count=base_count, percent=percent,
+                                                forward_file=forward_file,
+                                                backward_file=backward_file, request_id=args.request_id,
+                                                output_dir=output_dir,
+                                                request_idx=0)
+
+                        # Checking the download status of all files in the request
                         download_status = check_download_status(form_data['requests'], dating_request.data_type)
                         query_form_update = DatingRequest.update(form_data=str(json_encode(form_data))).where(
                             DatingRequest.request_id == str(args.request_id))
                         query_form_update.execute()
+
+
                         if download_status:
                             query_download_status_update = DatingRequest.update(are_files_downloaded=True).where(
                                 DatingRequest.request_id == str(args.request_id))

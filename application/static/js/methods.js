@@ -61,6 +61,11 @@ function fillRequests(requests, dataType) {
                 request = Object();
                 request.forward_file = 'forward_file_' + key;
                 request.backward_file = 'backward_file_' + key;
+                request.forward_primer = document.getElementById('forward-primer').value;
+                request.backward_primer = document.getElementById('backward-primer').value;
+                request.seq_len = document.getElementById('sequence-length').value;
+                request.base_count = document.getElementById('base-count').value;
+                request.percent = document.getElementById('percent').value;
                 request.meta_data = Object();
                 request.meta_data.forward_file = ngsFileUploadDict[key]['forward'];
                 request.meta_data.backward_file = ngsFileUploadDict[key]['backward'];
@@ -83,7 +88,7 @@ function fetch(request_id) {
             user_id = data['user_id'];
             status = data['code'];
             //6002 is not processed
-            window.location.assign("http://localhost:5000/displaypage?request_id=" + request_id + "&user_id=" + user_id + "&status=" + status);
+            window.location.assign(host + "/displaypage?request_id=" + request_id + "&user_id=" + user_id + "&status=" + status);
 
         },
         complete: function () {
@@ -154,6 +159,11 @@ function upload(form) {
             request.backward_file = 'backward_file_0';
             var forwardFile = form.elements['forwardfile'].files[0];
             var backwardFile = form.elements['backwardfile'].files[0];
+            request.forward_primer = form.elements['forward-primer'].value;
+            request.backward_primer = form.elements['backward-primer'].value;
+            request.seq_len = form.elements['sequence-length'].value;
+            request.base_count = form.elements['base-count'].value;
+            request.percent = form.elements['percent'].value;
             numReq = 1;
             requests.push(request);
             formData = new FormData();
@@ -205,7 +215,7 @@ function upload(form) {
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
-                   // alert(data['status']);
+                    // alert(data['status']);
                     if (data['status'] == 'ok') {
                         window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'] + "&status=0";
                     }
@@ -237,7 +247,7 @@ function upload(form) {
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
-                   // alert(data['status']);
+                    // alert(data['status']);
                     if (data['status'] == 'ok') {
                         window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'] + "&status=0";
                     }
@@ -436,6 +446,8 @@ function addNextGenInputElements() {
         removeElement(this.parentNode);
     };
 
+    var br = document.createElement('br');
+
     div.appendChild(forwardButtonLabel);
     div.appendChild(pickerForwardButton);
     div.appendChild(forwardFileLabel);
@@ -448,5 +460,6 @@ function addNextGenInputElements() {
     div.appendChild(backwardLoadScript);
     div.appendChild(removeButton);
     formContainer.appendChild(div);
+    //formContainer.appendChild(br);
     ngsElementNumber += 1;
 }

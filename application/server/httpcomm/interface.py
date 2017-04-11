@@ -7,11 +7,8 @@ and http_request to return the processed data
 
 """
 import httplib
-import socket
-import urllib
-from common.globalconst import *
-from common.globalfunct import *
 
+from common.globalconst import *
 from server.httpcomm.const import *
 
 

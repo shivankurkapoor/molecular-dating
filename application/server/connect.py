@@ -1,22 +1,19 @@
-import httplib2
 import logging
+from datetime import timedelta
+
+import httplib2
 from apiclient import errors
-from common.globalconst import *
-from common.globalfunct import *
-from database import *
-from database.domain.user import User
-from database.interface.request import *
-from datetime import datetime, timedelta
 from dateutil import parser
 from googleapiclient.discovery import build
 from oauth2client.client import Credentials
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
+
+from database.interface.request import *
 from server.errorhandler import *
-from server.server_common import *
 from server.httpcomm.interface import *
-from server.httpcomm.const import *
 from server.requesthandler import *
+from server.server_common import *
 
 
 def renew_access_token(client_id='', client_secret='', refresh_token='', grant_type='refresh_token'):
@@ -262,7 +259,7 @@ def connect_proc(fields=None, client_ip=STR_UNDEFINED):
 def get_oauth_token(user_id):
     try:
         db.connect()
-    #TODO WRITE EXCEPTION CLASS FOR DB CONNECT EXCEPTIONS
+    # TODO WRITE EXCEPTION CLASS FOR DB CONNECT EXCEPTIONS
     except Exception as e:
         print 'Error in opening database', e
     try:
@@ -290,12 +287,10 @@ def process_request(fields, files, user_id=''):
                                             files,
                                             user_id)
 
-
     if status_code == INT_OK:
         status_code = handle_request(request_id, user_id)
         if status_code == INT_OK:
             return status_code, respond_json(status_code, request_id=request_id, user_id=user_id)
-
 
     return INT_ERROR_GENERAL, None
 
