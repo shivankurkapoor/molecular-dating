@@ -9,8 +9,8 @@ STR_UNDEFINED = 'Undefined'
 '''
 Below fields are related to Google Drive API
 '''
-CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
-#CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/GitHub/moleculardating/application/auth/client_secret.json'
+#CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
+CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/GitHub/moleculardating/application/auth/client_secret.json'
 REDIRECT_URI = 'postmessage'
 SCOPES = [
     'https://www.googleapis.com/auth/drive.file'
@@ -38,8 +38,8 @@ RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refres
 GOOGLE DRIVE FILE HANDLING
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
-DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/downloadedfiles/{request_id}'
-#DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/downloadedfiles/{request_id}'
+#DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/downloadedfiles/{request_id}'
+DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/downloadedfiles/{request_id}'
 MIME_TYPE = 'application/octet-stream'
 ZIP_MIME_TYPE = 'application/zip'
 
@@ -82,24 +82,24 @@ INT_NOTPROCESSED = 6002
 '''
 Dir path for html file
 '''
-TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
+#TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
 MSG_TEMPLATE_SINGLE = 'display_template_single.html'
 MSG_TEMPLATE_MULTIPLE = 'display_template_multiple.html'
-#TEMPLATE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates'
+TEMPLATE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates'
 
 '''
 Output dir path
 '''
-OUTPUT_PATH = '/home/leelab/PycharmProjects/moleculardating/output'
-#OUTPUT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/output'
+#OUTPUT_PATH = '/home/leelab/PycharmProjects/moleculardating/output'
+OUTPUT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/output'
 
 '''
 Bash directories
 '''
-BASH_SCRIPT_DOWNLOAD = '/home/leelab/PycharmProjects/moleculardating/bash/download'
-BASH_SCRIPT_EXECUTE = '/home/leelab/PycharmProjects/moleculardating/bash/execute'
-#BASH_SCRIPT_DOWNLOAD = '/Users/shivankurkapoor/GitHub/moleculardating/bash/download'
-#BASH_SCRIPT_EXECUTE = '/Users/shivankurkapoor/GitHub/moleculardating/bash/execute'
+#BASH_SCRIPT_DOWNLOAD = '/home/leelab/PycharmProjects/moleculardating/bash/download'
+#BASH_SCRIPT_EXECUTE = '/home/leelab/PycharmProjects/moleculardating/bash/execute'
+BASH_SCRIPT_DOWNLOAD = '/Users/shivankurkapoor/GitHub/moleculardating/bash/download'
+BASH_SCRIPT_EXECUTE = '/Users/shivankurkapoor/GitHub/moleculardating/bash/execute'
 
 
 '''

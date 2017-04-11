@@ -1,1 +1,0 @@
-python file_downloader.py --user_id=116397074182558488295 --file_type=fasta_file --file_id=0Bxu5-_bls171WlA4QmpJakdvaHM --request_id=NTT8Y3X2 --request_idx=0 --file_path=/home/leelab/PycharmProjects/moleculardating/downloadedfiles/NTT8Y3X2/fasta_file_0.fasta

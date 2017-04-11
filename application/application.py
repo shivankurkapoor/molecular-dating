@@ -38,15 +38,15 @@ def app_display():
     elif int(request_params['status']) == INT_PROCESSED:
         return render_template('result/' + request_params['request_id'] + '.html')
     else:
-        return render_template('error.html', error='Error in fetching result')
+        return render_template('error.html', error='You are not authorized view this request status. Please log in to view the status')
 
 
 
 @application.route('/fetch', methods=['GET'])
 def app_fetch():
     request_params = request.values
-    status_code = fetch_request(request_params['request_id'], session.get('user_id',''))
-    return respond_json(status_code, request_id=request_params['request_id'], user_id=session.get('user_id',''))
+    status_code = fetch_request(request_params['request_id'], session.get('userId',''))
+    return respond_json(status_code, request_id=request_params['request_id'], user_id=session.get('userId',''))
 
 
 @application.route('/connect', methods=['POST'])

@@ -2,11 +2,21 @@
 <html itemscope itemtype="http://schema.org/Article">
 <head>
     <title>Molecular Dating</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <!-- BEGIN Pre-requisites -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+    <style>
+        body, h1, h2, h3, h4, h5 {
+            font-family: "Raleway", sans-serif
+        }
+    </style>
     <!-- END Pre-requisites -->
     <link rel="stylesheet" href="../static/style/style.css">
+
     <script src="../static/js/methods.js"></script>
     <script>
         function start() {
@@ -22,20 +32,16 @@
         }
     </script>
 </head>
-<body>
-<h2 style='text-align: center;'>HIV Incidence and Infection Time Estimator</h2>
+
+<!--Header -->
+<header class="w3-container w3-theme w3-padding" id="myHeader">
+    <div class="w3-center">
+        <h1 class="w3-xxxlarge">HIV INCIDENCE AND INFECTION TIME ESTIMATOR</h1>
+    </div>
+</header>
+
+<body class="w3-light-cyan">
 <div class="container">
-    <ul>
-        <li>This is the homepage for HIV incidence and infection time estimation</li>
-        <li>You can process your fasta/fastq files and we will perform molecular and generate dating output with
-            detailed analysis
-        </li>
-        <li>If you have multiple input files, please sign in to use Google Drive</li>
-        <li>In case of multiple file input, the output will be uploaded in your Google Drive
-        </li>
-        <li>Make sure that your web browser has 'enable pop-ups' for this website</li>
-        <li>Please sign in to upload multiple files or use the direct file upload for single file</li>
-    </ul>
     <button id="signin-button">Sign in with Google</button>
     <script>
         window.addEventListener('message', function (event) {
@@ -78,8 +84,10 @@
         }
     </script>
     <script>
+        //location.reload();
         window.onload = function () {
             showDefault();
+
         };
     </script>
     <div class="tab">
@@ -133,25 +141,42 @@
     </div>
 
     <div id="request-status" class="tabcontent">
-    <h3>Check your request status here</h3>
-    <div id="container-request-status">
-        <form id="request-status-input-form" name="request-status-input-form" onsubmit="return upload(this);">
-            <br>
-            Request Id: <input type='text' id='request-id' name="request-id-text-box">
-            <br>
-            <div>
+        <h3>Check your request status here</h3>
+        <div id="container-request-status">
+            <form id="request-status-input-form" name="request-status-input-form" onsubmit="return upload(this);">
                 <br>
-                <input type='submit' value='submit'>
-            </div>
-        </form>
+                Request Id: <input type='text' id='request-id' name="request-id-text-box">
+                <br>
+                <div>
+                    <br>
+                    <input type='submit' value='submit'>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
     <div id="loader-display" class="tabcontent">
         <h3 id="loader-msg"></h3>
         <img src="../static/images/ajax-loader.gif">
     </div>
 </div>
-
+<!-- Modal -->
+<div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-top">
+      <header class="w3-container w3-theme-l1">
+        <span onclick="document.getElementById('id01').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+        <h4>Oh snap! We just showed you a modal..</h4>
+        <h5>Because we can <i class="fa fa-smile-o"></i></h5>
+      </header>
+      <div class="w3-padding">
+        <p>Cool huh? Ok, enough teasing around..</p>
+        <p>Go to our <a class="w3-btn" href="/w3css/default.asp">W3.CSS Tutorial</a> to learn more!</p>
+      </div>
+      <footer class="w3-container w3-theme-l1">
+        <p>Modal footer</p>
+      </footer>
+    </div>
+</div>
 </body>
 </html>

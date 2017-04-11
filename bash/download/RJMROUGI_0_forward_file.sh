@@ -1,1 +1,0 @@
-python download.py --user_id=116397074182558488295 --file_type=forward_file --file_id=0Bxu5-_bls171WlA4QmpJakdvaHM --request_id=RJMROUGI --request_idx=0 --file_path=/home/leelab/PycharmProjects/moleculardating/downloadedfiles/RJMROUGI/forward_file_0.fastq
