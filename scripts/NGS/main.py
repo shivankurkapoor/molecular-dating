@@ -9,6 +9,8 @@ import pandas as pd
 import glob
 import sys
 matplotlib.use('Agg')
+import sys
+sys.path.append('../../application')
 import matplotlib.pyplot as plt
 
 from Bio import SeqIO
@@ -23,6 +25,11 @@ from Bio.Alphabet import DNAAlphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from collections import OrderedDict
+from argparse import ArgumentParser
+from database import *
+from database.domain.request import DatingRequest
+from common.globalfunct import *
+from common.globalconst import *
 
 
 def process(INPUT, OUTPUT, GSI, DIVERSITY, VAR, REPORT, TYPE, GSI_NUM, CLUSTERED=False):
@@ -252,6 +259,48 @@ def clean_fasta_files(INPUT, OUTPUT):
 if __name__ == '__main__':
     from utils import *
 
+    '''
+    Reading input parameters
+    '''
+    parser = ArgumentParser(description="FENV Process")
+
+    '''
+    Defining arguments
+    '''
+    parser.add_argument("--align", dest="align", default="")
+    parser.add_argument("--request_id", dest="request_id", default="")
+    parser.add_argument("--input_dir", dest="input_dir", default="")
+    parser.add_argument("--request_idx", dest="request_idx", default="")
+    parser.add_argument("--html_dir", dest="html_dir", default="")
+
+    '''
+    Parsing Arguments
+    '''
+    args = parser.parse_args()
+
+    print args.align
+    print args.request_id
+    print args.input_dir
+    print args.request_idx
+    print args.html_dir
+
+    try:
+        assert args.align != ""
+        assert args.request_id != ""
+        assert args.input_dir != ""
+        assert args.request_idx != ""
+    except AssertionError as e:
+        print e
+        sys.exit(1)
+
+    INPUT = os.path.join(args.input_dir, INPUT)
+    INPUT_UNCLUSTERED = os.path.join(args.input_dir, INPUT_UNCLUSTERED)
+    INPUT_CLUSTERED = os.path.join(args.input_dir, INPUT_CLUSTERED)
+    OUTPUT = os.path.join(args.input_dir, OUTPUT)
+
+    if args.html_dir:
+        HTML_OUTPUT = args.html_dir
+
     print 'Cleaning Directories'
     clean_directories([INPUT_CLUSTERED, OUTPUT, INPUT_UNCLUSTERED])
 
@@ -272,66 +321,141 @@ if __name__ == '__main__':
                        'r': R,
                        'l': L,
                        'b': B}
-    '''
-    Calculating gsi, variance and diversity for un-clustered data
-    '''
-    print '\n\nGenerating diversity, gsi and variance for unclustered data'
-    generate_div_gsi_var(INPUT=INPUT_UNCLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_UNCLUSTERED, OUTPUT_GSI=GSI_UNCLUSTERED,
-                         OUTPUT_VAR=VAR_UNCLUSTERED, OUTPUT_HD=HD_UNCLUSTERED, TYPE=TYPE, **alignment_param)
 
-    '''
-    Performing clustering
-    '''
-    print '\n\nPerforming clustering with Threshold=', THRESHOLD
-    print 'Clustering Threshold = ', THRESHOLD
-    clustering(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI_FILE=GSI_UNCLUSTERED, THRESHOLD=THRESHOLD,
-               DIVERSITY_THRESHOLD=DIVERSITY_THRESHOLD, GSI_THRESHOLD=THRESHOLD_GSI, SEQ_THRESHOLD=THRESHOLD_NUMSEQ,
-               TYPE=TYPE, FINALOUTPUT=OUTPUT, GSI_NUM=GSI_NUM)
-
-
-    '''
-    Calculating gsi, variance and diversity for clustered data
-    '''
-    print '\n\nGenerating diversity, gsi and variance for clustered data'
-    generate_div_gsi_var(INPUT=INPUT_CLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_CLUSTERED, OUTPUT_GSI=GSI_CLUSTERED,
-                         OUTPUT_VAR=VAR_CLUSTERED, OUTPUT_HD=HD_CLUSTERED, TYPE=TYPE, **alignment_param)
-
-    '''
-    Generating report files for clustered and unclustered data
-    '''
-    print '\n\nGenerating report file for unclustered data....'
-    process(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_UNCLUSTERED, GSI=GSI_UNCLUSTERED, REPORT=REPORT,
-            DIVERSITY=DIVERSITY_UNCLUSTERED, VAR=VAR_UNCLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=False)
-    print '\n\nGenerating report file for clustered data....'
-    process(INPUT=INPUT_CLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI=GSI_CLUSTERED, REPORT=REPORT,
-            DIVERSITY=DIVERSITY_CLUSTERED, VAR=VAR_CLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=True)
-
-    '''
-    Generating final output file
-    '''
-    print '\n\nGenerating final report file...'
-    REPORT_CLUSTERED = INPUT_CLUSTERED + os.sep + REPORT
-    REPORT_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + REPORT
-    CLUSTER_DATA = OUTPUT + os.sep + 'clusterdata.csv'
-    genoutput(CLUSTER_DATA, REPORT_CLUSTERED, REPORT_UNCLUSTERED, OUTPUT, FINAL_REPORT, COLS, THRESHOLD_GSI)
-
-    '''
-    Generating HD distribution plots
-    '''
-    hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, OUTPUT)
-
-    '''
-    Generating html
-    '''
-    print '\n\nGenerating html file...'
-    create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, OUTPUT)
-
-    '''
-    Generating plot
-    '''
-    if TYPE == 'longi':
+    try:
         '''
-        Generating plot file
+        Calculating gsi, variance and diversity for un-clustered data
         '''
-        print '\n\nGenerating plot file....'
-        plot(OUTPUT + os.sep + FINAL_REPORT, OUTPUT=OUTPUT, PLOTFILE=PLOT)
+        print '\n\nGenerating diversity, gsi and variance for unclustered data'
+        generate_div_gsi_var(INPUT=INPUT_UNCLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_UNCLUSTERED, OUTPUT_GSI=GSI_UNCLUSTERED,
+                             OUTPUT_VAR=VAR_UNCLUSTERED, OUTPUT_HD=HD_UNCLUSTERED, TYPE=TYPE, **alignment_param)
+
+        '''
+        Performing clustering
+        '''
+        print '\n\nPerforming clustering with Threshold=', THRESHOLD
+        print 'Clustering Threshold = ', THRESHOLD
+        clustering(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI_FILE=GSI_UNCLUSTERED, THRESHOLD=THRESHOLD,
+                   DIVERSITY_THRESHOLD=DIVERSITY_THRESHOLD, GSI_THRESHOLD=THRESHOLD_GSI, SEQ_THRESHOLD=THRESHOLD_NUMSEQ,
+                   TYPE=TYPE, FINALOUTPUT=OUTPUT, GSI_NUM=GSI_NUM)
+
+
+        '''
+        Calculating gsi, variance and diversity for clustered data
+        '''
+        print '\n\nGenerating diversity, gsi and variance for clustered data'
+        generate_div_gsi_var(INPUT=INPUT_CLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_CLUSTERED, OUTPUT_GSI=GSI_CLUSTERED,
+                             OUTPUT_VAR=VAR_CLUSTERED, OUTPUT_HD=HD_CLUSTERED, TYPE=TYPE, **alignment_param)
+
+        '''
+        Generating report files for clustered and unclustered data
+        '''
+        print '\n\nGenerating report file for unclustered data....'
+        process(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_UNCLUSTERED, GSI=GSI_UNCLUSTERED, REPORT=REPORT,
+                DIVERSITY=DIVERSITY_UNCLUSTERED, VAR=VAR_UNCLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=False)
+        print '\n\nGenerating report file for clustered data....'
+        process(INPUT=INPUT_CLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI=GSI_CLUSTERED, REPORT=REPORT,
+                DIVERSITY=DIVERSITY_CLUSTERED, VAR=VAR_CLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=True)
+
+        '''
+        Generating final output file
+        '''
+        print '\n\nGenerating final report file...'
+        REPORT_CLUSTERED = INPUT_CLUSTERED + os.sep + REPORT
+        REPORT_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + REPORT
+        CLUSTER_DATA = OUTPUT + os.sep + 'clusterdata.csv'
+        genoutput(CLUSTER_DATA, REPORT_CLUSTERED, REPORT_UNCLUSTERED, OUTPUT, FINAL_REPORT, COLS, THRESHOLD_GSI)
+
+        '''
+        Generating HD distribution plots
+        '''
+        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT)
+
+        '''
+        Generating html
+        '''
+        print '\n\nGenerating html file...'
+        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT)
+
+        # '''
+        # Generating plot
+        # '''
+        # if TYPE == 'longi':
+        #     '''
+        #     Generating plot file
+        #     '''
+        #     print '\n\nGenerating plot file....'
+        #     plot(OUTPUT + os.sep + FINAL_REPORT, OUTPUT=OUTPUT, PLOTFILE=PLOT)
+
+    except Exception as e:
+        print 'Error in NGS processing ',e
+
+    '''
+    The code below updates the database
+    I don't find it a good practice to update DB here
+    I will move it to a separate script
+    '''
+
+    try:
+        db.connect()
+    except Exception as e:
+        print 'Error in opening database connection ', e
+        sys.exit(1)
+
+
+
+    try:
+        with db.atomic():
+            request_query_res = DatingRequest.select().where(DatingRequest.request_id == str(args.request_id))
+            if request_query_res:
+                dating_request = request_query_res[0]
+                form_data = json_decode(str(dating_request.form_data))
+                form_data['requests'][int(args.request_idx)]['is_processed'] = True
+
+                # Updating form data
+                query_form_update = DatingRequest.update(form_data=str(json_encode(form_data))).where(
+                    DatingRequest.request_id == args.request_id)
+                query_form_update.execute()
+
+                if dating_request.form_type == SINGLE:
+                    query_is_processed = DatingRequest.update(is_processed=True, time_processed=datetime.now()).where(
+                        DatingRequest.request_id == args.request_id)
+                    query_is_processed.execute()
+
+
+                elif dating_request.form_type == MULTIPLE:
+                    processed_status = []
+                    for request in form_data['requests']:
+                        processed_status.append(request['is_processed'])
+
+                    if all(status == True for status in processed_status):
+                        # Updating databse
+                        query_is_processed = DatingRequest.update(is_processed=True,
+                                                                  time_processed=datetime.now()).where(
+                            DatingRequest.request_id == args.request_id)
+                        query_is_processed.execute()
+
+                        # Creating zip
+                        base_path = args.input_dir.rsplit('/', 1)[0]
+                        dest_dir = os.path.join(base_path, 'Archive')
+                        for i in range(int(dating_request.number_requests)):
+                            source_dir = os.path.join(base_path, str(i), OUTPUT_DIR)
+                            dest_dir_ = os.path.join(dest_dir, str(i))
+                            copy_dir(source_dir, dest_dir_)
+                        archive_file_name = os.path.join(base_path, args.request_id + '_ARCHIVE')
+                        zip_file = make_zip(archive_file_name, 'zip', dest_dir)
+
+                        # Creating upload bash script
+                        command = 'python ' + UPLOAD_SCRIPT
+                        script_name = 'UPLOAD_' + args.request_id
+                        script_path = BASH_SCRIPT_PROCESS.format(request_id=args.request_id)
+                        user_id = dating_request.user_id
+                        write_bash_file(script_path, script_name, command=command, request_id=args.request_id,
+                                        user_id=user_id, file_path=zip_file)
+
+
+    except Exception as e:
+        print 'Error in updating database in FENV processing ', e
+
+    finally:
+        db.close()

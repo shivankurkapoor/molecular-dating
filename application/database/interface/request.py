@@ -27,7 +27,8 @@ def store_request(form_type, data_type, num_request, form_data, files, user_id):
                                form_data=json_data,
                                form_type=form_type,
                                data_type=data_type,
-                               are_files_downloaded=download_status)
+                               are_files_downloaded=download_status,
+                               number_requests=num_request)
         record.save(force_insert=True)
         return status, request_id
     except Exception as e:
@@ -142,7 +143,7 @@ def _create_form_data(form_type, data_type, num_request, form_data, files, reque
                 if all(status == INT_DOWNLOADED for status in download_status_code_list):
                     download_status = True
             elif form_type == MULTIPLE:
-                for f in request_dict:
+                for f in ['forward_file', 'backward_file']:
                     request_dict[f] = {'file_id': request_id + '_' + request[f],
                                        'file_path': _get_file_path(request_id, request[f], FASTQ, i),
                                        'meta_data': request['meta_data'][f],

@@ -2,7 +2,9 @@ import json
 import os
 import random
 import string
+import shutil
 from datetime import datetime
+from distutils.dir_util import copy_tree
 
 from flask import jsonify
 
@@ -60,3 +62,20 @@ def write_bash_file(*args, **kwargs):
             f.write(command)
     except IOError as e:
         print 'Error in generating bash script', e
+
+
+def copy_dir(source_dir, destination_dir):
+    try:
+        if not os.path.exists(destination_dir):
+            os.makedirs(destination_dir)
+    except Exception as e:
+        print 'Error while creating ',destination_dir, e
+    copy_tree(source_dir, destination_dir)
+
+def make_zip(file_name, format, directory):
+    try:
+        return shutil.make_archive(file_name, format, directory)
+    except Exception as e:
+        print 'Error while archiving ', file_name, e
+        raise
+

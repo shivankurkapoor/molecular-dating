@@ -1,4 +1,6 @@
+import smtplib
 import sys
+
 sys.path.append('../application')
 import httplib2
 from oauth2client.client import Credentials
@@ -11,6 +13,29 @@ from apiclient import discovery
 from argparse import ArgumentParser
 from apiclient import errors
 from common.globalfunct import *
+from email.mime.text import MIMEText
+
+
+def send_email(sender, receiver, SMTP_server, message, request_id, password):
+    '''
+
+    :param sender:
+    :param receiver:
+    :param SMTP_server:
+    :param message:
+    :param request_id:
+    :return:
+    '''
+    msg = MIMEText(message)
+    msg['Subject'] = 'HIV Molecular Dating Request ID %s' % request_id
+    msg['From'] = sender
+    msg['To'] = receiver
+    s = smtplib.SMTP('localhost')
+    s.ehlo()
+    s.starttls()
+    s.login(sender,password)
+    s.sendmail(sender, [receiver], msg.as_string())
+    s.quit()
 
 
 def upload_file_google_drive(service, title, description, parent_id, mime_type, filename):
@@ -76,6 +101,11 @@ if __name__ == '__main__':
         print e
         raise
 
+
+    upload_status = False
+    download_link = ''
+    email = ''
+
     try:
         db.connect()
     except Exception as e:
@@ -94,8 +124,11 @@ if __name__ == '__main__':
             status, meta_data = upload_file_google_drive(drive_service, file_name, description, None, ZIP_MIME_TYPE,
                                                          str(args.file_path))
 
+            upload_status = status
+            email = user.email
             if status == INT_UPLOADED:
-                # TODO Code for cleanup
+                download_link = meta_data['alternateLink']
+
                 with db.atomic():
                     request_query_res = DatingRequest.select().where(DatingRequest.request_id == str(args.request_id))
                     if request_query_res:
@@ -104,10 +137,15 @@ if __name__ == '__main__':
                             json_encode(meta_data))).where(
                             DatingRequest.request_id == str(args.request_id))
                         query_form_update.execute()
-                        # TODO Code for email notification , display page generation and download link
-
 
     except Exception as e:
         print 'Error in updating records in uploading function ', e
     finally:
         db.close()
+
+    if upload_status:
+        try:
+            email = EMAIL.format(request_id=args.request_id, link=download_link)
+            send_email(SENDER, str(email), SERVER, email, args.request_id, PASSWORD)
+        except Exception as e:
+            print 'Error in sending email to ',email, e

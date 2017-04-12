@@ -99,7 +99,7 @@ if __name__ == '__main__':
         assert args.file_type != ""
     except AssertionError as e:
         print e
-        sys.exit()
+        sys.exit(1)
 
     try:
         db.connect()
@@ -136,7 +136,7 @@ if __name__ == '__main__':
                             script_path = BASH_SCRIPT_PROCESS.format(request_id = args.request_id)
                             align = form_data['requests'][int(args.request_idx)]['align']
                             hxb2 = form_data['requests'][int(args.request_idx)]['hxb2']
-                            input_dir = RESULT_PATH.format(request_id=str(args.result_id), request_idx=str(args.result_idx))
+                            input_dir = RESULT_PATH.format(request_id=str(args.request_id), request_idx=str(args.request_idx))
 
                             command = 'python '
                             if hxb2:
@@ -160,7 +160,7 @@ if __name__ == '__main__':
                                 seq_len = form_data['requests'][int(args.request_idx)]['seq_len']
                                 base_count = form_data['requests'][int(args.request_idx)]['base_count']
                                 percent = form_data['requests'][int(args.request_idx)]['percent']
-                                output_dir = os.path.join(RESULT_PATH.format(request_id=args.request_id, request_idx=str(args.request_idx)), FASTQ_DIR)
+                                output_dir = os.path.join(RESULT_PATH.format(request_id=args.request_id, request_idx=str(args.request_idx)), FASTA_DIR)
                                 forward_file = form_data['requests'][int(args.request_idx)]['forward_file']['file_path']
                                 backward_file = form_data['requests'][int(args.request_idx)]['backward_file']['file_path']
                                 write_bash_file(script_path, script_name, command=command,
@@ -172,11 +172,14 @@ if __name__ == '__main__':
                                                 output_dir=output_dir,
                                                 request_idx=0)
 
-                        # Checking the download status of all files in the request
-                        download_status = check_download_status(form_data['requests'], dating_request.data_type)
+
+                        #Updaing form
                         query_form_update = DatingRequest.update(form_data=str(json_encode(form_data))).where(
                             DatingRequest.request_id == str(args.request_id))
                         query_form_update.execute()
+
+                        # Checking the download status of all files in the request
+                        download_status = check_download_status(form_data['requests'], dating_request.data_type)
 
 
                         if download_status:

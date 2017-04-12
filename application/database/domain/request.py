@@ -16,6 +16,7 @@ class DatingRequest(Model):
     is_processed = BooleanField(default=False)
     is_uploaded = BooleanField(default=False)
     upload_file_meta_data = TextField(default='')
+    number_requests = IntegerField(default=1)
 
     class Meta:
         database = db
@@ -39,5 +40,5 @@ class DatingRequest(Model):
 
     datingrequest_attr = ['request_id', 'user_id','form_data', 'form_type', 'data_type',
                           'are_files_downloaded', 'time_created', 'time_processed',
-                          'is_processed', 'is_uploaded']
+                          'is_processed', 'is_uploaded', 'upload_file_meta_data','number_requests']
 

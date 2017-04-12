@@ -19,16 +19,16 @@ def create_html(INPUT, OUTPUT):
     try:
         gsi_num = GSI_NUM[-1]
         df = pd.read_csv(INPUT, dtype={"#SUBJECT": "string",
-                                                 "Single Lineage Diversity": "string",
-                                                 "Single Lineage GSI": "string",
-                                                 "Single Lineage Variance": "string",
-                                                 "Diversity": "string",
-                                                 "GSI": "string",
-                                                 "Variance": "string"},
+                                       "Single Lineage Diversity": "string",
+                                       "Single Lineage GSI": "string",
+                                       "Single Lineage Variance": "string",
+                                       "Diversity": "string",
+                                       "GSI": "string",
+                                       "Variance": "string"},
                          index_col=False)
         for index, row in df.iterrows():
             time = float(row['TIME'])
-            subject = str(row['#SUBJECT']).split('_',1)[0]
+            subject = str(row['#SUBJECT']).split('_', 1)[0]
             clustered = str(row['CLUSTERED'])
             days_since_infection = str(row['Days Since Infection'])
             row_df = pd.DataFrame([dict(row)])
@@ -40,18 +40,18 @@ def create_html(INPUT, OUTPUT):
             row_df = row_df[
                 ['Single Lineage Diversity', 'Single Lineage GSI', 'Single Lineage Variance', 'Diversity', 'GSI',
                  'Variance']]
-				 
+
             if clustered == 'NO':
-		row_df = row_df.drop('Single Lineage Diversity',1)
-		row_df = row_df.drop('Single Lineage GSI',1)
-		row_df = row_df.drop('Single Lineage Variance',1)
+                row_df = row_df.drop('Single Lineage Diversity', 1)
+                row_df = row_df.drop('Single Lineage GSI', 1)
+                row_df = row_df.drop('Single Lineage Variance', 1)
             row_df = row_df.transpose()
             row_df = row_df.reset_index()
-            row_df = row_df.rename(columns = {'index': 'Attribute',0:'Value'})
+            row_df = row_df.rename(columns={'index': 'Attribute', 0: 'Value'})
             fname = OUTPUT + os.sep + subject + '.html'
             table = row_df.to_html(classes='page', justify='center', index=False, header=False)
-            #For subscript notation
-            table = table.replace('GSI','GSI<sub>' + gsi_num + '</sub>')
+            # For subscript notation
+            table = table.replace('GSI', 'GSI<sub>' + gsi_num + '</sub>')
 
             graph_unclustered = os.path.join(subject + '-' + str(time) + '-' + 'UNCLUSTERED.png')
             context = {
@@ -59,7 +59,7 @@ def create_html(INPUT, OUTPUT):
                 'subject': 'Fasta File: ' + subject + '.fasta',
                 'unclustered_header': 'Whole',
                 'graph_unclustered': graph_unclustered,
-                'prediction_interval' : days_since_infection,
+                'prediction_interval': days_since_infection,
                 'table': table,
                 'h1': IMAGE_HEIGHT,
                 'w1': IMAGE_WIDTH

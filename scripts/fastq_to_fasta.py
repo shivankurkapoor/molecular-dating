@@ -284,7 +284,7 @@ if __name__ == '__main__':
     parser.add_argument("--base_count", dest="base_count", default="")
     parser.add_argument("--percent", dest="percent", default="")
     parser.add_argument("--forward_file", dest="forward_file", default="")
-    parser.add_argument("--backward_file", dest="request_idx", default="")
+    parser.add_argument("--backward_file", dest="backward_file", default="")
     parser.add_argument("--request_id", dest="request_id", default="")
     parser.add_argument("--output_dir", dest="output_dir", default="")
     parser.add_argument("--request_idx", dest="request_idx", default="")
@@ -332,7 +332,8 @@ if __name__ == '__main__':
         db.connect()
     except Exception as e:
         print 'Error in opening database'
-        raise
+        sys.exit(1)
+
 
     try:
         with db.atomic():
@@ -341,6 +342,11 @@ if __name__ == '__main__':
                 dating_request = request_query_res[0]
                 form_data = json_decode(str(dating_request.form_data))
                 form_data['requests'][int(args.request_idx)]['fastqtofasta'] = True
+
+                #Updating form
+                query_form_update = DatingRequest.update(form_data=str(json_encode(form_data))).where(
+                    DatingRequest.request_id == args.request_id)
+                query_form_update.execute()
 
                 # Generating bash script for processing
                 command = 'python ' + NGS_PROCESS_SCRIPT

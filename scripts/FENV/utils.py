@@ -57,9 +57,10 @@ PRED_INTERVAL_TXT_FILE = str(filenames['pred_interval_txt_file'])
 I/O Directory details for main file
 '''
 
-INPUT_UNCLUSTERED = 'input'
-INPUT_CLUSTERED = 'clustered_input'
+INPUT_UNCLUSTERED = 'fasta'
+INPUT_CLUSTERED = 'clustered_fasta'
 OUTPUT = 'output'
+HTML_OUTPUT = OUTPUT
 
 '''
 Threshold GSI

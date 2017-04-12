@@ -115,4 +115,3 @@ if __name__ == '__main__':
     application.secret_key = APP_SECRET_KEY
     # application.run(host='p512.usc.edu/miseq',port=5000)
     application.run(host='localhost', port=5000, debug=True)
-    # application.run(debug=True)

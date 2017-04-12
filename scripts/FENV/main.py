@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import glob
 import sys
-
+sys.path.append('../../application')
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from Bio import SeqIO
@@ -23,6 +23,11 @@ from stats import *
 from hddistribution import hd_distribution
 from htmlgen import create_html
 from argparse import ArgumentParser
+from database import *
+from database.domain.request import DatingRequest
+from common.globalfunct import *
+from common.globalconst import *
+
 
 
 def process(INPUT, OUTPUT, GSI, DIVERSITY, REPORT, TYPE, GSI_NUM, CLUSTERED=False):
@@ -307,14 +312,16 @@ if __name__ == '__main__':
         assert args.request_id != ""
         assert args.input_dir != ""
         assert args.request_idx != ""
-        assert args.html_dir != ""
     except AssertionError as e:
         print e
-        sys.exit()
+        sys.exit(1)
 
     INPUT_UNCLUSTERED = os.path.join(args.input_dir, INPUT_UNCLUSTERED)
     INPUT_CLUSTERED = os.path.join(args.input_dir, INPUT_CLUSTERED)
     OUTPUT = os.path.join(args.input_dir, OUTPUT)
+
+    if args.html_dir:
+        HTML_OUTPUT = args.html_dir
 
     print 'Cleaning Directories'
     clean_directories([INPUT_CLUSTERED, OUTPUT])
@@ -322,71 +329,140 @@ if __name__ == '__main__':
     TYPE = TYPE.strip().lower()
     assert TYPE == 'longi' or TYPE == 'chronic'
 
-    '''
-    Calculating statistics for un-clustered data
-    '''
-    # Calculating diversity
-    print 'Generating diversity for unclustered data'
-    generate_diversity_data(INPUT=INPUT_UNCLUSTERED, OUTPUT=DIVERSITY_UNCLUSTERED, TYPE=TYPE, OUTPUTHD=HD_UNCLUSTERED)
-    # Calculating gsi
-    print '\n\nGenerating GSI for unclustered data'
-    gsi(INPUT=INPUT_UNCLUSTERED, OUTPUT=GSI_UNCLUSTERED, gapsIgnore=GAPS_IGNORE)
+    try:
+        '''
+        Calculating statistics for un-clustered data
+        '''
+        # Calculating diversity
+        print 'Generating diversity for unclustered data'
+        generate_diversity_data(INPUT=INPUT_UNCLUSTERED, OUTPUT=DIVERSITY_UNCLUSTERED, TYPE=TYPE, OUTPUTHD=HD_UNCLUSTERED)
+        # Calculating gsi
+        print '\n\nGenerating GSI for unclustered data'
+        gsi(INPUT=INPUT_UNCLUSTERED, OUTPUT=GSI_UNCLUSTERED, gapsIgnore=GAPS_IGNORE)
+
+        '''
+        Performing clustering
+        '''
+        print '\n\nPerforming clustering with Threshold=', THRESHOLD
+        print 'Clustering Threshold = ', THRESHOLD
+        clustering(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI_FILE=GSI_UNCLUSTERED, THRESHOLD=THRESHOLD,
+                   DIVERSITY_THRESHOLD=DIVERSITY_THRESHOLD, GSI_THRESHOLD=THRESHOLD_GSI, SEQ_THRESHOLD=THRESHOLD_NUMSEQ,
+                   TYPE=TYPE, FINALOUTPUT=OUTPUT, GSI_NUM=GSI_NUM)
+
+        '''
+        Calculating statistics for clustered data
+        '''
+        # Calculating diversity
+        print '\nGenerating diversity for clustered data'
+        generate_diversity_data(INPUT=INPUT_CLUSTERED, OUTPUT=DIVERSITY_CLUSTERED, TYPE=TYPE, OUTPUTHD=HD_CLUSTERED)
+        # Calculating gsi
+        print '\n\nGenerating GSI for clustered data'
+        gsi(INPUT=INPUT_CLUSTERED, OUTPUT=GSI_CLUSTERED, gapsIgnore=GAPS_IGNORE)
+
+        '''
+        Generating report files for clustered and unclustered data
+        '''
+        print '\n\nGenerating report file for unclustered data....'
+        process(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_UNCLUSTERED, GSI=GSI_UNCLUSTERED, REPORT=REPORT,
+                DIVERSITY=DIVERSITY_UNCLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=False)
+        print '\n\nGenerating report file for clustered data....'
+        process(INPUT=INPUT_CLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI=GSI_CLUSTERED, REPORT=REPORT,
+                DIVERSITY=DIVERSITY_CLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=True)
+
+        '''
+        Generating final output file
+        '''
+        print '\n\nGenerating final report file...'
+        REPORT_CLUSTERED = INPUT_CLUSTERED + os.sep + REPORT
+        REPORT_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + REPORT
+        CLUSTER_DATA = OUTPUT + os.sep + 'clusterdata.csv'
+        genoutput(CLUSTER_DATA, REPORT_CLUSTERED, REPORT_UNCLUSTERED, OUTPUT, FINAL_REPORT, COLS, THRESHOLD_GSI)
+
+        '''
+        Generating HD distribution plots
+        '''
+        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT)
+
+        '''
+        Generating html
+        '''
+        print '\n\nGenerating html file...'
+        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT)
+
+        # '''
+        # Generating plot
+        # '''
+        # if TYPE == 'longi':
+        #     '''
+        #     Generating plot file
+        #     '''
+        #     print '\n\nGenerating plot file....'
+        #     plot(OUTPUT + os.sep + FINAL_REPORT, OUTPUT=OUTPUT, PLOTFILE=PLOT)
+    except Exception as e:
+        print 'Error in FENV processing', e
+        sys.exit(1)
 
     '''
-    Performing clustering
+    The code below updates the database
+    I don't find it a good practice to update DB here
+    I will move it to a separate script
     '''
-    print '\n\nPerforming clustering with Threshold=', THRESHOLD
-    print 'Clustering Threshold = ', THRESHOLD
-    clustering(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI_FILE=GSI_UNCLUSTERED, THRESHOLD=THRESHOLD,
-               DIVERSITY_THRESHOLD=DIVERSITY_THRESHOLD, GSI_THRESHOLD=THRESHOLD_GSI, SEQ_THRESHOLD=THRESHOLD_NUMSEQ,
-               TYPE=TYPE, FINALOUTPUT=OUTPUT, GSI_NUM=GSI_NUM)
+    try:
+        db.connect()
+    except Exception as e:
+        print 'Error in opening database connection ',e
+        sys.exit(1)
 
-    '''
-    Calculating statistics for clustered data
-    '''
-    # Calculating diversity
-    print '\nGenerating diversity for clustered data'
-    generate_diversity_data(INPUT=INPUT_CLUSTERED, OUTPUT=DIVERSITY_CLUSTERED, TYPE=TYPE, OUTPUTHD=HD_CLUSTERED)
-    # Calculating gsi
-    print '\n\nGenerating GSI for clustered data'
-    gsi(INPUT=INPUT_CLUSTERED, OUTPUT=GSI_CLUSTERED, gapsIgnore=GAPS_IGNORE)
+    try:
+        with db.atomic():
+            request_query_res = DatingRequest.select().where(DatingRequest.request_id == str(args.request_id))
+            if request_query_res:
+                dating_request = request_query_res[0]
+                form_data = json_decode(str(dating_request.form_data))
+                form_data['requests'][int(args.request_idx)]['is_processed'] = True
 
-    '''
-    Generating report files for clustered and unclustered data
-    '''
-    print '\n\nGenerating report file for unclustered data....'
-    process(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_UNCLUSTERED, GSI=GSI_UNCLUSTERED, REPORT=REPORT,
-            DIVERSITY=DIVERSITY_UNCLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=False)
-    print '\n\nGenerating report file for clustered data....'
-    process(INPUT=INPUT_CLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI=GSI_CLUSTERED, REPORT=REPORT,
-            DIVERSITY=DIVERSITY_CLUSTERED, TYPE=TYPE, GSI_NUM=GSI_NUM, CLUSTERED=True)
+                #Updating form data
+                query_form_update = DatingRequest.update(form_data = str(json_encode(form_data))).where(DatingRequest.request_id == args.request_id)
+                query_form_update.execute()
 
-    '''
-    Generating final output file
-    '''
-    print '\n\nGenerating final report file...'
-    REPORT_CLUSTERED = INPUT_CLUSTERED + os.sep + REPORT
-    REPORT_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + REPORT
-    CLUSTER_DATA = OUTPUT + os.sep + 'clusterdata.csv'
-    genoutput(CLUSTER_DATA, REPORT_CLUSTERED, REPORT_UNCLUSTERED, OUTPUT, FINAL_REPORT, COLS, THRESHOLD_GSI)
+                if dating_request.form_type == SINGLE:
+                    query_is_processed = DatingRequest.update(is_processed = True, time_processed = datetime.now()).where(DatingRequest.request_id == args.request_id)
+                    query_is_processed.execute()
 
-    '''
-    Generating HD distribution plots
-    '''
-    hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, OUTPUT)
 
-    '''
-    Generating html
-    '''
-    print '\n\nGenerating html file...'
-    create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, OUTPUT)
+                elif dating_request.form_type == MULTIPLE:
+                    processed_status = []
+                    for request in form_data['requests']:
+                        processed_status.append(request['is_processed'])
 
-    # '''
-    # Generating plot
-    # '''
-    # if TYPE == 'longi':
-    #     '''
-    #     Generating plot file
-    #     '''
-    #     print '\n\nGenerating plot file....'
-    #     plot(OUTPUT + os.sep + FINAL_REPORT, OUTPUT=OUTPUT, PLOTFILE=PLOT)
+
+                    if all(status == True for status in processed_status):
+                        #Updating database
+                        query_is_processed = DatingRequest.update(is_processed=True,
+                                                                  time_processed=datetime.now()).where(
+                            DatingRequest.request_id == args.request_id)
+                        query_is_processed.execute()
+
+                        # Creating zip
+                        base_path = args.input_dir.rsplit('/',1)[0]
+                        dest_dir = os.path.join(base_path, 'Archive')
+                        for i in range(int(dating_request.number_requests)):
+                            source_dir = os.path.join(base_path, str(i), OUTPUT_DIR)
+                            dest_dir_ = os.path.join(dest_dir, str(i))
+                            copy_dir(source_dir, dest_dir_)
+                        archive_file_name = os.path.join(base_path, args.request_id + '_ARCHIVE')
+                        zip_file = make_zip(archive_file_name, 'zip',dest_dir)
+
+                        #Creating upload bash script
+                        command = 'python ' + UPLOAD_SCRIPT
+                        script_name = 'UPLOAD_' + args.request_id
+                        script_path = BASH_SCRIPT_PROCESS.format(request_id=args.request_id)
+                        user_id = dating_request.user_id
+                        write_bash_file(script_path, script_name, command=command, request_id=args.request_id, user_id=user_id, file_path=zip_file)
+
+
+    except Exception as e:
+        print 'Error in updating database in FENV processing ', e
+
+    finally:
+        db.close()
