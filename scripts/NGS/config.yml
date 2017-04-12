@@ -10,10 +10,10 @@ predictioninterval:
 #Configuration for main.py
 mainconfig:
   type: 'chronic'
-  input: 'INPUT_RV144'
-  input_unclustered: 'TEMP'
-  input_clustered: 'RV144_CLUSTERED_FASTA_PAM'
-  output: 'OUTPUT_RV144'
+#  input: 'INPUT_RV144'
+#  input_unclustered: 'TEMP'
+#  input_clustered: 'RV144_CLUSTERED_FASTA_PAM'
+#  output: 'OUTPUT_RV144'
   threshold_gsi: '0.7311'
   threshold_clustering: '10' #beta threshold
   threshold_diversity: '0.654'

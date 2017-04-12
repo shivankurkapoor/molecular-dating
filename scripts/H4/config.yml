@@ -10,9 +10,9 @@ predictioninterval:
 #Configuration for main.py
 mainconfig:
   type: 'chronic'
-  input_unclustered: 'INPUT_CHRONIC'
-  input_clustered: 'CHRONIC_CLUSTERED_FASTA_PAM'
-  output: 'OUTPUT_CHRONIC'
+  #input_unclustered: 'INPUT_CHRONIC'
+  #input_clustered: 'CHRONIC_CLUSTERED_FASTA_PAM'
+  #output: 'OUTPUT_CHRONIC'
   threshold_gsi: '0.45'
   threshold_clustering: '14.' #beta threshold
   threshold_diversity: '0.962'

@@ -1,7 +1,10 @@
-This is the readme file
-1. Add input fields to NGS form
-2. Write script to generate execution for single as well as multiple
+TODO
 3. Write code for clean up
 4. Error handling
 5. Exception classes
-6.
+6. Write Env on top of every python file - http://stackoverflow.com/questions/3128669/python-script-header
+7. install pipreqs /path/to/project
+8. Deploy app on gunicore server - very easy to deploy https://www.youtube.com/watch?v=kDRRtPO0YPA
+9. Move the database update code from process scripts to a more relevant location
+10. Take care of Align - change code to run alignment only once
+
