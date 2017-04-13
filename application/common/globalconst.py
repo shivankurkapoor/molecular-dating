@@ -10,7 +10,7 @@ STR_UNDEFINED = 'Undefined'
 '''
 Below fields are related to Google Drive API
 '''
-#CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
+# CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
 CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/GitHub/moleculardating/application/auth/client_secret.json'
 REDIRECT_URI = 'postmessage'
 SCOPES = [
@@ -37,7 +37,7 @@ RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refres
 GOOGLE DRIVE FILE HANDLING
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
-#DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
+# DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
 DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
 MIME_TYPE = 'application/octet-stream'
 ZIP_MIME_TYPE = 'application/zip'
@@ -79,7 +79,7 @@ INT_NOTPROCESSED = 6002
 '''
 Dir path for html file
 '''
-#TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
+# TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
 MSG_TEMPLATE_SINGLE = 'display_template_single.html'
 MSG_TEMPLATE_MULTIPLE = 'display_template_multiple.html'
 TEMPLATE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates'
@@ -87,14 +87,14 @@ TEMPLATE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templ
 '''
 Result dir path
 '''
-#RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
+# RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
 RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
 
 '''
 Bash directories
 '''
-#BASH_SCRIPT_FASTPROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/fastprocess/{request_id}'
-#BASH_SCRIPT_PROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/process/{request_id}'
+# BASH_SCRIPT_FASTPROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/fastprocess/{request_id}'
+# BASH_SCRIPT_PROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/process/{request_id}'
 
 BASH_SCRIPT_FASTPROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/fastprocess/{request_id}'
 BASH_SCRIPT_PROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/process/{request_id}'
@@ -109,12 +109,11 @@ FENV_PROCESS_SCRIPT = ''
 HXB_PROCESS_SCRIPT = ''
 NGS_PROCESS_SCRIPT = ''
 
-
 '''
 Request Form Types
 '''
 SINGLE = 'single'
-SANGER_SEQUNCE_DATA = 'ss'  #Sanger Sequence Data
+SANGER_SEQUNCE_DATA = 'ss'  # Sanger Sequence Data
 MULTIPLE = 'multiple'
 NEXT_GEN_DATA = 'ngs'  # Next Generation Sequence Data
 
@@ -128,7 +127,6 @@ FASTQ = 'fastq'
 Time to wait for processing
 '''
 DELTA = 10
-
 
 '''
 Fasta file folder name
@@ -153,7 +151,7 @@ CLUSTERED_DIR = 'clustered'
 '''
 HTML result path
 '''
-#HTML_RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates/result/{request_id}'
+# HTML_RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates/result/{request_id}'
 HTML_RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates/result/{request_id}'
 
 '''
