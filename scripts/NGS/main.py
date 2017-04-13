@@ -8,8 +8,10 @@ import matplotlib
 import pandas as pd
 import glob
 import sys
+
 matplotlib.use('Agg')
 import sys
+
 sys.path.append('../../application')
 import matplotlib.pyplot as plt
 
@@ -232,7 +234,6 @@ def clean_directories(DIRS):
 
 
 def clean_fasta_files(INPUT, OUTPUT):
-
     try:
         file_paths = glob.glob(INPUT + '/*fasta')
         file_paths = sorted(file_paths)
@@ -249,11 +250,10 @@ def clean_fasta_files(INPUT, OUTPUT):
             for seq_id, seq in seq_dict.iteritems():
                 rec = SeqRecord(Seq(seq, DNAAlphabet), id=seq_id, description='')
                 rec_list.append(rec)
-            SeqIO.write(rec_list, OUTPUT+'/'+filename, "fasta")
+            SeqIO.write(rec_list, OUTPUT + '/' + filename, "fasta")
     except Exception as e:
-        print 'Error in cleaning fasta files',e
+        print 'Error in cleaning fasta files', e
         sys.exit(1)
-
 
 
 if __name__ == '__main__':
@@ -285,7 +285,6 @@ if __name__ == '__main__':
     print args.html_dir
 
     try:
-        assert args.align != ""
         assert args.request_id != ""
         assert args.input_dir != ""
         assert args.request_idx != ""
@@ -311,7 +310,7 @@ if __name__ == '__main__':
     Clean fasta files
     '''
     print '\n\nCleaning the fasta files'
-    clean_fasta_files(INPUT=INPUT,OUTPUT=INPUT_UNCLUSTERED)
+    clean_fasta_files(INPUT=INPUT, OUTPUT=INPUT_UNCLUSTERED)
 
     '''
     Parameter dict for sequence alignment
@@ -327,7 +326,8 @@ if __name__ == '__main__':
         Calculating gsi, variance and diversity for un-clustered data
         '''
         print '\n\nGenerating diversity, gsi and variance for unclustered data'
-        generate_div_gsi_var(INPUT=INPUT_UNCLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_UNCLUSTERED, OUTPUT_GSI=GSI_UNCLUSTERED,
+        generate_div_gsi_var(INPUT=INPUT_UNCLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_UNCLUSTERED,
+                             OUTPUT_GSI=GSI_UNCLUSTERED,
                              OUTPUT_VAR=VAR_UNCLUSTERED, OUTPUT_HD=HD_UNCLUSTERED, TYPE=TYPE, **alignment_param)
 
         '''
@@ -338,7 +338,6 @@ if __name__ == '__main__':
         clustering(INPUT=INPUT_UNCLUSTERED, OUTPUT=INPUT_CLUSTERED, GSI_FILE=GSI_UNCLUSTERED, THRESHOLD=THRESHOLD,
                    DIVERSITY_THRESHOLD=DIVERSITY_THRESHOLD, GSI_THRESHOLD=THRESHOLD_GSI, SEQ_THRESHOLD=THRESHOLD_NUMSEQ,
                    TYPE=TYPE, FINALOUTPUT=OUTPUT, GSI_NUM=GSI_NUM)
-
 
         '''
         Calculating gsi, variance and diversity for clustered data
@@ -388,7 +387,7 @@ if __name__ == '__main__':
         #     plot(OUTPUT + os.sep + FINAL_REPORT, OUTPUT=OUTPUT, PLOTFILE=PLOT)
 
     except Exception as e:
-        print 'Error in NGS processing ',e
+        print 'Error in NGS processing for request_id', e, args.request_id
 
     '''
     The code below updates the database
@@ -401,8 +400,6 @@ if __name__ == '__main__':
     except Exception as e:
         print 'Error in opening database connection ', e
         sys.exit(1)
-
-
 
     try:
         with db.atomic():
@@ -455,7 +452,7 @@ if __name__ == '__main__':
 
 
     except Exception as e:
-        print 'Error in updating database in FENV processing ', e
+        print 'Error in updating database in FENV processing for request_id', e, args.request_id
 
     finally:
         db.close()

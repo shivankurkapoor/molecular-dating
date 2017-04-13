@@ -33,7 +33,7 @@ def send_email(sender, receiver, SMTP_server, message, request_id, password):
     s = smtplib.SMTP('localhost')
     s.ehlo()
     s.starttls()
-    s.login(sender,password)
+    s.login(sender, password)
     s.sendmail(sender, [receiver], msg.as_string())
     s.quit()
 
@@ -101,7 +101,6 @@ if __name__ == '__main__':
         print e
         raise
 
-
     upload_status = False
     download_link = ''
     email = ''
@@ -148,4 +147,4 @@ if __name__ == '__main__':
             email = EMAIL.format(request_id=args.request_id, link=download_link)
             send_email(SENDER, str(email), SERVER, email, args.request_id, PASSWORD)
         except Exception as e:
-            print 'Error in sending email to ',email, e
+            print 'Error in sending email for request_id ', args.request_id

@@ -334,7 +334,6 @@ if __name__ == '__main__':
         print 'Error in opening database'
         sys.exit(1)
 
-
     try:
         with db.atomic():
             request_query_res = DatingRequest.select().where(DatingRequest.request_id == str(args.request_id))
@@ -343,7 +342,7 @@ if __name__ == '__main__':
                 form_data = json_decode(str(dating_request.form_data))
                 form_data['requests'][int(args.request_idx)]['fastqtofasta'] = True
 
-                #Updating form
+                # Updating form
                 query_form_update = DatingRequest.update(form_data=str(json_encode(form_data))).where(
                     DatingRequest.request_id == args.request_id)
                 query_form_update.execute()
