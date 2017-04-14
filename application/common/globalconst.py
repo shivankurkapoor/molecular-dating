@@ -10,7 +10,8 @@ STR_UNDEFINED = 'Undefined'
 '''
 Below fields are related to Google Drive API
 '''
-CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
+CLIENTSECRET_LOCATION = '/home/web/moleculardating/application/auth/client_secret.json'
+#CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
 #CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/GitHub/moleculardating/application/auth/client_secret.json'
 REDIRECT_URI = 'postmessage'
 SCOPES = [
@@ -37,7 +38,8 @@ RENEW_TOKEN_PARAMS = 'client_id={client_id}&client_secret={client_secret}&refres
 GOOGLE DRIVE FILE HANDLING
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
-DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
+DOWNLOAD_FILE_PATH = '/home/web/moleculardating/result/{request_id}/{request_idx}'
+#DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
 #DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
 MIME_TYPE = 'application/octet-stream'
 ZIP_MIME_TYPE = 'application/zip'
@@ -79,7 +81,8 @@ INT_NOTPROCESSED = 6002
 '''
 Dir path for html file
 '''
-TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
+TEMPLATE_PATH = '/home/web/moleculardating/application/templates'
+#TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
 MSG_TEMPLATE_SINGLE = 'display_template_single.html'
 MSG_TEMPLATE_MULTIPLE = 'display_template_multiple.html'
 #TEMPLATE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates'
@@ -87,14 +90,18 @@ MSG_TEMPLATE_MULTIPLE = 'display_template_multiple.html'
 '''
 Result dir path
 '''
-RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
+RESULT_PATH = '/home/web/moleculardating/result/{request_id}/{request_idx}'
+#RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
 #RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
 
 '''
 Bash directories
 '''
-BASH_SCRIPT_FASTPROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/fastprocess/{request_id}'
-BASH_SCRIPT_PROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/process/{request_id}'
+BASH_SCRIPT_FASTPROCESS = '/home/web/moleculardating/bash/fastprocess/{request_id}'
+BASH_SCRIPT_PROCESS = '/home/web/moleculardating/bash/process/{request_id}'
+
+#BASH_SCRIPT_FASTPROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/fastprocess/{request_id}'
+#BASH_SCRIPT_PROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/process/{request_id}'
 
 #BASH_SCRIPT_FASTPROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/fastprocess/{request_id}'
 #BASH_SCRIPT_PROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/process/{request_id}'
@@ -105,9 +112,9 @@ Bash script
 DOWNLOAD_SCRIPT = 'download.py'
 UPLOAD_SCRIPT = 'upload.py'
 FASTQTOFASTA_SCRIPT = 'fastq_to_fasta.py'
-FENV_PROCESS_SCRIPT = ''
-HXB_PROCESS_SCRIPT = ''
-NGS_PROCESS_SCRIPT = ''
+FENV_PROCESS_SCRIPT = '/FENV/main.py'
+HXB_PROCESS_SCRIPT = '/H4/main.py'
+NGS_PROCESS_SCRIPT = '/NGS/main.py'
 
 '''
 Request Form Types
@@ -151,7 +158,8 @@ CLUSTERED_DIR = 'clustered'
 '''
 HTML result path
 '''
-HTML_RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates/result/{request_id}'
+HTML_RESULT_PATH = '/home/web/moleculardating/application/templates/result/{request_id}'
+#HTML_RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates/result/{request_id}'
 #HTML_RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates/result/{request_id}'
 
 '''
@@ -161,3 +169,5 @@ EMAIL = 'Thank you for using our web tool. Your results for Request Id : {reques
         ' You can directly download the results here {link}'
 SENDER = 'shivankurkapoor3192@gmail.com'
 PASSWORD = '***********'
+
+

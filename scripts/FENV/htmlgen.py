@@ -15,7 +15,7 @@ def render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
 
 
-def create_html(INPUT, OUTPUT):
+def create_html(INPUT, OUTPUT, REQUEST_ID):
     try:
         gsi_num = GSI_NUM[-1]
         df = pd.read_csv(INPUT, dtype={"#SUBJECT": "string",
@@ -53,7 +53,7 @@ def create_html(INPUT, OUTPUT):
             # For subscript notation
             table = table.replace('GSI', 'GSI<sub>' + gsi_num + '</sub>')
 
-            graph_unclustered = os.path.join(subject + '-' + str(time) + '-' + 'UNCLUSTERED.png')
+            graph_unclustered = '../../../static/images/'+ REQUEST_ID + '_UNCLUSTERED.png'
             context = {
                 'title': 'Prediction Interval',
                 'subject': 'Fasta File: ' + subject + '.fasta',
@@ -65,7 +65,7 @@ def create_html(INPUT, OUTPUT):
                 'w1': IMAGE_WIDTH
             }
             if clustered == 'YES':
-                graph_clustered = os.path.join(subject + '-' + str(time) + '-' + 'CLUSTERED.png')
+                graph_clustered = '../../../static/images/'+ REQUEST_ID +'_CLUSTERED.png'
                 context.update({
                     'clustered_header': 'Single Lineage',
                     'graph_clustered': graph_clustered,

@@ -17,6 +17,7 @@ from scipy_pam import *
 from stats import stats
 from prettytable import PrettyTable
 from utilityfunc import *
+from collections import OrderedDict
 
 colors = cnames.keys() * 20
 
@@ -71,7 +72,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
         os.makedirs(OUTPUT)
     for subject, files_paths in subject_dict.items():
         for file in files_paths:
-            seq_dict = {}
+            seq_dict = OrderedDict()
             time = float(file.split(os.sep)[-1].rsplit('.', 1)[0].split('-')[2][3:]) if TYPE == 'longi' else 1000.0
             fasta_sequences = SeqIO.parse(open(file), 'fasta')
             for fasta in fasta_sequences:

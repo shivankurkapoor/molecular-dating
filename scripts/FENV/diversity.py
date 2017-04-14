@@ -1,10 +1,12 @@
 import glob
 import os
+import numpy as np
 from Bio import SeqIO
 from hammingdistance import hamming_distance
 from stats import *
 from utilityfunc import *
 from collections import OrderedDict
+
 
 max_iterations = 10000
 
@@ -66,7 +68,7 @@ def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD, GAPS_IGNORE, ALIGN, *
                             print 'Sequence 2 : ', seq_2
                             print 'Subject : ', subject
                             print 'Time point : ', time
-            mat_path = ''.join(file.rsplit('.',1)[:-1])
+            mat_path = ''.join(file.rsplit('.',1)[:-1]) + '.npy'
             np.save(mat_path, hd_mat)
 
             try:

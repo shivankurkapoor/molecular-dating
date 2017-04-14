@@ -35,7 +35,7 @@ def app_display():
     if (int(request_params['status']) == INT_OK) or (int(request_params['status']) == INT_NOTPROCESSED):
         return render_template('display/' + request_params['request_id'] + '.html')
     elif int(request_params['status']) == INT_PROCESSED:
-        return render_template('result/' + request_params['request_id'] + '.html')
+        return render_template(os.path.join('result', request_params['request_id'], 'fasta.html'))
     else:
         return render_template('error.html',
                                error='You are not authorized view this request status. Please log in to view the status')

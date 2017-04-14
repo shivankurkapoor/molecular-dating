@@ -77,14 +77,13 @@ def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
                 input_dir = RESULT_PATH.format(request_id=request_id, request_idx = '0')
                 html_result_dir = HTML_RESULT_PATH.format(request_id=request_id)
                 if hxb2:
-                    command+= FENV_PROCESS_SCRIPT
+                    command+= HXB_PROCESS_SCRIPT
                     script_name = 'HXB2_' + script_name
                 else:
-                    command+= HXB_PROCESS_SCRIPT
+                    command+= FENV_PROCESS_SCRIPT
                     script_name = 'FENV_' + script_name
 
-                write_bash_file(script_path, script_name, command=command, align=align, hxb2=hxb2,
-                                request_id=request_id, input=input_dir, request_idx=0, html_dir=html_result_dir)
+                write_bash_file(script_path, script_name, command=command, align=align, request_id=request_id, input=input_dir, request_idx=0, html_dir=html_result_dir)
 
             elif data_type == NEXT_GEN_DATA:
                 command = 'python ' + FASTQTOFASTA_SCRIPT

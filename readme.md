@@ -7,4 +7,6 @@
 8. Deploy app on gunicore server - very easy to deploy https://www.youtube.com/watch?v=kDRRtPO0YPA
 9. Move the database update code from process scripts to a more relevant location
 11. Take care of download and upload refresh token
+12. Handle css thing so that it resides in same folder for SINGLE and MULTIPLE
+13. Handle image, not showing on the page
 

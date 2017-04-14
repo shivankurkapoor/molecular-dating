@@ -5,6 +5,7 @@ Description: Performs PAM clustering on input fasta files and generates fasta fl
 '''
 
 import pandas as pd
+import numpy as np
 import glob
 from Bio import SeqIO
 from Bio.Seq import Seq

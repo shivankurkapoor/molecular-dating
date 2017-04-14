@@ -141,7 +141,7 @@ def hamming_distance(s1, s2, input, gaps_ignore=True, align=False, **kwargs):
     '''
     try:
         if align or len(s1) != len(s2):
-            print 'One or more sequences are misaligned, aligning now'
+            #print 'One or more sequences are misaligned, aligning now'
             # s1, s2 = needleman_wunsch(s1, s2)
             s1, s2 = fast_sequence_alignment(input, s1.replace('_', ''), s2.replace('_', ''), **kwargs)
         matches, mismatches, insertionErrors, deletionErrors = 0, 0, 0, 0

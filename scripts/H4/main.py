@@ -321,12 +321,25 @@ if __name__ == '__main__':
         print e
         sys.exit(1)
 
+
+    '''
+    Updating paths
+    '''
     INPUT_UNCLUSTERED = os.path.join(args.input_dir, INPUT_UNCLUSTERED)
     INPUT_CLUSTERED = os.path.join(args.input_dir, INPUT_CLUSTERED)
     OUTPUT = os.path.join(args.input_dir, OUTPUT)
+    GSI_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + GSI_FILE
+    GSI_CLUSTERED = INPUT_CLUSTERED + os.sep + GSI_FILE
+    DIVERSITY_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + DIVERSITY_FILE
+    DIVERSITY_CLUSTERED = INPUT_CLUSTERED + os.sep + DIVERSITY_FILE
+    HD_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + HD_FILE
+    HD_CLUSTERED = INPUT_CLUSTERED + os.sep + HD_FILE
 
     if args.html_dir:
         HTML_OUTPUT = args.html_dir
+    else:
+        HTML_OUTPUT = OUTPUT
+
 
     if args.align == 'True':
         ALIGN = True
@@ -343,7 +356,7 @@ if __name__ == '__main__':
 
 
     print 'Cleaning Directories'
-    clean_directories([INPUT_CLUSTERED, OUTPUT])
+    clean_directories([INPUT_CLUSTERED, OUTPUT, HTML_OUTPUT])
 
     TYPE = TYPE.strip().lower()
     assert TYPE == 'longi' or TYPE == 'chronic'
@@ -400,13 +413,13 @@ if __name__ == '__main__':
         '''
         Generating HD distribution plots
         '''
-        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT)
+        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
 
         '''
         Generating html
         '''
         print '\n\nGenerating html file...'
-        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT)
+        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
 
         # '''
         # Generating plot

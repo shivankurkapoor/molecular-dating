@@ -13,8 +13,10 @@ import numpy as np
 import pandas as pd
 from matplotlib.ticker import MaxNLocator
 
+#image_path = '/home/leelab/PycharmProjects/moleculardating/application/static/images'
+image_path = '/home/web/moleculardating/application/static/images'
 
-def distribution_plot(subject, time, hd, freq, output, type):
+def distribution_plot(subject, time, hd, freq, output, type, request_id):
     '''
     Generates hd distribution plot
     :param subject: name of the subject
@@ -39,11 +41,11 @@ def distribution_plot(subject, time, hd, freq, output, type):
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
 
-    plt.savefig(output + os.sep + subject + "-" + str(time) + "-" + type + '.png')
+    plt.savefig(os.path.join(image_path, request_id + '_' + type + '.png'))
     plt.close()
 
 
-def hd_distribution(CLUSTERED_HD_DATA, UNCLUSTERED_HD_DATA, SUBJECT_DATA, OUTPUT):
+def hd_distribution(CLUSTERED_HD_DATA, UNCLUSTERED_HD_DATA, SUBJECT_DATA, OUTPUT, REQUEST_ID):
     '''
     :param CLUSTERED_HD_DATA: path of hamming distance npy file for clustered fasta files
     :param UNCLUSTERED_HD_DATA: path of hamming distance npy file for unclustered fasta files
@@ -63,15 +65,15 @@ def hd_distribution(CLUSTERED_HD_DATA, UNCLUSTERED_HD_DATA, SUBJECT_DATA, OUTPUT
             hd_dict = clustered_hd_dict[subject][time]
             hd = sorted(hd_dict.keys())
             freq = [hd_dict[h] for h in hd]
-            distribution_plot(subject, time, hd, freq, OUTPUT, 'CLUSTERED')
+            distribution_plot(subject, time, hd, freq, OUTPUT, 'CLUSTERED', REQUEST_ID)
 
             hd_dict = unclustered_hd_dict[subject][time]
             hd = sorted(hd_dict.keys())
             freq = [hd_dict[h] for h in hd]
-            distribution_plot(subject, time, hd, freq, OUTPUT, 'UNCLUSTERED')
+            distribution_plot(subject, time, hd, freq, OUTPUT, 'UNCLUSTERED', REQUEST_ID)
 
         elif clustered == 'NO':
             hd_dict = unclustered_hd_dict[subject][time]
             hd = sorted(hd_dict.keys())
             freq = [hd_dict[h] for h in hd]
-            distribution_plot(subject, time, hd, freq, OUTPUT, 'UNCLUSTERED')
+            distribution_plot(subject, time, hd, freq, OUTPUT, 'UNCLUSTERED', REQUEST_ID)
