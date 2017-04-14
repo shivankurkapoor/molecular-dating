@@ -20,6 +20,12 @@ mainconfig:
   threshold_numseq: '4'
   gaps_ignore: 'True'
   gsi_num: 'GSI1'
+  #Sequence Alignment parameters
+  ms: '-1' #score of a mismatch
+  q: '10'   #gap-open penalty
+  r: '2'   #gap-extension penalty
+  l: '1'   #context length
+  b: '1'  #match bonus
 
 #Configurations for filenames
 filenames:

@@ -1,15 +1,15 @@
 import glob
 import os
-import numpy as np
 from Bio import SeqIO
 from hammingdistance import hamming_distance
 from stats import *
 from utilityfunc import *
+from collections import OrderedDict
 
 max_iterations = 10000
 
 
-def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD):
+def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD, GAPS_IGNORE, ALIGN, **alignment_params):
     subject_dict = {}
     div_dict = {}
     # div_diff_dict = {}
@@ -31,7 +31,7 @@ def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD):
         print subject
         hd_dict[subject] = {}
         for file in files_paths:
-            seq_dict = {}
+            seq_dict = OrderedDict()
             time = float(file.split(os.sep)[-1].rsplit('.', 1)[0].split('-')[2][3:]) if TYPE == 'longi' else 1000.0
             fasta_sequences = SeqIO.parse(open(file), 'fasta')
             for fasta in fasta_sequences:
@@ -41,24 +41,33 @@ def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD):
             seq_list = [seq for seq in seq_dict.values()]
             hd_list = []
 
+            # Creating pairwise hamming distance matrix and saving it to use it later
+            n = len(seq_list)
+            hd_mat = np.zeros((n,n))
+
             # Calculating actual diversity
             hd_dict[subject][time] = {}
             for i, seq_1 in enumerate(seq_list):
                 for j, seq_2 in enumerate(seq_list):
-                    if i < j:
+                    if i == j:
+                        hd_mat[i][j] = 0
+                    elif i < j:
                         try:
-                            hd = hamming_distance(seq_1, seq_2)
+                            hd = hamming_distance(seq_1, seq_2, INPUT, GAPS_IGNORE, ALIGN, **alignment_params)
+                            hd_mat[i][j] = hd_mat[j][i] = hd
                             if hd in hd_dict[subject][time]:
                                 hd_dict[subject][time][hd] += 1
                             else:
                                 hd_dict[subject][time][hd] = 1
-                            hd_list.append(hamming_distance(seq_1, seq_2))
+                            hd_list.append(hd)
                         except Exception as e:
                             print 'Error while calculating Hamming Distance', e
                             print 'Sequence 1 : ', seq_1
                             print 'Sequence 2 : ', seq_2
                             print 'Subject : ', subject
                             print 'Time point : ', time
+            mat_path = ''.join(file.rsplit('.',1)[:-1])
+            np.save(mat_path, hd_mat)
 
             try:
                 actual_diversity = calc_diversity(hd_list, max_seq_len, len(seq_list))

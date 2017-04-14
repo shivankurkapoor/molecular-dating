@@ -79,7 +79,10 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                 seq_dict[name + random_string(3)] = clean_seqeunce(sequence)
             seq_list = [seq for seq in seq_dict.values()]
 
+            # Reading the saved HD matrix
             hd_mat = {}
+            hd_mat_path = ''.join(file.rsplit('.', 1)[:-1]) + '.npy'
+            hd_mat_saved = np.load(hd_mat_path)
 
             for i in range(len(seq_list)):
                 hd_mat[i] = {}
@@ -89,7 +92,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                 for j, seq_2 in enumerate(seq_list):
                     if i < j:
                         try:
-                            hd = hamming_distance(seq_1, seq_2)
+                            hd = hd_mat_saved[i][j]
                             if i not in hd_mat:
                                 hd_mat[i] = {}
                             if j not in hd_mat:

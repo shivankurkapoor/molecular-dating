@@ -132,3 +132,13 @@ IMAGE_HEIGHT = str(html['image_height'])
 EFFECTIVE DIVERSITY THRESHOLD (for chronic)
 '''
 EFFECTIVE_DIVERSITY_TH = float(mainconfig['effective_diversity_th'])
+
+'''
+Alignment parameters
+'''
+ALIGN = False
+MS = int(mainconfig['ms'])
+Q = int(mainconfig['q'])
+R = int(mainconfig['r'])
+L = int(mainconfig['l'])
+B = int(mainconfig['b'])

@@ -16,7 +16,7 @@ max_iterations = 10000
 HDrange = 6
 
 
-def generate_div_gsi_var(INPUT, OUTPUT_DIVERSITY, OUTPUT_GSI, OUTPUT_VAR, OUTPUT_HD, TYPE, **alignment_param):
+def generate_div_gsi_var(INPUT, OUTPUT_DIVERSITY, OUTPUT_GSI, OUTPUT_VAR, OUTPUT_HD, TYPE, GAPS_IGNORE, **alignment_param):
     '''
     Calculates diversity, varaince and gsi using using frequency based formulae
     :param INPUT: directory path for the input fasta files
@@ -80,7 +80,7 @@ def generate_div_gsi_var(INPUT, OUTPUT_DIVERSITY, OUTPUT_GSI, OUTPUT_VAR, OUTPUT
                     if i == j:
                         hd_mat[i][j] = 0.0
                     elif j > i:
-                        hd_mat[i][j] = hd_mat[j][i] = hamming_distance(seq1, seq2, **alignment_param)        
+                        hd_mat[i][j] = hd_mat[j][i] = hamming_distance(seq1, seq2, GAPS_IGNORE, **alignment_param)
             
 
             unique_seq_dict = dict((seq, idx) for idx, seq in enumerate(unique_seq_list))

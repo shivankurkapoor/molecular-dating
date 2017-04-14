@@ -13,7 +13,6 @@ sys.path.append('../../application')
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from Bio import SeqIO
-from hammingdistance import *
 from scipy.stats.stats import pearsonr
 from clustering import clustering
 from diversity import generate_diversity_data
@@ -27,6 +26,8 @@ from database import *
 from database.domain.request import DatingRequest
 from common.globalfunct import *
 from common.globalconst import *
+from collections import OrderedDict
+
 
 
 
@@ -63,7 +64,7 @@ def process(INPUT, OUTPUT, GSI, DIVERSITY, REPORT, TYPE, GSI_NUM, CLUSTERED=Fals
         stats_dict[subject] = {}
         final_stats_dict[subject] = {}
         for file in files_paths:
-            seq_dict = {}
+            seq_dict = OrderedDict()
             time = float(file.split(os.sep)[-1].rsplit('.', 1)[0].split('-')[2][3:]) if TYPE == 'longi' else 1000.0
             fasta_sequences = SeqIO.parse(open(file), 'fasta')
             for fasta in fasta_sequences:
@@ -79,6 +80,10 @@ def process(INPUT, OUTPUT, GSI, DIVERSITY, REPORT, TYPE, GSI_NUM, CLUSTERED=Fals
             final_stats_dict[subject][time]['type'] = TYPE
             hd_dict = dict()
 
+            # Reading the saved HD matrix
+            hd_mat_path = ''.join(file.rsplit('.', 1)[:-1]) + '.npy'
+            hd_mat_saved = np.load(hd_mat_path)
+
             N = len(seq_list)
             max_len = max([len(seq.replace('_', '')) for seq in seq_list])
             for i, seq_1 in enumerate(seq_list):
@@ -86,7 +91,7 @@ def process(INPUT, OUTPUT, GSI, DIVERSITY, REPORT, TYPE, GSI_NUM, CLUSTERED=Fals
                 for j, seq_2 in enumerate(seq_list):
                     if i < j:
                         try:
-                            hd = hamming_distance(seq_1, seq_2)
+                            hd = hd_mat_saved[i][j]
                             hd_list.append(hd)
                             hd_dict[i][j] = hd
                         except Exception as e:
@@ -157,7 +162,7 @@ def process(INPUT, OUTPUT, GSI, DIVERSITY, REPORT, TYPE, GSI_NUM, CLUSTERED=Fals
     corr_data = sorted(corr_data, key=lambda x: x[0])
     x, y = zip(*corr_data)[0], zip(*corr_data)[1]
     corr_coeff = pearsonr(x, y)
-    print 'Correlation Coefficients : ', corr_coeff
+    #print 'Correlation Coefficients : ', corr_coeff
 
 
 def genoutput(CLUSTER_DATA, FILE1, FILE2, OUTPUT, FINAL_REPORT, COLS, THRESHOLD_GSI):
@@ -323,23 +328,36 @@ if __name__ == '__main__':
     if args.html_dir:
         HTML_OUTPUT = args.html_dir
 
+    if args.align == 'True':
+        ALIGN = True
+
+    '''
+    Parameter dict for sequence alignment
+    '''
+    alignment_param = {'ms': MS,
+                       'q': Q,
+                       'r': R,
+                       'l': L,
+                       'b': B}
+
+
+
+    print 'Cleaning Directories'
+    clean_directories([INPUT_CLUSTERED, OUTPUT])
+
+    TYPE = TYPE.strip().lower()
+    assert TYPE == 'longi' or TYPE == 'chronic'
+
     try:
-
-        print 'Cleaning Directories'
-        clean_directories([INPUT_CLUSTERED, OUTPUT])
-
-        TYPE = TYPE.strip().lower()
-        assert TYPE == 'longi' or TYPE == 'chronic'
-
         '''
         Calculating statistics for un-clustered data
         '''
         # Calculating diversity
         print 'Generating diversity for unclustered data'
-        generate_diversity_data(INPUT=INPUT_UNCLUSTERED, OUTPUT=DIVERSITY_UNCLUSTERED, TYPE=TYPE, OUTPUTHD=HD_UNCLUSTERED)
+        generate_diversity_data(INPUT=INPUT_UNCLUSTERED, OUTPUT=DIVERSITY_UNCLUSTERED, TYPE=TYPE, OUTPUTHD=HD_UNCLUSTERED, GAPS_IGNORE=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
         # Calculating gsi
         print '\n\nGenerating GSI for unclustered data'
-        gsi(INPUT=INPUT_UNCLUSTERED, OUTPUT=GSI_UNCLUSTERED, gapsIgnore=GAPS_IGNORE)
+        gsi(INPUT=INPUT_UNCLUSTERED, OUTPUT=GSI_UNCLUSTERED, gapsIgnore=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
 
         '''
         Performing clustering
@@ -355,10 +373,10 @@ if __name__ == '__main__':
         '''
         # Calculating diversity
         print '\nGenerating diversity for clustered data'
-        generate_diversity_data(INPUT=INPUT_CLUSTERED, OUTPUT=DIVERSITY_CLUSTERED, TYPE=TYPE, OUTPUTHD=HD_CLUSTERED)
+        generate_diversity_data(INPUT=INPUT_CLUSTERED, OUTPUT=DIVERSITY_CLUSTERED, TYPE=TYPE, OUTPUTHD=HD_CLUSTERED, GAPS_IGNORE=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
         # Calculating gsi
         print '\n\nGenerating GSI for clustered data'
-        gsi(INPUT=INPUT_CLUSTERED, OUTPUT=GSI_CLUSTERED, gapsIgnore=GAPS_IGNORE)
+        gsi(INPUT=INPUT_CLUSTERED, OUTPUT=GSI_CLUSTERED, gapsIgnore=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
 
         '''
         Generating report files for clustered and unclustered data
@@ -401,7 +419,8 @@ if __name__ == '__main__':
         #     plot(OUTPUT + os.sep + FINAL_REPORT, OUTPUT=OUTPUT, PLOTFILE=PLOT)
 
     except Exception as e:
-        print 'Error in H4 processing', e
+        print 'Error in H4 processing for request_id', e, args.request_id
+        sys.exit(1)
 
     '''
     The code below updates the database
@@ -440,7 +459,7 @@ if __name__ == '__main__':
 
 
                     if all(status == True for status in processed_status):
-                        #Updating databse
+                        #Updating database
                         query_is_processed = DatingRequest.update(is_processed=True,
                                                                   time_processed=datetime.now()).where(
                             DatingRequest.request_id == args.request_id)

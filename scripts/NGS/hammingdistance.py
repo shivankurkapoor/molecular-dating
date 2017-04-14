@@ -5,6 +5,7 @@ Description: Calculates hamming distances between 2 sequences. Also apply alignm
 '''
 
 import os
+import numpy as np
 # Parameters for needlemanwunsch algorithm
 MATCH_REWARD = 1
 MISMATCH_PENALTY = -1
@@ -148,12 +149,12 @@ def needleman_using_affine_penalty(s1, s2):
     alignseq2.reverse()
     return ''.join(alignseq1), ''.join(alignseq2)
 
-def fast_sequence_alignment(s1, s2, **kwargs):
+
+def fast_sequence_alignment(input, s1, s2, **kwargs):
     '''
     The Context-Dependent Alignment (CDA) program computes a global alignment
     of two sequences. It delivers the alignment in linear space,
     so long sequences can be aligned.
-
     Users supply scoring parameters. In the simplest form, users just
     provide 5 integers: ms, q, r, l and b, where ms is the score of a mismatch,
     q is gap-open penalty, r is gap-extension penalty, l is context length,
@@ -165,31 +166,33 @@ def fast_sequence_alignment(s1, s2, **kwargs):
     match occurs within l positions to the right of the match.
     This simple scoring scheme may be used for DNA sequences.
     NOTE: all scores are integers.
-
     '''
-    #Writing sequences to files A and B
+    # Writing sequences to files A and B
     try:
-        if os.path.exists('A'):
-            os.remove('A')
-        if os.path.exists('B'):
-            os.remove('B')
-        with open('A', 'w') as f:
+        if os.path.exists(os.path.join(input, 'SEQUENCE_A')):
+            os.remove(os.path.join(input, 'SEQUENCE_A'))
+        if os.path.exists(os.path.join(input, 'SEQUENCE_B')):
+            os.remove(os.path.join(input, 'SEQUENCE_B'))
+        with open(os.path.join(input, 'SEQUENCE_A'), 'w') as f:
             f.write(s1)
-        with open('B', 'w') as f:
+        with open(os.path.join(input, 'SEQUENCE_B'), 'w') as f:
             f.write(s2)
     except IOError as e:
         print e
         raise
 
     try:
-        if os.path.exists('result.txt'):
-            os.remove('result.txt')
+        if os.path.exists(os.path.join(input, 'ALIGNED_SEQUENCES.txt')):
+            os.remove(os.path.join(input, 'ALIGNED_SEQUENCES.txt'))
         ms = kwargs.pop('ms', -1)
-        q = kwargs.pop('q',1)
-        r = kwargs.pop('r',1)
-        l = kwargs.pop('l',1)
+        q = kwargs.pop('q', 1)
+        r = kwargs.pop('r', 1)
+        l = kwargs.pop('l', 1)
         b = kwargs.pop('b', 0)
-        cmd = "./cda A B {ms} {q} {r} {l} {b} > result.txt".format(ms=ms, q=q, r=r, l=l, b=b)
+        cmd = "./cda {A} {B} {ms} {q} {r} {l} {b} > {R}".format(A=os.path.join(input, 'SEQUENCE_A'),
+                                                                B=os.path.join(input, 'SEQUENCE_B'), ms=ms, q=q, r=r,
+                                                                l=l, b=b,
+                                                                R=os.path.join(input, 'ALIGNED_SEQUENCES.txt'))
         os.system(cmd)
     except Exception as e:
         print 'Error in running fast alignment', e
@@ -199,16 +202,16 @@ def fast_sequence_alignment(s1, s2, **kwargs):
         gaps = []
         seq2 = []
         l = 0
-        with open('result.txt','r') as f:
+        with open(os.path.join(input, 'ALIGNED_SEQUENCES.txt'), 'r') as f:
             for line in f.readlines():
-                line = line.replace(' ','_').strip()
+                line = line.replace(' ', '_').strip()
                 if l == 0:
                     seq1.append(line)
                 elif l == 1:
                     gaps.append(line)
                 elif l == 2:
                     seq2.append(line)
-                l = (l+1)%3
+                l = (l + 1) % 3
         alignseq1 = ''.join(seq1)
         alignseq2 = ''.join(seq2)
         return alignseq1, alignseq2
@@ -217,7 +220,7 @@ def fast_sequence_alignment(s1, s2, **kwargs):
         raise
 
 
-def hamming_distance(s1, s2, gaps_ignore=True, **kwargs):
+def hamming_distance(s1, s2, input, gaps_ignore=True, **kwargs):
     '''
     Calculates Hamming Distance
     :param s1: String sequence 1
@@ -226,7 +229,8 @@ def hamming_distance(s1, s2, gaps_ignore=True, **kwargs):
     :return: hamming distance
     '''
     try:
-        s1, s2 = fast_sequence_alignment(s1.replace('_',''), s2.replace('_',''), **kwargs)
+
+        s1, s2 = fast_sequence_alignment(input, s1.replace('_', ''), s2.replace('_', ''), **kwargs)
         matches, mismatches, insertionErrors, deletionErrors = 0, 0, 0, 0
         for i in range(len(s1)):
             if s1[i] == s2[i]:
@@ -244,3 +248,4 @@ def hamming_distance(s1, s2, gaps_ignore=True, **kwargs):
         print s1
         print s2
         raise
+

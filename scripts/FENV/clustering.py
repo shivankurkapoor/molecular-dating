@@ -11,12 +11,12 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import DNAAlphabet
 import os
-from hammingdistance import *
 from plotutils import *
 from scipy_pam import *
 from stats import stats
 from prettytable import PrettyTable
 from utilityfunc import *
+from collections import OrderedDict
 
 colors = cnames.keys() * 20
 
@@ -71,7 +71,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
         os.makedirs(OUTPUT)
     for subject, files_paths in subject_dict.items():
         for file in files_paths:
-            seq_dict = {}
+            seq_dict = OrderedDict()
             time = float(file.split(os.sep)[-1].rsplit('.', 1)[0].split('-')[2][3:]) if TYPE == 'longi' else 1000.0
             fasta_sequences = SeqIO.parse(open(file), 'fasta')
             for fasta in fasta_sequences:
@@ -79,7 +79,10 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                 seq_dict[name + random_string(3)] = clean_seqeunce(sequence)
             seq_list = [seq for seq in seq_dict.values()]
 
+            # Reading the saved HD matrix
             hd_mat = {}
+            hd_mat_path = ''.join(file.rsplit('.', 1)[:-1]) + '.npy'
+            hd_mat_saved = np.load(hd_mat_path)
 
             for i in range(len(seq_list)):
                 hd_mat[i] = {}
@@ -89,7 +92,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                 for j, seq_2 in enumerate(seq_list):
                     if i < j:
                         try:
-                            hd = hamming_distance(seq_1, seq_2)
+                            hd = hd_mat_saved[i][j]
                             if i not in hd_mat:
                                 hd_mat[i] = {}
                             if j not in hd_mat:

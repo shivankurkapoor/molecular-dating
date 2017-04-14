@@ -6,5 +6,5 @@
 7. install pipreqs /path/to/project
 8. Deploy app on gunicore server - very easy to deploy https://www.youtube.com/watch?v=kDRRtPO0YPA
 9. Move the database update code from process scripts to a more relevant location
-10. Take care of Align - change code to run alignment only once
+11. Take care of download and upload refresh token
 

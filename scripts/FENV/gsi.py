@@ -6,14 +6,14 @@ Description : Generates GSI data for all the input fasta files and saves then in
 
 import os
 from Bio import SeqIO
-from hammingdistance import *
+from hammingdistance import hamming_distance
 from utilityfunc import *
 
 HDrange = 6
 gapCost = 0
 
 
-def gsi(INPUT, OUTPUT, gapsIgnore=True):
+def gsi(INPUT, OUTPUT, gapsIgnore=True, align=False, **alignment_params):
     '''
     Generates gsi for input fasta files
     :param INPUT: directory containing input fasta files
@@ -79,7 +79,7 @@ def gsi(INPUT, OUTPUT, gapsIgnore=True):
                 else:
                     if (key2, key1) not in hdAlreadyCalculated:
                         alignSeq1, alignSeq2 = sequences[key1], sequences[key2]
-                        HD = hamming_distance(alignSeq1, alignSeq2, gapsIgnore)
+                        HD = hamming_distance(alignSeq1, alignSeq2, INPUT, gapsIgnore, align, **alignment_params)
                         hdAlreadyCalculated[(key1, key2)] = HD
                     else:
                         HD = hdAlreadyCalculated[(key2, key1)]

@@ -328,7 +328,7 @@ if __name__ == '__main__':
         print '\n\nGenerating diversity, gsi and variance for unclustered data'
         generate_div_gsi_var(INPUT=INPUT_UNCLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_UNCLUSTERED,
                              OUTPUT_GSI=GSI_UNCLUSTERED,
-                             OUTPUT_VAR=VAR_UNCLUSTERED, OUTPUT_HD=HD_UNCLUSTERED, TYPE=TYPE, **alignment_param)
+                             OUTPUT_VAR=VAR_UNCLUSTERED, OUTPUT_HD=HD_UNCLUSTERED, TYPE=TYPE,GAPS_IGNORE=GAPS_IGNORE,  **alignment_param)
 
         '''
         Performing clustering
@@ -344,7 +344,7 @@ if __name__ == '__main__':
         '''
         print '\n\nGenerating diversity, gsi and variance for clustered data'
         generate_div_gsi_var(INPUT=INPUT_CLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_CLUSTERED, OUTPUT_GSI=GSI_CLUSTERED,
-                             OUTPUT_VAR=VAR_CLUSTERED, OUTPUT_HD=HD_CLUSTERED, TYPE=TYPE, **alignment_param)
+                             OUTPUT_VAR=VAR_CLUSTERED, OUTPUT_HD=HD_CLUSTERED, TYPE=TYPE, GAPS_IGNORE=GAPS_IGNORE, **alignment_param)
 
         '''
         Generating report files for clustered and unclustered data
