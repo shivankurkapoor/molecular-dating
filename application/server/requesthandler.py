@@ -62,7 +62,7 @@ def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
                     for f in ['forward_file', 'backward_file']:
                         file_id = request[f]['meta_data']['id']
                         file_path = request[f]['file_path']
-                        script_name = '_'.join(['DOWNLOAD' , f.upper(), request_id, str(idx)])
+                        script_name = '_'.join(['DOWNLOAD', f.upper(), request_id, str(idx)])
                         write_bash_file(script_path, script_name, command=command, user_id=user_id, file_id=file_id,
                                         file_path=file_path, request_id=request_id, request_idx=idx, file_type=f)
 
@@ -73,17 +73,18 @@ def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
                 command = 'python '
                 script_name = request_id
                 align = request['align']
-                hxb2 =  request['hxb2']
-                input_dir = RESULT_PATH.format(request_id=request_id, request_idx = '0')
+                hxb2 = request['hxb2']
+                input_dir = RESULT_PATH.format(request_id=request_id, request_idx='0')
                 html_result_dir = HTML_RESULT_PATH.format(request_id=request_id)
                 if hxb2:
-                    command+= HXB_PROCESS_SCRIPT
+                    command += HXB_PROCESS_SCRIPT
                     script_name = 'HXB2_' + script_name
                 else:
-                    command+= FENV_PROCESS_SCRIPT
+                    command += FENV_PROCESS_SCRIPT
                     script_name = 'FENV_' + script_name
 
-                write_bash_file(script_path, script_name, command=command, align=align, request_id=request_id, input=input_dir, request_idx=0, html_dir=html_result_dir)
+                write_bash_file(script_path, script_name, command=command, align=align, request_id=request_id,
+                                input=input_dir, request_idx=0, html_dir=html_result_dir)
 
             elif data_type == NEXT_GEN_DATA:
                 command = 'python ' + FASTQTOFASTA_SCRIPT
@@ -95,7 +96,7 @@ def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
                 percent = request['base_count']
                 forward_file = request['forward_file']['file_path']
                 backward_file = request['backward_file']['file_path']
-                output_dir = os.path.join(RESULT_PATH.format(request_id=request_id, request_idx = '0'), FASTQ_DIR)
+                output_dir = os.path.join(RESULT_PATH.format(request_id=request_id, request_idx='0'), FASTQ_DIR)
                 write_bash_file(script_path, script_name, command=command, forward_primer=forward_primer,
                                 backward_primer=backward_primer,
                                 seq_len=seq_len, base_count=base_count, percent=percent, forward_file=forward_file,

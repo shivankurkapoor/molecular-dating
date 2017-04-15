@@ -3,10 +3,10 @@ This is the main file for the backend server
 '''
 
 from flask import Flask, request, render_template, session, redirect
-
 from server.connect import *
 
 application = Flask(__name__, )
+application.secret_key = APP_SECRET_KEY
 
 
 @application.route('/')

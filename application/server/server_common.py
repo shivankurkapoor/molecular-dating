@@ -46,4 +46,3 @@ def respond_json(status_code, **kw):
 
     myjson['code'] = status_code
     return json_encode_flask(myjson)
-

@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import glob
 import sys
+
 sys.path.append('../../application')
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -27,7 +28,6 @@ from database import *
 from database.domain.request import DatingRequest
 from common.globalfunct import *
 from common.globalconst import *
-
 
 
 def process(INPUT, OUTPUT, GSI, DIVERSITY, REPORT, TYPE, GSI_NUM, CLUSTERED=False):
@@ -329,11 +329,13 @@ if __name__ == '__main__':
     DIVERSITY_CLUSTERED = INPUT_CLUSTERED + os.sep + DIVERSITY_FILE
     HD_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + HD_FILE
     HD_CLUSTERED = INPUT_CLUSTERED + os.sep + HD_FILE
+    REQUEST_TYPE = 'SINGLE'
 
     if args.html_dir:
         HTML_OUTPUT = args.html_dir
     else:
         HTML_OUTPUT = OUTPUT
+        REQUEST_TYPE = 'MULTIPLE'
     if args.align == 'True':
         ALIGN = True
 
@@ -358,7 +360,8 @@ if __name__ == '__main__':
         '''
         # Calculating diversity
         print 'Generating diversity for unclustered data'
-        generate_diversity_data(INPUT=INPUT_UNCLUSTERED, OUTPUT=DIVERSITY_UNCLUSTERED, TYPE=TYPE, OUTPUTHD=HD_UNCLUSTERED, GAPS_IGNORE=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
+        generate_diversity_data(INPUT=INPUT_UNCLUSTERED, OUTPUT=DIVERSITY_UNCLUSTERED, TYPE=TYPE,
+                                OUTPUTHD=HD_UNCLUSTERED, GAPS_IGNORE=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
         # Calculating gsi
         print '\n\nGenerating GSI for unclustered data'
         gsi(INPUT=INPUT_UNCLUSTERED, OUTPUT=GSI_UNCLUSTERED, gapsIgnore=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
@@ -377,7 +380,8 @@ if __name__ == '__main__':
         '''
         # Calculating diversity
         print '\nGenerating diversity for clustered data'
-        generate_diversity_data(INPUT=INPUT_CLUSTERED, OUTPUT=DIVERSITY_CLUSTERED, TYPE=TYPE, OUTPUTHD=HD_CLUSTERED, GAPS_IGNORE=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
+        generate_diversity_data(INPUT=INPUT_CLUSTERED, OUTPUT=DIVERSITY_CLUSTERED, TYPE=TYPE, OUTPUTHD=HD_CLUSTERED,
+                                GAPS_IGNORE=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
         # Calculating gsi
         print '\n\nGenerating GSI for clustered data'
         gsi(INPUT=INPUT_CLUSTERED, OUTPUT=GSI_CLUSTERED, gapsIgnore=GAPS_IGNORE, ALIGN=ALIGN, **alignment_param)
@@ -404,13 +408,14 @@ if __name__ == '__main__':
         '''
         Generating HD distribution plots
         '''
-        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
+        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, REQUEST_TYPE,
+                        args.request_id)
 
         '''
         Generating html
         '''
         print '\n\nGenerating html file...'
-        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
+        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, REQUEST_TYPE, args.request_id)
 
         # '''
         # Generating plot
@@ -433,7 +438,7 @@ if __name__ == '__main__':
     try:
         db.connect()
     except Exception as e:
-        print 'Error in opening database connection ',e
+        print 'Error in opening database connection ', e
         sys.exit(1)
 
     try:
@@ -444,12 +449,14 @@ if __name__ == '__main__':
                 form_data = json_decode(str(dating_request.form_data))
                 form_data['requests'][int(args.request_idx)]['is_processed'] = True
 
-                #Updating form data
-                query_form_update = DatingRequest.update(form_data = str(json_encode(form_data))).where(DatingRequest.request_id == args.request_id)
+                # Updating form data
+                query_form_update = DatingRequest.update(form_data=str(json_encode(form_data))).where(
+                    DatingRequest.request_id == args.request_id)
                 query_form_update.execute()
 
                 if dating_request.form_type == SINGLE:
-                    query_is_processed = DatingRequest.update(is_processed = True, time_processed = datetime.now()).where(DatingRequest.request_id == args.request_id)
+                    query_is_processed = DatingRequest.update(is_processed=True, time_processed=datetime.now()).where(
+                        DatingRequest.request_id == args.request_id)
                     query_is_processed.execute()
 
 
@@ -458,30 +465,30 @@ if __name__ == '__main__':
                     for request in form_data['requests']:
                         processed_status.append(request['is_processed'])
 
-
                     if all(status == True for status in processed_status):
-                        #Updating database
+                        # Updating database
                         query_is_processed = DatingRequest.update(is_processed=True,
                                                                   time_processed=datetime.now()).where(
                             DatingRequest.request_id == args.request_id)
                         query_is_processed.execute()
 
                         # Creating zip
-                        base_path = args.input_dir.rsplit('/',1)[0]
+                        base_path = args.input_dir.rsplit('/', 1)[0]
                         dest_dir = os.path.join(base_path, 'Archive')
                         for i in range(int(dating_request.number_requests)):
                             source_dir = os.path.join(base_path, str(i), OUTPUT_DIR)
                             dest_dir_ = os.path.join(dest_dir, str(i))
                             copy_dir(source_dir, dest_dir_)
                         archive_file_name = os.path.join(base_path, args.request_id + '_ARCHIVE')
-                        zip_file = make_zip(archive_file_name, 'zip',dest_dir)
+                        zip_file = make_zip(archive_file_name, 'zip', dest_dir)
 
-                        #Creating upload bash script
+                        # Creating upload bash script
                         command = 'python ' + UPLOAD_SCRIPT
                         script_name = 'UPLOAD_' + args.request_id
                         script_path = BASH_SCRIPT_PROCESS.format(request_id=args.request_id)
                         user_id = dating_request.user_id
-                        write_bash_file(script_path, script_name, command=command, request_id=args.request_id, user_id=user_id, file_path=zip_file)
+                        write_bash_file(script_path, script_name, command=command, request_id=args.request_id,
+                                        user_id=user_id, file_path=zip_file)
 
 
     except Exception as e:

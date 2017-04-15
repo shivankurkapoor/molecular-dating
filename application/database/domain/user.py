@@ -19,7 +19,6 @@ class User(Model):
     class Meta:
         database = db
 
-
     def save_user_info(self, user_info):
 
         if 'family_name' in user_info and user_info['family_name'] != None:
@@ -54,7 +53,6 @@ class User(Model):
 
         self.save()
 
-
     def update_credentials(self, credentials):
         self.credentials = credentials
         self.save()
@@ -62,4 +60,3 @@ class User(Model):
     user_attr = ['user_id', 'family_name', 'given_name', 'email',
                  'gender', 'link', 'locale', 'name', 'picture',
                  'verified_email', 'credentials']
-

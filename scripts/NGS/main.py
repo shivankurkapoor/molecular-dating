@@ -307,11 +307,15 @@ if __name__ == '__main__':
     HD_CLUSTERED = INPUT_CLUSTERED + os.sep + HD_FILE
     VAR_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + VAR_FILE
     VAR_CLUSTERED = INPUT_CLUSTERED + os.sep + VAR_FILE
+    REQUEST_TYPE = 'SINGLE'
 
     if args.html_dir:
         HTML_OUTPUT = args.html_dir
     else:
         HTML_OUTPUT = OUTPUT
+        REQUEST_TYPE = 'MULTIPLE'
+    if args.align == 'True':
+        ALIGN = True
 
     print 'Cleaning Directories'
     clean_directories([INPUT_CLUSTERED, OUTPUT, INPUT_UNCLUSTERED])
@@ -341,7 +345,8 @@ if __name__ == '__main__':
         print '\n\nGenerating diversity, gsi and variance for unclustered data'
         generate_div_gsi_var(INPUT=INPUT_UNCLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_UNCLUSTERED,
                              OUTPUT_GSI=GSI_UNCLUSTERED,
-                             OUTPUT_VAR=VAR_UNCLUSTERED, OUTPUT_HD=HD_UNCLUSTERED, TYPE=TYPE,GAPS_IGNORE=GAPS_IGNORE,  **alignment_param)
+                             OUTPUT_VAR=VAR_UNCLUSTERED, OUTPUT_HD=HD_UNCLUSTERED, TYPE=TYPE, GAPS_IGNORE=GAPS_IGNORE,
+                             **alignment_param)
 
         '''
         Performing clustering
@@ -357,7 +362,8 @@ if __name__ == '__main__':
         '''
         print '\n\nGenerating diversity, gsi and variance for clustered data'
         generate_div_gsi_var(INPUT=INPUT_CLUSTERED, OUTPUT_DIVERSITY=DIVERSITY_CLUSTERED, OUTPUT_GSI=GSI_CLUSTERED,
-                             OUTPUT_VAR=VAR_CLUSTERED, OUTPUT_HD=HD_CLUSTERED, TYPE=TYPE, GAPS_IGNORE=GAPS_IGNORE, **alignment_param)
+                             OUTPUT_VAR=VAR_CLUSTERED, OUTPUT_HD=HD_CLUSTERED, TYPE=TYPE, GAPS_IGNORE=GAPS_IGNORE,
+                             **alignment_param)
 
         '''
         Generating report files for clustered and unclustered data
@@ -381,13 +387,14 @@ if __name__ == '__main__':
         '''
         Generating HD distribution plots
         '''
-        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
+        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, REQUEST_TYPE,
+                        args.request_id)
 
         '''
         Generating html
         '''
         print '\n\nGenerating html file...'
-        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
+        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, REQUEST_TYPE, args.request_id)
 
         # '''
         # Generating plot

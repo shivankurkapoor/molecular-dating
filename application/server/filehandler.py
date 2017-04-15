@@ -28,4 +28,3 @@ def download_file_direct(file, request_id, filename, format=FASTA):
         print 'Error in downloading file'
         return INT_FAILURE_DOWNLOAD
     return INT_DOWNLOADED
-

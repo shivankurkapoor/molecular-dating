@@ -334,13 +334,13 @@ if __name__ == '__main__':
     DIVERSITY_CLUSTERED = INPUT_CLUSTERED + os.sep + DIVERSITY_FILE
     HD_UNCLUSTERED = INPUT_UNCLUSTERED + os.sep + HD_FILE
     HD_CLUSTERED = INPUT_CLUSTERED + os.sep + HD_FILE
+    REQUEST_TYPE = 'SINGLE'
 
     if args.html_dir:
         HTML_OUTPUT = args.html_dir
     else:
         HTML_OUTPUT = OUTPUT
-
-
+        REQUEST_TYPE = 'MULTIPLE'
     if args.align == 'True':
         ALIGN = True
 
@@ -413,13 +413,13 @@ if __name__ == '__main__':
         '''
         Generating HD distribution plots
         '''
-        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
+        hd_distribution(HD_CLUSTERED, HD_UNCLUSTERED, OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, REQUEST_TYPE, args.request_id)
 
         '''
         Generating html
         '''
         print '\n\nGenerating html file...'
-        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, args.request_id)
+        create_html(OUTPUT + os.sep + PRED_INTERVAL_FILE, HTML_OUTPUT, REQUEST_TYPE,args.request_id)
 
         # '''
         # Generating plot

@@ -64,7 +64,8 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
     except Exception as e:
         print 'Error in reading GSI file ', e
 
-    t = PrettyTable(['Subject', 'Time', 'Number of Clusters', 'Diversity', 'Variance', 'Beta', 'GSI', 'Diversity(before clustering)'])
+    t = PrettyTable(['Subject', 'Time', 'Number of Clusters', 'Diversity', 'Variance', 'Beta', 'GSI',
+                     'Diversity(before clustering)'])
     stats_dict_list = []
     if not os.path.exists(OUTPUT):
         os.makedirs(OUTPUT)
@@ -79,7 +80,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                 seq_dict[name] = sequence
             seq_list = [seq for seq in seq_dict.values()]
 
-            #Creating unique sequences
+            # Creating unique sequences
             seq_count_dict = OrderedDict()
             for seq in seq_list:
                 if seq not in seq_count_dict:
@@ -122,7 +123,8 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                 old_div = diversity
 
                 if len(D) < 3:
-                    t.add_row([subject, str(time), str(1), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
+                    t.add_row(
+                        [subject, str(time), str(1), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
                     stats_dict_list.append({'#SUBJECT': subject,
                                             'TIME': str(time),
                                             'CLUSTERS': str(1),
@@ -131,7 +133,8 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                                             'BETA': str(beta)})
 
                 elif (diversity > DIVERSITY_THRESHOLD and gsi < GSI_THRESHOLD):
-                    t.add_row([subject, str(time), str(1), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
+                    t.add_row(
+                        [subject, str(time), str(1), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
                     stats_dict_list.append({'#SUBJECT': subject,
                                             'TIME': str(time),
                                             'CLUSTERS': str(1),
@@ -141,8 +144,9 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
 
                 elif beta > THRESHOLD:
                     K, var_SE, diversity, beta, C, MC = pam_var(D, hd_mat, unique_seq_list, THRESHOLD, SEQ_THRESHOLD,
-                                                                seq_count_dict,K=range(1, 20))
-                    t.add_row([subject, str(time), str(K), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
+                                                                seq_count_dict, K=range(1, 20))
+                    t.add_row(
+                        [subject, str(time), str(K), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
                     stats_dict_list.append({'#SUBJECT': subject,
                                             'TIME': str(time),
                                             'CLUSTERS': str(K),
@@ -150,7 +154,8 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
                                             'VAR_SE': str(var_SE),
                                             'BETA': str(beta)})
                 else:
-                    t.add_row([subject, str(time), str(1), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
+                    t.add_row(
+                        [subject, str(time), str(1), str(diversity), str(var_SE), str(beta), str(gsi), str(old_div)])
                     stats_dict_list.append({'#SUBJECT': subject,
                                             'TIME': str(time),
                                             'CLUSTERS': str(1),

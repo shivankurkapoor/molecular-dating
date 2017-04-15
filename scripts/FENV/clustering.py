@@ -129,7 +129,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
 
                     elif beta > THRESHOLD:
                         K, var_SE, diversity, beta, C, MC = pam_var(D, hd_mat, seq_list, THRESHOLD, SEQ_THRESHOLD,
-                                                                       K=range(1, 20))
+                                                                    K=range(1, 20))
                         t.add_row([subject, str(time), str(K), str(diversity), str(var_SE), str(beta)])
                         stats_dict_list.append({'#SUBJECT': subject,
                                                 'TIME': str(time),

@@ -69,8 +69,9 @@ def copy_dir(source_dir, destination_dir):
         if not os.path.exists(destination_dir):
             os.makedirs(destination_dir)
     except Exception as e:
-        print 'Error while creating ',destination_dir, e
+        print 'Error while creating ', destination_dir, e
     copy_tree(source_dir, destination_dir)
+
 
 def make_zip(file_name, format, directory):
     try:
@@ -78,4 +79,3 @@ def make_zip(file_name, format, directory):
     except Exception as e:
         print 'Error while archiving ', file_name, e
         raise
-

@@ -29,16 +29,14 @@ class DatingRequest(Model):
         self.time_processed = timestamp
         self.save()
 
-
     def set_is_processed(self, is_processed=False):
-        self.is_processed=is_processed
+        self.is_processed = is_processed
         self.save()
 
     def set_is_uploaded(self, is_uploaded=False):
         self.is_uploaded = is_uploaded
         self.save()
 
-    datingrequest_attr = ['request_id', 'user_id','form_data', 'form_type', 'data_type',
+    datingrequest_attr = ['request_id', 'user_id', 'form_data', 'form_type', 'data_type',
                           'are_files_downloaded', 'time_created', 'time_processed',
-                          'is_processed', 'is_uploaded', 'upload_file_meta_data','number_requests']
-
+                          'is_processed', 'is_uploaded', 'upload_file_meta_data', 'number_requests']

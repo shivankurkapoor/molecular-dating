@@ -7,7 +7,6 @@ from stats import *
 from utilityfunc import *
 from collections import OrderedDict
 
-
 max_iterations = 10000
 
 
@@ -45,7 +44,7 @@ def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD, GAPS_IGNORE, ALIGN, *
 
             # Creating pairwise hamming distance matrix and saving it to use it later
             n = len(seq_list)
-            hd_mat = np.zeros((n,n))
+            hd_mat = np.zeros((n, n))
 
             # Calculating actual diversity
             hd_dict[subject][time] = {}
@@ -68,7 +67,7 @@ def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD, GAPS_IGNORE, ALIGN, *
                             print 'Sequence 2 : ', seq_2
                             print 'Subject : ', subject
                             print 'Time point : ', time
-            mat_path = ''.join(file.rsplit('.',1)[:-1]) + '.npy'
+            mat_path = ''.join(file.rsplit('.', 1)[:-1]) + '.npy'
             np.save(mat_path, hd_mat)
 
             try:
