@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import glob
 import sys
-sys.path.append('../../application')
+sys.path.append('/Users/shivankurkapoor/GitHub/moleculardating/application')
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from Bio import SeqIO

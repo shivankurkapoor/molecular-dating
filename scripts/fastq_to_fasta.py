@@ -16,7 +16,8 @@ N	        A,C,G,T
 '''
 import sys
 
-sys.path.append('../application')
+sys.path.append('/Users/shivankurkapoor/GitHub/moleculardating/application')
+
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq

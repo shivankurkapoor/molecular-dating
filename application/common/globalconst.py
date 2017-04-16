@@ -25,7 +25,7 @@ SCOPES = [
     # Add other requested scopes.
 ]
 ORIGIN = 'http://localhost:5000'
-SERVER = 'localhost'
+SERVER = ''
 
 '''
 Renew Token URI
@@ -61,6 +61,12 @@ Result dir path
 # RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
 RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
 
+
+'''
+Bash Shebang
+'''
+BASH_SHEBANG = '#!/usr/bin/env bash'
+
 '''
 Bash directories
 '''
@@ -77,8 +83,8 @@ BASH_SCRIPT_PROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/proces
 Bash script
 '''
 DOWNLOAD_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/download.py'
-UPLOAD_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/fastq_to_fasta.py'
-FASTQTOFASTA_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/upload.py'
+UPLOAD_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/upload.py'
+FASTQTOFASTA_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/fastq_to_fasta.py'
 FENV_PROCESS_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/FENV/main.py'
 HXB_PROCESS_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/H4/main.py'
 NGS_PROCESS_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/NGS/main.py'
@@ -96,7 +102,7 @@ Email template and other parameters
 EMAIL = 'Thank you for using our web tool. Your results for Request Id : {request_id} have been uploaded to your Google Drive account.' \
         ' You can directly download the results here {link}'
 SENDER = 'shivankurkapoor3192@gmail.com'
-PASSWORD = '***********'
+PASSWORD = 'dabamalsi'
 
 '''
 Request Form Types
@@ -168,3 +174,4 @@ INT_DOWNLOADED = 5001
 INT_UPLOADED = 5002
 INT_PROCESSED = 6001
 INT_NOTPROCESSED = 6002
+

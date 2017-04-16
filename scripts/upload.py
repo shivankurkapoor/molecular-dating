@@ -1,7 +1,7 @@
 import smtplib
 import sys
 
-sys.path.append('../application')
+sys.path.append('/Users/shivankurkapoor/GitHub/moleculardating/application')
 import httplib2
 from oauth2client.client import Credentials
 from apiclient import http
@@ -30,7 +30,7 @@ def send_email(sender, receiver, SMTP_server, message, request_id, password):
     msg['Subject'] = 'HIV Molecular Dating Request ID %s' % request_id
     msg['From'] = sender
     msg['To'] = receiver
-    s = smtplib.SMTP('localhost')
+    s = smtplib.SMTP('smtp.gmail.com', 587)
     s.ehlo()
     s.starttls()
     s.login(sender, password)
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
     if upload_status:
         try:
-            email = EMAIL.format(request_id=args.request_id, link=download_link)
-            send_email(SENDER, str(email), SERVER, email, args.request_id, PASSWORD)
+            msg = EMAIL.format(request_id=args.request_id, link=download_link)
+            send_email(SENDER, str(email), SERVER, msg, args.request_id, PASSWORD)
         except Exception as e:
-            print 'Error in sending email for request_id ', args.request_id
+            print 'Error in sending email for request_id ', args.request_id, e

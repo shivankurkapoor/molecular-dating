@@ -3,6 +3,7 @@ import os
 import random
 import string
 import shutil
+from globalconst import BASH_SHEBANG
 from datetime import datetime
 from distutils.dir_util import copy_tree
 
@@ -51,6 +52,7 @@ def write_bash_file(*args, **kwargs):
     script_path = args[0]
     script_name = args[1]
     command = kwargs.pop('command')
+    cd = 'cd '+ command.rsplit('/',1)[0].split(' ')[1]
     for key, value in kwargs.items():
         command += ' ' + '--' + str(key) + '=' + str(value)
     script = '.'.join([os.path.join(script_path, script_name), 'sh'])
@@ -59,6 +61,8 @@ def write_bash_file(*args, **kwargs):
         if not os.path.exists(script_path):
             os.makedirs(script_path)
         with open(script, 'w') as f:
+            f.write(BASH_SHEBANG + '\n')
+            f.write(cd + '\n')
             f.write(command)
     except IOError as e:
         print 'Error in generating bash script', e

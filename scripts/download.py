@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('../application')
+sys.path.append('/Users/shivankurkapoor/GitHub/moleculardating/application')
 import io
 import httplib2
 import errno
