@@ -14,9 +14,9 @@ import pandas as pd
 from matplotlib.ticker import MaxNLocator
 
 
-#image_path = '/home/leelab/PycharmProjects/moleculardating/application/static/images'
+image_path = '/home/leelab/PycharmProjects/moleculardating/application/static/images'
 #image_path = '/home/web/moleculardating/application/static/images'
-image_path = '/Users/shivankurkapoor/GitHub/moleculardating/application/static/images'
+#image_path = '/Users/shivankurkapoor/GitHub/moleculardating/application/static/images'
 
 def distribution_plot(subject, time, hd, freq, output, type, request_type, request_id):
     '''

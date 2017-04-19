@@ -17,8 +17,8 @@ APP_SECRET_KEY = 'MoleDat:AQWER-WDSEE-DDEWE-WECEG8'
 Below fields are related to Google Drive API
 '''
 # CLIENTSECRET_LOCATION = '/home/web/moleculardating/application/auth/client_secret.json'
-# CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
-CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/GitHub/moleculardating/application/auth/client_secret.json'
+CLIENTSECRET_LOCATION = '/home/leelab/PycharmProjects/moleculardating/application/auth/client_secret.json'
+#CLIENTSECRET_LOCATION = '/Users/shivankurkapoor/GitHub/moleculardating/application/auth/client_secret.json'
 REDIRECT_URI = 'postmessage'
 SCOPES = [
     'https://www.googleapis.com/auth/drive.file'
@@ -39,8 +39,8 @@ GOOGLE DRIVE FILE HANDLING
 '''
 DOWNLOAD_FILE_URL = 'googleapis.com/drive/v2/files/{fileId}?alt=media'
 # DOWNLOAD_FILE_PATH = '/home/web/moleculardating/result/{request_id}/{request_idx}'
-# DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
-DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
+DOWNLOAD_FILE_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
+#DOWNLOAD_FILE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
 MIME_TYPE = 'application/octet-stream'
 ZIP_MIME_TYPE = 'application/zip'
 DESCRIPTION = ''
@@ -49,17 +49,17 @@ DESCRIPTION = ''
 Dir path for html file
 '''
 # TEMPLATE_PATH = '/home/web/moleculardating/application/templates'
-# TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
+TEMPLATE_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates'
 MSG_TEMPLATE_SINGLE = 'display_template_single.html'
 MSG_TEMPLATE_MULTIPLE = 'display_template_multiple.html'
-TEMPLATE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates'
+#TEMPLATE_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates'
 
 '''
 Result dir path
 '''
 # RESULT_PATH = '/home/web/moleculardating/result/{request_id}/{request_idx}'
-# RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
-RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
+RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/result/{request_id}/{request_idx}'
+#RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/result/{request_id}/{request_idx}'
 
 
 '''
@@ -73,28 +73,28 @@ Bash directories
 # BASH_SCRIPT_FASTPROCESS = '/home/web/moleculardating/bash/fastprocess/{request_id}'
 # BASH_SCRIPT_PROCESS = '/home/web/moleculardating/bash/process/{request_id}'
 
-# BASH_SCRIPT_FASTPROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/fastprocess/{request_id}'
-# BASH_SCRIPT_PROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/process/{request_id}'
+BASH_SCRIPT_FASTPROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/fastprocess/{request_id}'
+BASH_SCRIPT_PROCESS = '/home/leelab/PycharmProjects/moleculardating/bash/process/{request_id}'
 
-BASH_SCRIPT_FASTPROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/fastprocess/{request_id}'
-BASH_SCRIPT_PROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/process/{request_id}'
+#BASH_SCRIPT_FASTPROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/fastprocess/{request_id}'
+#BASH_SCRIPT_PROCESS = '/Users/shivankurkapoor/GitHub/moleculardating/bash/process/{request_id}'
 
 '''
 Bash script
 '''
-DOWNLOAD_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/download.py'
-UPLOAD_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/upload.py'
-FASTQTOFASTA_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/fastq_to_fasta.py'
-FENV_PROCESS_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/FENV/main.py'
-HXB_PROCESS_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/H4/main.py'
-NGS_PROCESS_SCRIPT = '/Users/shivankurkapoor/GitHub/moleculardating/scripts/NGS/main.py'
+DOWNLOAD_SCRIPT = '/home/leelab/PycharmProjects/moleculardating/scripts/download.py'
+UPLOAD_SCRIPT = '/home/leelab/PycharmProjects/moleculardating/scripts/upload.py'
+FASTQTOFASTA_SCRIPT = '/home/leelab/PycharmProjects/moleculardating/scripts/fastq_to_fasta.py'
+FENV_PROCESS_SCRIPT = '/home/leelab/PycharmProjects/moleculardating/scripts/FENV/main.py'
+HXB_PROCESS_SCRIPT = '/home/leelab/PycharmProjects/moleculardating/scripts/H4/main.py'
+NGS_PROCESS_SCRIPT = '/home/leelab/PycharmProjects/moleculardating/scripts/NGS/main.py'
 
 '''
 HTML result path
 '''
 # HTML_RESULT_PATH = '/home/web/moleculardating/application/templates/result/{request_id}'
-# HTML_RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates/result/{request_id}'
-HTML_RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates/result/{request_id}'
+HTML_RESULT_PATH = '/home/leelab/PycharmProjects/moleculardating/application/templates/result/{request_id}'
+#HTML_RESULT_PATH = '/Users/shivankurkapoor/GitHub/moleculardating/application/templates/result/{request_id}'
 
 '''
 Email template and other parameters
@@ -102,7 +102,7 @@ Email template and other parameters
 EMAIL = 'Thank you for using our web tool. Your results for Request Id : {request_id} have been uploaded to your Google Drive account.' \
         ' You can directly download the results here {link}'
 SENDER = 'shivankurkapoor3192@gmail.com'
-PASSWORD = 'dabamalsi'
+PASSWORD = '***********'
 
 '''
 Request Form Types

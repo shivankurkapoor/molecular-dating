@@ -96,7 +96,7 @@ def generate_bash_scripts(request_id, form_type, data_type, form_data, user_id):
                 percent = request['base_count']
                 forward_file = request['forward_file']['file_path']
                 backward_file = request['backward_file']['file_path']
-                output_dir = os.path.join(RESULT_PATH.format(request_id=request_id, request_idx='0'), FASTQ_DIR)
+                output_dir = os.path.join(RESULT_PATH.format(request_id=request_id, request_idx='0'), FASTA_DIR)
                 write_bash_file(script_path, script_name, command=command, forward_primer=forward_primer,
                                 backward_primer=backward_primer,
                                 seq_len=seq_len, base_count=base_count, percent=percent, forward_file=forward_file,

@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('/Users/shivankurkapoor/GitHub/moleculardating/application')
+sys.path.append('/home/leelab/PycharmProjects/moleculardating/application')
 import io
 import httplib2
 import errno
@@ -18,7 +18,7 @@ from common.globalconst import *
 
 def download_file_google_drive(user_id, drive_service, file_id, filename, file_path):
     '''
-    :param user_id:
+    :param user_id:/Users/shivankurkapoor/GitHub/
     :param drive_service:
     :param file_id:
     :param filename:
@@ -175,7 +175,7 @@ if __name__ == '__main__':
                                                 forward_file=forward_file,
                                                 backward_file=backward_file, request_id=args.request_id,
                                                 output_dir=output_dir,
-                                                request_idx=0)
+                                                request_idx=args.request_idx)
 
                         # Updaing form
                         query_form_update = DatingRequest.update(form_data=str(json_encode(form_data))).where(

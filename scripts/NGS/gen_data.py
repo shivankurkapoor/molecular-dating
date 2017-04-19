@@ -80,7 +80,7 @@ def generate_div_gsi_var(INPUT, OUTPUT_DIVERSITY, OUTPUT_GSI, OUTPUT_VAR, OUTPUT
                     if i == j:
                         hd_mat[i][j] = 0.0
                     elif j > i:
-                        hd_mat[i][j] = hd_mat[j][i] = hamming_distance(seq1, seq2, GAPS_IGNORE, **alignment_param)
+                        hd_mat[i][j] = hd_mat[j][i] = hamming_distance(seq1, seq2, INPUT, GAPS_IGNORE, **alignment_param)
             
 
             unique_seq_dict = dict((seq, idx) for idx, seq in enumerate(unique_seq_list))
