@@ -56,7 +56,7 @@ def generate_div_gsi_var(INPUT, OUTPUT_DIVERSITY, OUTPUT_GSI, OUTPUT_VAR, OUTPUT
             for fasta in fasta_sequences:
                 name, sequence = fasta.id, str(fasta.seq)
                 seq_dict[name] = sequence
-            max_seq_len = max([len(seq.replace('_', '')) for seq in seq_dict.values()])
+            max_seq_len = max([len(seq.replace('-', '')) for seq in seq_dict.values()])
             seq_list = [seq for seq in seq_dict.values()]
 
             # Calculating fvalues

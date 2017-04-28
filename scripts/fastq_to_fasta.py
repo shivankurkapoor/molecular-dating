@@ -258,12 +258,15 @@ def process_pipeline(forward_primer_seq, backward_primer_seq, seq_length, percen
                 # index = str(forward[:-i] + backward) + ':' + key
                 if (len(index) > 200):
                     # print 'hi'
-                    join_dict[index] = []
+                    if index not in join_dict:
+                        join_dict[index] = []
+                        id_join_dict[index] = id_dict[key]
+
                     joinCount += len(collapse_dict[key])
                     # join_list.append(str(forward[:-i] + backward))
                     for item in collapse_dict[key]:
                         join_dict[index].append(item[0][:-i] + item[1][::-1])
-                    id_join_dict[index] = id_dict[key]
+                    #id_join_dict[index] = id_dict[key]
                     break
                     # join_index[key] = i
                     # key_to_seq[key] = index
@@ -346,11 +349,14 @@ def process_pipeline(forward_primer_seq, backward_primer_seq, seq_length, percen
                 # primer_match_list.append(item[22:-23])
                 # print 'hi'
                 index = key[FIRST_LEN:-LAST_LEN]
-                primer_match_dict[index] = []
+                if index not in primer_match_dict:
+                    primer_match_dict[index] = []
+                    id_primer_dict[index] = id_join_dict[key]
+
                 for item in join_dict[key]:
                     primer_match_dict[index].append(item[FIRST_LEN:-LAST_LEN])
                 # id_primer_dict[index] = [id_join_dict[key], len(primer_match_dict[index])]
-                id_primer_dict[index] = id_join_dict[key]
+                #id_primer_dict[index] = id_join_dict[key]
     else:
         print 'No primers provided'
         primer_match_dict = join_dict

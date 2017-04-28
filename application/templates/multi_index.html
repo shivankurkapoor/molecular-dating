@@ -116,20 +116,20 @@
             <form id="ngs-multi-input-form" name="ngs-multi-input-form" onsubmit="return upload(this)">
                 <div id="ngs-form-container">
                     <br>
-                    Forward Primer Sequence: <input type="text" id="forward-primer" name="forward-primer">
+                    Forward Primer Sequence: <input type="text" id="forward-primer" name="forward-primer" pattern="[ACGTRYMKSWHBVDN]*">
                     <br>
                     <br>
-                    Backward Primer Sequence: <input type="text" id="backward-primer" name="backward-primer">
+                    Backward Primer Sequence: <input type="text" id="backward-primer" name="backward-primer" pattern="[ACGTRYMKSWHBVDN]*">
                     <br>
                     <br>
                     Sequence Length (for collapsing): <input type="number" id="sequence-length"
-                                                             name="sequence-length" min="0">
+                                                             name="sequence-length" min="0" value="250">
                     <br>
                     <br>
-                    Base Count: <input type="number" id="base-count" name="base-count" min="0">
+                    Base Count: <input type="number" id="base-count" name="base-count" min="0" value="0">
                     <br>
                     <br>
-                    Percent: <input type="number" id="percent" name="percent" min="0" max="100" step="any">
+                    Percent: <input type="number" id="percent" name="percent" min="0" max="100" step="any" value="0">
                     <br>
                     <br>
                     <div class=w3-container id="ngs-input-form-element-0">
@@ -191,7 +191,7 @@
         <div id="container-request-status">
             <form id="request-status-input-form" name="request-status-input-form" onsubmit="return upload(this);">
                 <br>
-                Request Id: <input type='text' id='request-id' name="request-id-text-box">
+                Request Id: <input type='text' id='request-id' name="request-id-text-box" required pattern="[A-Z0-9]{8}">
                 <br>
                 <div>
                     <br>

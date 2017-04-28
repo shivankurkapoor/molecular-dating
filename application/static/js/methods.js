@@ -36,7 +36,25 @@ function showDefault() {
 }
 
 function isAnyError(form) {
-    return false;
+    var error = false;
+    if (form.id == 'ss-single-input-form'){
+        if(form.elements['fastafile'].value == ""){
+            error = true;
+            alert('Choose a fasta file');
+        }
+    }
+    else if(form.id == 'ngs-single-input-form'){
+    }
+    else if(form.id == 'ss-multi-input-form'){
+
+    }
+    else if(form.id == 'ngs-multi-input-form'){
+
+    }
+    else if(form.id == 'request-status-input-form'){
+
+    }
+    return error;
 }
 
 
@@ -82,6 +100,7 @@ function fetch(request_id) {
         data: {'request_id': request_id},
         dataType: 'json',
         type: 'GET',
+       // timeout: 50000,
         success: function (data) {
             //alert('SUCCESS');
             request_id = data['request_id'];
@@ -93,8 +112,8 @@ function fetch(request_id) {
         },
         complete: function () {
         },
-        error: function (data) {
-            alert('Error in second Ajax call');
+        error: function (x,m,t) {
+            alert('ERROR');
         }
     });
 }
@@ -106,7 +125,7 @@ function upload(form) {
     var request;
     var formData;
     var numReq;
-    if (form.id == 'ss-single-input-form') {
+   if (form.id == 'ss-single-input-form') {
         if (!isAnyError(form)) {
             formType = 'single';
             dataType = 'ss';
@@ -130,16 +149,16 @@ function upload(form) {
                 data: formData,
                 processData: false,
                 contentType: false,
-                type: 'POST',
-                async: false,
+                dataType: 'json',
+		        type: 'POST',
                 success: function (data) {
-                    //alert(data['request_id']);
-                    document.getElementById("loader-msg").innerHTML = 'Request Id:' + data['request_id'] + '. Your request is being processed. ' +
-                        'Please wait or keep note of your request id and check the status of your ' +
-                        'request later.';
-                    document.getElementById("ss").style.display = 'none';
-                    document.getElementById("loader-display").style.display = 'block';
-                    fetch(data['request_id'])
+                  // alert(data['status']);
+                    if (data['status'] == 'ok') {
+                        window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'] + "&status=6002";
+                    }
+                    else {
+                        window.location.href = '/error'
+                    }
                 },
 
                 error: function () {
@@ -161,9 +180,25 @@ function upload(form) {
             var backwardFile = form.elements['backwardfile'].files[0];
             request.forward_primer = form.elements['forward-primer'].value;
             request.backward_primer = form.elements['backward-primer'].value;
-            request.seq_len = form.elements['sequence-length'].value;
-            request.base_count = form.elements['base-count'].value;
-            request.percent = form.elements['percent'].value;
+            if(form.elements['sequence-length'].value!=""){
+                request.seq_len = form.elements['sequence-length'].value;
+            }
+            else{
+                request.seq_len = '250';
+            }
+            if(form.elements['base-count'].value!=""){
+                request.base_count = form.elements['base-count'].value;
+            }
+            else{
+                request.base_count = "0";
+            }
+            if(form.elements['percent'].value!=""){
+                request.percent = form.elements['percent'].value;
+            }
+            else{
+                request.percent = "0";
+            }
+
             numReq = 1;
             requests.push(request);
             formData = new FormData();
@@ -180,14 +215,14 @@ function upload(form) {
                 processData: false,
                 contentType: false,
                 type: 'POST',
-                async: false,
                 success: function (data) {
-                    document.getElementById("loader-msg").innerHTML = 'Request Id:' + data['request_id'] + '. Your request is being processed. ' +
-                        'Please wait or keep note of your request id and check the status of your ' +
-                        'request later.';
-                    document.getElementById("ngs").style.display = 'none';
-                    document.getElementById("loader-display").style.display = 'block';
-                    fetch(data['request_id'])
+                  // alert(data['status']);
+                    if (data['status'] == 'ok') {
+                        window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'] + "&status=6002";
+                    }
+                    else {
+                        window.location.href = '/error'
+                    }
                 },
                 error: function () {
                     alert('Error in first Ajax call');

@@ -46,18 +46,18 @@ def needleman_wunsch(s1, s2):
             i -= 1
             j -= 1
         elif currentValue == table[i][j - 1] + gapCost:
-            alignSeq1 = '_' + alignSeq1
+            alignSeq1 = '-' + alignSeq1
             alignSeq2 = s2[j - 1] + alignSeq2
             j -= 1
         elif currentValue == table[i - 1][j] + gapCost:
-            alignSeq2 = '_' + alignSeq2
+            alignSeq2 = '-' + alignSeq2
             alignSeq1 = s1[i - 1] + alignSeq1
             i -= 1
     if j != 0:
-        alignSeq1 = '_' * j + alignSeq1
+        alignSeq1 = '-' * j + alignSeq1
         alignSeq2 = s2[:j] + alignSeq2
     elif i != 0:
-        alignSeq2 = '_' * i + alignSeq2
+        alignSeq2 = '-' * i + alignSeq2
         alignSeq1 = s1[:i] + alignSeq1
     return alignSeq1, alignSeq2
 
@@ -116,7 +116,7 @@ def fast_sequence_alignment(input, s1, s2, **kwargs):
         l = 0
         with open(os.path.join(input, 'ALIGNED_SEQUENCES.txt'), 'r') as f:
             for line in f.readlines():
-                line = line.replace(' ', '_').strip()
+                line = line.replace(' ', '-').strip()
                 if l == 0:
                     seq1.append(line)
                 elif l == 1:
@@ -144,14 +144,14 @@ def hamming_distance(s1, s2, input, gaps_ignore=True, align=False, **kwargs):
         if align or len(s1) != len(s2):
             #print 'One or more sequences are misaligned, aligning now'
             # s1, s2 = needleman_wunsch(s1, s2)
-            s1, s2 = fast_sequence_alignment(input, s1.replace('_', ''), s2.replace('_', ''), **kwargs)
+            s1, s2 = fast_sequence_alignment(input, s1.replace('-', ''), s2.replace('-', ''), **kwargs)
         matches, mismatches, insertionErrors, deletionErrors = 0, 0, 0, 0
         for i in range(len(s1)):
             if s1[i] == s2[i]:
                 matches += 1
-            elif s1[i] == '_':
+            elif s1[i] == '-':
                 insertionErrors += 1
-            elif s2[i] == '_':
+            elif s2[i] == '-':
                 deletionErrors += 1
             else:
                 mismatches += 1

@@ -51,7 +51,7 @@ def create_html(INPUT, OUTPUT, REQUEST_TYPE, REQUEST_ID):
             row_df = row_df.transpose()
             row_df = row_df.reset_index()
             row_df = row_df.rename(columns={'index': 'Attribute', 0: 'Value'})
-            fname = OUTPUT + os.sep + subject + '.html'
+            fname = OUTPUT + os.sep + REQUEST_ID + '.html'
             table = row_df.to_html(classes='page', justify='center', index=False, header=False)
             # For subscript notation
             table = table.replace('GSI', 'GSI<sub>' + gsi_num + '</sub>')

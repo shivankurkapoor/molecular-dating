@@ -85,7 +85,7 @@ def process(INPUT, OUTPUT, GSI, DIVERSITY, REPORT, TYPE, GSI_NUM, CLUSTERED=Fals
             hd_mat_saved = np.load(hd_mat_path)
 
             N = len(seq_list)
-            max_len = max([len(seq.replace('_', '')) for seq in seq_list])
+            max_len = max([len(seq.replace('-', '')) for seq in seq_list])
             for i, seq_1 in enumerate(seq_list):
                 hd_dict[i] = {}
                 for j, seq_2 in enumerate(seq_list):

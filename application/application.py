@@ -31,11 +31,10 @@ def app_show_form():
 @application.route('/displaypage', methods=['GET'])
 def app_display():
     request_params = request.values
-    # Todo Add a check for verifying the request id
-    if (int(request_params['status']) == INT_OK) or (int(request_params['status']) == INT_NOTPROCESSED):
+    if (int(request_params['status']) == INT_OK):
         return render_template('display/' + request_params['request_id'] + '.html')
-    elif int(request_params['status']) == INT_PROCESSED:
-        return render_template(os.path.join('result', request_params['request_id'], 'fasta.html'))
+    elif int(request_params['status']) == INT_PROCESSED or (int(request_params['status']) == INT_NOTPROCESSED):
+        return render_template(os.path.join('result', request_params['request_id'], str(request_params['request_id']) + '.html'))
     else:
         return render_template('error.html',
                                error='You are not authorized view this request status. Please log in to view the status')
