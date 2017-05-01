@@ -73,19 +73,21 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
         for file in files_paths:
             file_name = file.split('/')[-1]
             seq_dict = OrderedDict()
+            seq_id_dict = OrderedDict()
             time = float(file.split('/')[-1].rsplit('.', 1)[0].split('-')[2][3:]) if TYPE == 'longi' else 1000
             fasta_sequences = SeqIO.parse(open(file), 'fasta')
             for fasta in fasta_sequences:
                 name, sequence = fasta.id, str(fasta.seq)
                 seq_dict[name] = sequence
-            seq_list = [seq for seq in seq_dict.values()]
+                seq_id_dict[sequence] = name
+            seq_tup = seq_dict.items()
+            seq_list = [seq for _, seq in seq_tup]
 
             # Creating unique sequences
             seq_count_dict = OrderedDict()
-            for seq in seq_list:
-                if seq not in seq_count_dict:
-                    seq_count_dict[seq] = 0
-                seq_count_dict[seq] += 1
+            for id, seq in seq_tup:
+                count = int(id.strip().split(':')[7])
+                seq_count_dict[seq] = count
             unique_seq_list = seq_count_dict.keys()
 
             # Reading the saved HD matrix
@@ -165,8 +167,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
 
                 for c in MC.values()[0]:
                     sequence = unique_seq_list[c]
-                    for _ in xrange(seq_count_dict[sequence]):
-                        major_seq.append(sequence)
+                    major_seq.append(sequence)
 
 
             except Exception as e:
@@ -176,7 +177,7 @@ def clustering(INPUT, OUTPUT, GSI_FILE, THRESHOLD, DIVERSITY_THRESHOLD, GSI_THRE
 
             rec_list = []
             for sequence in major_seq:
-                rec = SeqRecord(Seq(sequence, DNAAlphabet), id=random_string(9), description='')
+                rec = SeqRecord(Seq(sequence, DNAAlphabet), id=seq_id_dict[sequence], description='')
                 rec_list.append(rec)
             if TYPE == 'longi':
                 SeqIO.write(rec_list, OUTPUT + '/' + file_name, "fasta")

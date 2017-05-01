@@ -74,11 +74,11 @@ def process(INPUT, OUTPUT, GSI, DIVERSITY, VAR, REPORT, TYPE, GSI_NUM, CLUSTERED
                 name, sequence = fasta.id, str(fasta.seq)
                 seq_dict[name] = sequence
 
-            seq_list = [seq for seq in seq_dict.values()]
-            num_seq = len(seq_list)
+            seq_ids = [id for id in seq_dict.keys()]
+            num_seq = sum([int(id.strip().split(':')[7]) for id in seq_ids])
             stats_dict[subject][time] = {}
             final_stats_dict[subject][time] = {}
-            final_stats_dict[subject][time]['num_seq'] = len(seq_list)
+            final_stats_dict[subject][time]['num_seq'] = num_seq
             final_stats_dict[subject][time]['type'] = TYPE
             stats_dict[subject][time]['seq'] = num_seq
 
@@ -245,7 +245,7 @@ def clean_fasta_files(INPUT, OUTPUT):
             fasta_sequences = SeqIO.parse(open(file), 'fasta')
             for fasta in fasta_sequences:
                 name, sequence = fasta.id, str(fasta.seq)
-                seq_dict[name + random_string(9)] = clean_seqeunce(sequence)
+                seq_dict[name +':'+ random_string(9)] = clean_seqeunce(sequence)
 
             for seq_id, seq in seq_dict.iteritems():
                 rec = SeqRecord(Seq(seq, DNAAlphabet), id=seq_id, description='')

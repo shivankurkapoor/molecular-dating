@@ -48,13 +48,8 @@ def output(output_file_name, primer_match_list, id_primer_dict, count):
             (original_id):(number of copies of this sequence):(total number of sequences):(total number of unique sequences)
             '''
             seqid = id_primer_dict[item[0]] + ':' + str(len(item[1])) + ':' + str(count[0]) + ':' + str(uniqueSequences)
-            '''
-            Putting duplicate sequences
-            '''
-            for i in range(len(item[1])):
-                seqid_ = seqid + ':' + str(i)
-                record = SeqRecord(Seq(item[0]), id=seqid, description='')
-                SeqIO.write(record, outputfile, 'fasta')
+            record = SeqRecord(Seq(item[0]), id=seqid, description='')
+            SeqIO.write(record, outputfile, 'fasta')
 
     '''
 	outputdata = ''
