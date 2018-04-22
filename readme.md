@@ -23,13 +23,13 @@ The application is deployed [here](http://p512.usc.edu/request/)
 <div class="container">
 <figure>
 <h5>Whole</h5>
-<p><img src="../../../static/images/UNZ1GJGQ_UNCLUSTERED.png" height="350" width="550" /><br />
+<p><img src="http://p512.usc.edu/static/images/UNZ1GJGQ_UNCLUSTERED.png" height="350" width="550" /><br />
 </figure>
 </div>
 <div class="container">
 <figure>
 <h5>Single Lineage</h5>
-<p><img src="../../../static/images/UNZ1GJGQ_CLUSTERED.png" height="350" width="550" /><br />
+<p><img src="http://p512.usc.edu/static/images/UNZ1GJGQ_CLUSTERED.png" height="350" width="550" /><br />
 </figure>
 </div>
 
@@ -37,7 +37,7 @@ The application is deployed [here](http://p512.usc.edu/request/)
     Statistics<br />
 </h4>
 <div>
-<table border="1" class="dataframe page">
+<table border="0" class="dataframe page">
 <tbody>
 <tr>
 <td>Single Lineage Diversity</td>
