@@ -4,6 +4,72 @@ HIITE designates the infection stage as either being chronic or incident, and ap
 
 The application is deployed [here](http://p512.usc.edu/request/)
 
+### Example:
+
+#### Input
+[Fasta File](https://github.com/shivankurkapoor/molecular-dating/blob/master/test/example_input.fasta)
+
+#### Output
+<h4>
+    Infection Stage with Time Since Infection<br />
+</h4>
+<h5>
+<p align="left">&nbsp;&nbsp;&nbsp;&nbsp;Incident: 51.5 [0.0 &#8211; 132.7] days</p>
+</h5>
+
+<div>
+<h4>Hamming Distance Distribution</h4>
+</div>
+<div class="container">
+<figure>
+<h5>Whole</h5>
+<p><img src="../../../static/images/UNZ1GJGQ_UNCLUSTERED.png" height="350" width="550" /><br />
+</figure>
+</div>
+<div class="container">
+<figure>
+<h5>Single Lineage</h5>
+<p><img src="../../../static/images/UNZ1GJGQ_CLUSTERED.png" height="350" width="550" /><br />
+</figure>
+</div>
+
+<h4>
+    Statistics<br />
+</h4>
+<div>
+<table border="1" class="dataframe page">
+<tbody>
+<tr>
+<td>Single Lineage Diversity</td>
+<td>0.104</td>
+</tr>
+<tr>
+<td>Single Lineage GSI</td>
+<td>0.852</td>
+</tr>
+<tr>
+<td>Single Lineage Variance</td>
+<td>0.091</td>
+</tr>
+<tr>
+<td>Diversity</td>
+<td>0.62</td>
+</tr>
+<tr>
+<td>GSI</td>
+<td>0.48</td>
+</tr>
+<tr>
+<td>Variance</td>
+<td>7.365</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+
 ### Reference:
 [S. Y. Park, T. M. T. Love, S. Kapoor, and H. Y. Lee, HIITE: HIV-1 Incidence and Infection Time Estimator - Bioinformatics](https://www.ncbi.nlm.nih.gov/pubmed/29438560)
 
