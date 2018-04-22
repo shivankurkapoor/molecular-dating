@@ -34,16 +34,16 @@ def clean_seqeunce(sequence):
     :param sequence: input sequence
     :return: clean sequence
     '''
-    sequence = sequence.replace('-', '-')
-    sequence = sequence.replace('~', '-')
+    sequence = sequence.replace('-', '_')
+    sequence = sequence.replace('~', '_')
     sequence = sequence.replace('a', 'A')
     sequence = sequence.replace('c', 'C')
     sequence = sequence.replace('g', 'G')
     sequence = sequence.replace('t', 'T')
-    sequence = sequence.replace('R', '-')
-    sequence = sequence.replace('Y', '-')
-    sequence = sequence.replace('W', '-')
-    sequence = sequence.replace('M', '-')
-    sequence = sequence.replace('K', '-')
-    sequence = sequence.replace('N', '-')
+    sequence = sequence.replace('R', '_')
+    sequence = sequence.replace('Y', '_')
+    sequence = sequence.replace('W', '_')
+    sequence = sequence.replace('M', '_')
+    sequence = sequence.replace('K', '_')
+    sequence = sequence.replace('N', '_')
     return sequence

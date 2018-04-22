@@ -38,7 +38,7 @@ def generate_diversity_data(INPUT, OUTPUT, TYPE, OUTPUTHD, GAPS_IGNORE, ALIGN, *
             for fasta in fasta_sequences:
                 name, sequence = fasta.id, str(fasta.seq)
                 seq_dict[name + random_string(3)] = clean_seqeunce(sequence)
-            max_seq_len = max([len(seq.replace('-', '')) for seq in seq_dict.values()])
+            max_seq_len = max([len(seq.replace('_', '')) for seq in seq_dict.values()])
             seq_list = [seq for seq in seq_dict.values()]
             hd_list = []
 

@@ -39,6 +39,7 @@ def store_request(form_type, data_type, num_request, form_data, files, user_id):
 
 
 def fetch_request(request_id, session_user_id):
+    print request_id
     try:
         db.connect()
     except Exception as e:
@@ -59,6 +60,7 @@ def fetch_request(request_id, session_user_id):
                 if is_processed:
                     return INT_PROCESSED
                 else:
+                    print 'I am here'
                     return INT_NOTPROCESSED
 
             elif request.form_type == MULTIPLE:
@@ -90,7 +92,7 @@ def _get_file_path(request_id, file, format=FASTA, request_idx=0):
 def _create_form_data(form_type, data_type, num_request, form_data, files, request_id):
     request_list = []
     download_status = False
-    if data_type == SANGER_SEQUNCE_DATA:
+    if data_type == SANGER_SEQUENCE_DATA:
         for i, request in enumerate(form_data['requests']):
             if form_type == SINGLE:
                 download_status_code = download_file_direct(files[request['file']], request_id, request['file'],

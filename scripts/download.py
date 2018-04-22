@@ -1,6 +1,8 @@
+#!/home/spark/moleculardating/mol_dat_venv/bin/python2
+
 import sys
 
-sys.path.append('/home/leelab/PycharmProjects/moleculardating/application')
+sys.path.append('/home/spark/moleculardating/application')
 import io
 import httplib2
 import errno
@@ -18,7 +20,7 @@ from common.globalconst import *
 
 def download_file_google_drive(user_id, drive_service, file_id, filename, file_path):
     '''
-    :param user_id:/Users/shivankurkapoor/GitHub/
+    :param user_id:
     :param drive_service:
     :param file_id:
     :param filename:
@@ -58,7 +60,7 @@ def download_file_google_drive(user_id, drive_service, file_id, filename, file_p
 def check_download_status(requests, data_type):
     download_status_list = []
     for request in requests:
-        if data_type == SANGER_SEQUNCE_DATA:
+        if data_type == SANGER_SEQUENCE_DATA:
             download_status_list.append(request['fasta_file']['is_downloaded'])
         elif data_type == NEXT_GEN_DATA:
             download_status_list.append(request['backward_file']['is_downloaded'])
@@ -131,7 +133,7 @@ if __name__ == '__main__':
                         # Check if files for a single process has been downloaded
                         # In case of NGS, we need to generate bash script for fastq to fasta
                         # In case of Sanger, we need to generate the bash script for molecular dating
-                        if dating_request.data_type == SANGER_SEQUNCE_DATA:
+                        if dating_request.data_type == SANGER_SEQUENCE_DATA:
                             script_name = args.request_id + '_' + str(args.request_idx)
                             script_path = BASH_SCRIPT_PROCESS.format(request_id=args.request_id)
                             align = form_data['requests'][int(args.request_idx)]['align']

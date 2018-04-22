@@ -12,7 +12,7 @@ TEMPLATE_ENVIRONMENT = Environment(
     trim_blocks=False)
 
 
-local_css_path = '/home/leelab/PycharmProjects/moleculardating/scripts/FENV/static/style.css'
+local_css_path = '/home/spark/moleculardating/scripts/FENV/static/style.css'
 
 def render_template(template_filename, context):
     return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)

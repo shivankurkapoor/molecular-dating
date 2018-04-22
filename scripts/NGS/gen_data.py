@@ -56,18 +56,16 @@ def generate_div_gsi_var(INPUT, OUTPUT_DIVERSITY, OUTPUT_GSI, OUTPUT_VAR, OUTPUT
             for fasta in fasta_sequences:
                 name, sequence = fasta.id, str(fasta.seq)
                 seq_dict[name] = sequence
-            max_seq_len = max([len(seq.replace('-', '')) for seq in seq_dict.values()])
-            seq_tup = seq_dict.items()
-            seq_list = []
+            max_seq_len = max([len(seq.replace('_', '')) for seq in seq_dict.values()])
+            seq_list = [seq for seq in seq_dict.values()]
 
             # Calculating fvalues
             fvalues = {}
             seq_count_dict = OrderedDict()
-            for id, seq in seq_tup:
-                count = int(id.strip().split(':')[7])
-                seq_count_dict[seq] = count
-                for iter in range(count):
-                    seq_list.append(seq)
+            for seq in seq_list:
+                if seq not in seq_count_dict:
+                    seq_count_dict[seq] = 0
+                seq_count_dict[seq] += 1
             unique_seq_list = seq_count_dict.keys()
             nu = len(unique_seq_list)
             totalReads = sum(seq_count_dict.values()) * 1.0

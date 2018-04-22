@@ -81,16 +81,46 @@ function fillRequests(requests, dataType) {
                 request.backward_file = 'backward_file_' + key;
                 request.forward_primer = document.getElementById('forward-primer').value;
                 request.backward_primer = document.getElementById('backward-primer').value;
-                request.seq_len = document.getElementById('sequence-length').value;
-                request.base_count = document.getElementById('base-count').value;
-                request.percent = document.getElementById('percent').value;
+             
+                if(document.getElementById('sequence-length').value!=""){
+                  request.seq_len = document.getElementById('sequence-length').value;
+                }
+                else{
+                 request.seq_len = '250';
+                }
+                if(document.getElementById('base-count').value!=""){
+                 request.base_count = document.getElementById('base-count').value;
+               }
+                else{
+                 request.base_count = "0";
+               }
+                if(document.getElementById('percent').value!=""){
+                 request.percent = document.getElementById('percent').value;
+               }
+                else{
+                 request.percent = "0";
+             }
+
                 request.meta_data = Object();
-                request.meta_data.forward_file = ngsFileUploadDict[key]['forward'];
-                request.meta_data.backward_file = ngsFileUploadDict[key]['backward'];
+                if(ngsFileUploadDict[key]['forward']){
+                  request.meta_data.forward_file = ngsFileUploadDict[key]['forward'];
+                }
+                else{
+                  alert('Missing forward fastq file');
+                  return false;
+                }
+                if(ngsFileUploadDict[key]['backward']){
+                  request.meta_data.backward_file = ngsFileUploadDict[key]['backward'];
+                }
+                else{
+                  alert('Missing backward fastq file');
+                  return false;
+                }
                 requests.push(request);
             }
         }
     }
+  return true;
 }
 
 
@@ -114,7 +144,7 @@ function fetch(request_id) {
         },
         error: function (x,m,t) {
             alert('ERROR');
-        }
+         }
     });
 }
 
@@ -149,10 +179,10 @@ function upload(form) {
                 data: formData,
                 processData: false,
                 contentType: false,
-                dataType: 'json',
-		        type: 'POST',
+                type: 'POST',
+                async : false,
                 success: function (data) {
-                  // alert(data['status']);
+                     // alert(data['status']);
                     if (data['status'] == 'ok') {
                         window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'] + "&status=6002";
                     }
@@ -160,12 +190,12 @@ function upload(form) {
                         window.location.href = '/error'
                     }
                 },
-
                 error: function () {
                     alert('Error in first Ajax call');
                 }
             });
-
+        
+ 
         }
     }
 
@@ -215,8 +245,9 @@ function upload(form) {
                 processData: false,
                 contentType: false,
                 type: 'POST',
+                async : false,
                 success: function (data) {
-                  // alert(data['status']);
+                     // alert(data['status']);
                     if (data['status'] == 'ok') {
                         window.location.href = "/displaypage?request_id=" + data['request_id'] + "&user_id=" + data['user_id'] + "&status=6002";
                     }
@@ -228,7 +259,7 @@ function upload(form) {
                     alert('Error in first Ajax call');
                 }
             });
-
+       
         }
 
     }
@@ -236,8 +267,14 @@ function upload(form) {
         if (!isAnyError(form)) {
             formType = 'multiple';
             dataType = 'ss';
-            fillRequests(requests, dataType);
+            if(!fillRequests(requests, dataType)){
+                return false;
+            }
             numReq = requests.length;
+            if(numReq == 0){
+                alert('Upload atleast 1 fasta file');
+		return false;
+            }
             formData = new FormData();
             formData.append('form_type', formType);
             formData.append('data_type', dataType);
@@ -268,8 +305,14 @@ function upload(form) {
         if (!isAnyError(form)) {
             formType = 'multiple';
             dataType = 'ngs';
-            fillRequests(requests, dataType);
+            if(!fillRequests(requests, dataType)){
+                return false;
+            }
             numReq = requests.length;
+            if(numReq == 0){
+                alert('Upload atleast 1 pair of  fastq files');
+                return false;
+            }
             formData = new FormData();
             formData.append('form_type', formType);
             formData.append('data_type', dataType);

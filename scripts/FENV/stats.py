@@ -69,7 +69,7 @@ def stats(C, seq_list, hd_dict):
                         hd_list.append(hd_dict[i][j])
 
             seqs = [seq_list[i] for i in cluster]
-            max_seq_len = max([len(seq.replace('-', '')) for seq in seqs])
+            max_seq_len = max([len(seq.replace('_', '')) for seq in seqs])
             var_SE = var_se(max_seq_len, hd_list, N)
             diversity = calc_diversity(hd_list, max_seq_len, N)
             beta = 1 if diversity == 0 or var_SE == 0 else var_SE / diversity

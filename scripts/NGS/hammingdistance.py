@@ -139,11 +139,11 @@ def needleman_using_affine_penalty(s1, s2):
             current_cost = refer_dict[Ix_Parent[i][j]]
             i -= 1
             alignseq1.append(s1[i])
-            alignseq2.append('-')
+            alignseq2.append('_')
         elif current_cost == Iy_Cost:
             current_cost = refer_dict[Iy_Parent[i][j]]
             j -= 1
-            alignseq1.append('-')
+            alignseq1.append('_')
             alignseq2.append(s2[j])
     alignseq1.reverse()
     alignseq2.reverse()
@@ -204,7 +204,7 @@ def fast_sequence_alignment(input, s1, s2, **kwargs):
         l = 0
         with open(os.path.join(input, 'ALIGNED_SEQUENCES.txt'), 'r') as f:
             for line in f.readlines():
-                line = line.replace(' ', '-').strip()
+                line = line.replace(' ', '_').strip()
                 if l == 0:
                     seq1.append(line)
                 elif l == 1:
@@ -230,14 +230,14 @@ def hamming_distance(s1, s2, input, gaps_ignore=True, **kwargs):
     '''
     try:
 
-        s1, s2 = fast_sequence_alignment(input, s1.replace('-', ''), s2.replace('-', ''), **kwargs)
+        s1, s2 = fast_sequence_alignment(input, s1.replace('_', ''), s2.replace('_', ''), **kwargs)
         matches, mismatches, insertionErrors, deletionErrors = 0, 0, 0, 0
         for i in range(len(s1)):
             if s1[i] == s2[i]:
                 matches += 1
-            elif s1[i] == '-':
+            elif s1[i] == '_':
                 insertionErrors += 1
-            elif s2[i] == '-':
+            elif s2[i] == '_':
                 deletionErrors += 1
             else:
                 mismatches += 1

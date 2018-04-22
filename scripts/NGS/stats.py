@@ -91,7 +91,7 @@ def stats(C, unique_seq_list, hd_dict, freq_dict):
                     elif j > i:
                         hd_mat[i][j] = hd_mat[j][i] = hd_dict[unique_seq_id_1][unique_seq_id_2]
 
-            max_seq_len = max([len(seq.replace('-', '')) for seq in unique_seqs_mc])
+            max_seq_len = max([len(seq.replace('_', '')) for seq in unique_seqs_mc])
             var_SE = var_freq(hd_mat, fvalues, max_seq_len)
             diversity = calc_diversity_frequency(hd_mat, fvalues, max_seq_len)
             beta = 1 if diversity == 0 or var_SE == 0 else var_SE / diversity

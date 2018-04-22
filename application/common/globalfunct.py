@@ -1,13 +1,17 @@
 import json
 import os
 import random
-import string
 import shutil
-from globalconst import BASH_SHEBANG
+import string
 from datetime import datetime
 from distutils.dir_util import copy_tree
+from functools import wraps, update_wrapper
 
 from flask import jsonify
+from flask import make_response
+
+from globalconst import BASH_SHEBANG
+from globalconst import VENV
 
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
@@ -52,7 +56,7 @@ def write_bash_file(*args, **kwargs):
     script_path = args[0]
     script_name = args[1]
     command = kwargs.pop('command')
-    cd = 'cd '+ command.rsplit('/',1)[0].split(' ')[1]
+    cd = 'cd ' + command.rsplit('/', 1)[0].split(' ')[1]
     for key, value in kwargs.items():
         command += ' ' + '--' + str(key) + '=' + str(value)
     script = '.'.join([os.path.join(script_path, script_name), 'sh'])
@@ -62,6 +66,7 @@ def write_bash_file(*args, **kwargs):
             os.makedirs(script_path)
         with open(script, 'w') as f:
             f.write(BASH_SHEBANG + '\n')
+            f.write(VENV + '\n')
             f.write(cd + '\n')
             f.write(command)
     except IOError as e:
@@ -83,3 +88,15 @@ def make_zip(file_name, format, directory):
     except Exception as e:
         print 'Error while archiving ', file_name, e
         raise
+
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
+
+    return update_wrapper(no_cache, view)

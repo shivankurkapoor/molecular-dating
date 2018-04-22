@@ -2,11 +2,56 @@
 This is the main file for the backend server
 '''
 
-from flask import Flask, request, render_template, session, redirect
+from flask import Flask, render_template, session, redirect
+from flask import request, current_app
+
 from server.connect import *
 
 application = Flask(__name__, )
 application.secret_key = APP_SECRET_KEY
+
+
+def crossdomain(origin=None, methods=None, headers=None,
+                max_age=21600, attach_to_all=True,
+                automatic_options=True):
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, basestring):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, basestring):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        def wrapped_function(*args, **kwargs):
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+
+    return decorator
 
 
 @application.route('/')
@@ -31,13 +76,17 @@ def app_show_form():
 @application.route('/displaypage', methods=['GET'])
 def app_display():
     request_params = request.values
+    # Todo Add a check for verifying the request id
     if (int(request_params['status']) == INT_OK):
-        return render_template('display/' + request_params['request_id'] + '.html')
+        # return render_template('display/' + request_params['request_id'] + '.html')
+        return render_template(
+            os.path.join('result', request_params['request_id'], str(request_params['request_id']) + '.html'))
     elif int(request_params['status']) == INT_PROCESSED or (int(request_params['status']) == INT_NOTPROCESSED):
-        return render_template(os.path.join('result', request_params['request_id'], str(request_params['request_id']) + '.html'))
+        return render_template(
+            os.path.join('result', request_params['request_id'], str(request_params['request_id']) + '.html'))
     else:
         return render_template('error.html',
-                               error='You are not authorized view this request status. Please log in to view the status')
+                               error='You are not authorized view this request status')
 
 
 @application.route('/fetch', methods=['GET'])
@@ -60,10 +109,15 @@ def app_connect():
 
 
 @application.route('/upload', methods=['POST'])
+@crossdomain(origin='http://p512.usc.edu')
 def upload():
     user_id = session.get('userId', '')
+    print request.form
+    print request.files
+    print user_id
     status, response = process_request(request.form, request.files, user_id=user_id)
     if status == INT_OK:
+        print 'I am here'
         return response
     else:
         return render_template('error.html', error='Failure')
@@ -113,4 +167,4 @@ def handle_invalid_usage(error):
 if __name__ == '__main__':
     application.secret_key = APP_SECRET_KEY
     # application.run(host='p512.usc.edu/miseq',port=5000)
-    application.run(host='localhost', port=5000, debug=True)
+    application.run(host='192.168.22.2', port=5000, debug=False)

@@ -11,7 +11,7 @@ TEMPLATE_ENVIRONMENT = Environment(
     loader=FileSystemLoader(os.path.join(PATH, 'templates')),
     trim_blocks=False)
 
-local_css_path = '/home/leelab/PycharmProjects/moleculardating/scripts/FENV/static/style.css'
+local_css_path = '/home/spark/moleculardating/scripts/FENV/static/style.css'
 
 
 def render_template(template_filename, context):
@@ -51,7 +51,7 @@ def create_html(INPUT, OUTPUT, REQUEST_TYPE, REQUEST_ID):
             row_df = row_df.transpose()
             row_df = row_df.reset_index()
             row_df = row_df.rename(columns={'index': 'Attribute', 0: 'Value'})
-            fname = OUTPUT + os.sep + REQUEST_ID + '.html'
+            fname = OUTPUT + os.sep + REQUEST_ID  + '.html'
             table = row_df.to_html(classes='page', justify='center', index=False, header=False)
             # For subscript notation
             table = table.replace('GSI', 'GSI<sub>' + gsi_num + '</sub>')
@@ -86,6 +86,7 @@ def create_html(INPUT, OUTPUT, REQUEST_TYPE, REQUEST_ID):
                     'h2': IMAGE_HEIGHT,
                     'w2': IMAGE_WIDTH
                 })
+           # print fname
             with open(fname, 'w') as f:
                 html = render_template(TEMPLATE, context)
                 print 'HTMLPRINT'

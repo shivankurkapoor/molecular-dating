@@ -5,4 +5,4 @@
 var developerKey = 'AIzaSyAK4MtRgKB-EPXvE94oCtuma8kXaynaAes';
 var appId = '160430799521';
 var oauthToken;
-var host = 'http://localhost:5000';
+var host = 'http://p512.usc.edu:5000';

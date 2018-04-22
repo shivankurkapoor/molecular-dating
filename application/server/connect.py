@@ -317,11 +317,11 @@ def _upload_proc_parsing_fields(fields):
 
     try:
         assert len(form_data['requests']) == num_request
-        if form_type == SINGLE and data_type == SANGER_SEQUNCE_DATA:
+        if form_type == SINGLE and data_type == SANGER_SEQUENCE_DATA:
             pass
         elif form_type == SINGLE and data_type == NEXT_GEN_DATA:
             pass
-        elif form_type == MULTIPLE and data_type == SANGER_SEQUNCE_DATA:
+        elif form_type == MULTIPLE and data_type == SANGER_SEQUENCE_DATA:
             pass
         elif form_type == MULTIPLE and data_type == NEXT_GEN_DATA:
             pass

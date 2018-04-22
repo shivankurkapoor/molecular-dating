@@ -7,7 +7,6 @@ and http_request to return the processed data
 
 """
 import httplib
-
 from common.globalconst import *
 from server.httpcomm.const import *
 

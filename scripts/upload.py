@@ -1,7 +1,7 @@
 import smtplib
 import sys
 
-sys.path.append('/home/leelab/PycharmProjects/moleculardating/application')
+sys.path.append('/home/spark/moleculardating/application')
 import httplib2
 from oauth2client.client import Credentials
 from apiclient import http
