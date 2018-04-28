@@ -1,0 +1,57 @@
+##################################  SUMMARY OF MIXED EFECTS MODEL FOR FIRST 150 DAYS #####################################
+Linear mixed-effects model fit by REML
+ Data: dataset 
+        AIC       BIC  logLik
+  -94.98259 -89.84188 50.4913
+
+Random effects:
+ Formula: ~time + 0 | subject
+                time  Residual
+StdDev: 0.0008860933 0.0507611
+
+Fixed effects: diversity ~ time + 0 
+           Value    Std.Error DF  t-value p-value
+time 0.002693783 0.0002892471 27 9.313086       0
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.71009616 -0.58005671  0.05750256  0.42901181  1.70696788 
+
+Number of Observations: 42
+Number of Groups: 15 
+#################################  COEFFICIENTS FOR DIFFERENT SUBJECT  ###############################
+                time
+CAP45    0.003239644
+CH040    0.001543560
+CH042    0.001958489
+CH058    0.002913227
+CH077    0.003908135
+CH131    0.002206601
+CH159    0.002572910
+CH162    0.002464757
+CH164    0.002259177
+CH185    0.001861170
+CH198    0.003571926
+CH256    0.003582558
+CH505    0.002302576
+SUMA0874 0.002853931
+WEAU0578 0.003168085
+################################# SUMMARY FOR THE LINEAR MODEL  #################################
+
+Call:
+lm(formula = diversity ~ time + 0, data = dataset)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.134225 -0.032728  0.003527  0.033927  0.227597 
+
+Coefficients:
+      Estimate Std. Error t value Pr(>|t|)    
+time 0.0025263  0.0001878   13.46   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.06715 on 41 degrees of freedom
+Multiple R-squared:  0.8154,	Adjusted R-squared:  0.8109 
+F-statistic:   181 on 1 and 41 DF,  p-value: < 2.2e-16
+

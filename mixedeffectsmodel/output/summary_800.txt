@@ -1,0 +1,65 @@
+##########################################  SUMMARY OF MIXED EFECTS MODEL FOR 800 DAYS #######################################
+Linear mixed-effects model fit by REML
+ Data: dataset 
+        AIC       BIC  logLik
+  -54.25059 -40.84595 33.1253
+
+Random effects:
+ Formula: ~time + I(time^2) + 0 | subject
+ Structure: General positive-definite, Log-Cholesky parametrization
+          StdDev       Corr  
+time      8.475916e-04 time  
+I(time^2) 1.337357e-06 -0.864
+Residual  8.459743e-02       
+
+Fixed effects: diversity ~ time + I(time^2) + 0 
+                  Value    Std.Error DF   t-value p-value
+time       0.0023039871 2.741739e-04 55  8.403378  0.0000
+I(time^2) -0.0000012217 4.966600e-07 55 -2.459776  0.0171
+ Correlation: 
+          time  
+I(time^2) -0.876
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-1.61513198 -0.45225464  0.07378476  0.40774010  3.81172326 
+
+Number of Observations: 71
+Number of Groups: 15 
+#################################  COEFFICIENTS FOR DIFFERENT SUBJECT  ###############################
+                time     I(time^2)
+CAP45    0.001943936 -1.189465e-06
+CH040    0.001592095 -7.425059e-07
+CH042    0.002050711  8.732685e-08
+CH058    0.002628700 -1.650743e-06
+CH077    0.002971384 -2.591879e-06
+CH131    0.002948021 -2.739128e-06
+CH159    0.003041044 -1.952425e-06
+CH162    0.001693739 -9.504525e-07
+CH164    0.001327478  1.616288e-07
+CH185    0.001021454  4.107040e-07
+CH198    0.003478721 -2.207767e-06
+CH256    0.002624362 -1.282056e-06
+CH505    0.002597997 -1.141263e-06
+SUMA0874 0.002412118 -1.367374e-06
+WEAU0578 0.002228047 -1.169800e-06
+##########################################  SUMMARY FOR THE LINEAR MODEL  #######################################
+
+Call:
+lm(formula = diversity ~ time + I(time^2) + 0, data = dataset)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.40260 -0.03242  0.00874  0.06809  0.44542 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+time       2.095e-03  2.045e-04   10.24 1.71e-15 ***
+I(time^2) -6.289e-07  3.766e-07   -1.67   0.0995 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1435 on 69 degrees of freedom
+Multiple R-squared:  0.9186,	Adjusted R-squared:  0.9162 
+F-statistic: 389.1 on 2 and 69 DF,  p-value: < 2.2e-16
+
