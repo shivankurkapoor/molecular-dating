@@ -80,21 +80,3 @@ HITTE requires the following third-party python modules:
 2. Numpy (>=1.8.2)
 3. Scipy (>=0.13.3)
 4. Biopython (>=1.68)
-
-### License:
-HIITE is released udner the "BSD 3-clause license" as follows:
-Copyright (c) 2018 All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-   * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-   * Neither the name of the copyright holder nor the
-      names of its contributors may be used to endorse or promote products
-      derived from this software without specific prior written permission.
-
-
-
